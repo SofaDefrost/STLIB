@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 
-from elasticobject import ElasticObject
+from elasticmaterialobject import ElasticMaterialObject
 

@@ -8,7 +8,7 @@ utilitary function we should always consider to use.
 
 ```python
 from stlib.scenes import STLIBHeader
-from stlib.physics.rigid.shapes import Cube, Sphere, Plane
+from stlib.physics.rigid.shapes import Cube, Sphere, Floor
 from stlib.physics.deformable import ElasticMaterialObject
 
 from stlib.animate import AnimationManager, Animation, animate
@@ -25,7 +25,7 @@ def createScene(rootNode):
 
     ElasticMaterialObject(name="dragon", translation=[0.0,1.0,0.0])
 
-    Plane(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
+    Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
 
     animate( ( myAction, { "target" :   } ) )
 ```

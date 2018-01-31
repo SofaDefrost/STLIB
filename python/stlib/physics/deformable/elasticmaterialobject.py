@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import Sofa
-from defrost.solver import DefaultSolver
 
-def ElasticObject(rootNode, 
+def ElasticMaterialObject(rootNode,
 		  name="elasticelasticobject", surface=None, volume=None, 
           rotation=[0.0, 0.0, 0.0], translation=[0.0, 0.0, 0.0], 
           surfacecolor=[1.0, 1.0, 1.0],
@@ -14,7 +13,6 @@ def ElasticObject(rootNode,
         return None
     	
     elasticobject = rootNode.createChild(name)
-    DefaultSolver(elasticobject)
 
     if volume.endswith(".msh"):
         elasticobject.createObject('MeshGmshLoader', name='loader', filename=volume, rotation=rotation, translation=translation)
@@ -52,9 +50,10 @@ def ElasticObject(rootNode,
     return elasticobject
     
 def createScene(rootNode):
-    from defrost.scene import DefaultHeader
-    DefaultHeader(rootNode)
-    ElasticObject(rootNode, "ShouldFail")
-    ElasticObject(rootNode, "NoVisual", volume="mesh/liver.msh", translation=[3.0, 0.0, 0.0])
-    ElasticObject(rootNode, "WithVisual", surface="mesh/liver.obj", surfacecolor=[1.0, 0.0, 0.0], volume="mesh/liver.msh", translation=[-3, 0, 0])
+    from stlib.scene import STLIBHeader
+
+    STLIBHeader(rootNode)
+    ElasticMaterialObject(rootNode, "ShouldFail")
+    ElasticMaterialObject(rootNode, "NoVisual", volume="mesh/liver.msh", translation=[3.0, 0.0, 0.0])
+    ElasticMaterialObject(rootNode, "WithVisual", surface="mesh/liver.obj", surfacecolor=[1.0, 0.0, 0.0], volume="mesh/liver.msh", translation=[-3, 0, 0])
 	
