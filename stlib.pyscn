@@ -3,11 +3,6 @@ from stlib.solver import DefaultSolver
 from stlib.physics.rigid import Cube, Sphere, Floor
 from stlib.physics.deformable import ElasticMaterialObject
 
-from stlib.tools.animation import AnimationManager, animate
-
-#def myAnimAction(target, factor):
-#    target.
-
 def createScene(rootNode):
     STLIBHeader(rootNode)
     DefaultSolver(rootNode)
@@ -21,5 +16,3 @@ def createScene(rootNode):
                           translation=[0.0,0.0,0.0])
 
     Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
-
-    #animate( ( myAction, { "target" :   } ) )
