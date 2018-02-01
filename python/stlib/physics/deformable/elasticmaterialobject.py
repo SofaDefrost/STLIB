@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-import Sofa
+#import Sofa
 
 def ElasticMaterialObject(rootNode,
 		  name="elasticelasticobject", surface=None, volume=None, 

@@ -1,13 +1,40 @@
 # -*- coding: utf-8 -*-
+"""
+
+This package is focused on implementing a standard rigid object for sofa. The object is
+made described by its surface mesh.
+
+Content:
+********
+.. autosummary::
+
+    RigidObject
+    Cube
+    Sphere
+    Floor
+
+|
+
+.. autofunction:: RigidObject
+.. autofunction:: Cube
+.. autofunction:: Sphere
+.. autofunction:: Floor
+
+
+"""
+
 from rigidobject import RigidObject
 
 def Cube(node, **kwargs):
+    """Create a rigid cube of unit dimension"""
     return RigidObject(node, shapeFromFile="mesh/cube.obj", **kwargs)
 
 def Sphere(node, **kwargs):
+    """Create a rigid sphere of unit dimension"""
     return RigidObject(node, shapeFromFile="mesh/ball.obj", **kwargs)
 
 def Floor(node, **kwargs):
+    """Create a rigid floor of unit dimension"""
     return RigidObject(node, shapeFromFile="mesh/floor.obj", **kwargs)
 
 def createScene(rootNode):

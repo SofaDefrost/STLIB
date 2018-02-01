@@ -7,25 +7,22 @@ The templates should be compatible with .pyscn and PSL scenes. The library also 
 utilitary function we should always consider to use.
 
 ```python
-from stlib.scenes import STLIBHeader
-from stlib.physics.rigid.shapes import Cube, Sphere, Floor
+from stlib.scene import STLIBHeader
+from stlib.solver import DefaultSolver
+from stlib.physics.rigid import Cube, Sphere, Floor
 from stlib.physics.deformable import ElasticMaterialObject
-
-from stlib.animate import AnimationManager, Animation, animate
-
-#def myAnimAction(target, factor):
-#    target.
 
 def createScene(rootNode):
     STLIBHeader(rootNode)
+    DefaultSolver(rootNode)
     AnimationManager(rootNode)
 
-    #Sphere(rootNode, name="sphere", translation=[0.0, 1.0, 0.0])
-    #Cube(rootNode, name="cube", translation=[0.0,1.0,0.0])
+    Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
+    Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
 
-    ElasticMaterialObject(name="dragon", translation=[0.0,1.0,0.0])
+    ElasticMaterialObject(rootNode, name="dragon",
+                          surface="mesh/dragon.obj", volume="mesh/liver.msh",
+                          translation=[0.0,0.0,0.0])
 
     Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
-
-    animate( ( myAction, { "target" :   } ) )
 ```

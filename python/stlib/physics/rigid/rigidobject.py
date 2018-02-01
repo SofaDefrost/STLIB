@@ -4,7 +4,9 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
                 translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0], scale=1.0,
                 totalmass=1.0,
                 color=[1.0, 1.0, 0.0]):
-
+    """Creates a rigid body from a surface mesh.
+       The mass is distributed according to the geometry of the object.
+    """
     #### mechanics
     cube =node.createChild(name)
 

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+"""
+ElasticMaterialObject.
+
+"""
+
 from elasticmaterialobject import ElasticMaterialObject
 
-def createScene(node):
-    #ElasticMaterialObject(node)
-    print("COCOU")
-    None
 

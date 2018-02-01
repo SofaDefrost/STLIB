@@ -1,2 +1,10 @@
 # -*- coding: utf-8 -*-
-__all__=["visuals", "tools", "solver", "scene", "physics"]
+"""
+The Sofa Template Library.
+
+.. autosummary::
+    :toctree: _autosummary
+
+    stlib.physics
+"""
+__all__=["physics"]

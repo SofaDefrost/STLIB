@@ -11,8 +11,9 @@ def createScene(rootNode):
     Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
     Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
 
-    ElasticMaterialObject(rootNode, name="dragon",
+    e = ElasticMaterialObject(rootNode, name="dragon",
                           surface="mesh/dragon.obj", volume="mesh/liver.msh",
                           translation=[0.0,0.0,0.0])
 
-    Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
+    f = Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
+
