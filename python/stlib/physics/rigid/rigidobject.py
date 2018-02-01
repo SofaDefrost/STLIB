@@ -4,8 +4,45 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
                 translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0], scale=1.0,
                 totalmass=1.0,
                 color=[1.0, 1.0, 0.0]):
-    """Creates a rigid body from a surface mesh.
-       The mass is distributed according to the geometry of the object.
+    """Creates and adds rigid body from a surface mesh.
+
+    Args:
+        shapeFromFile (str):  The path or filename pointing to surface mesh file.
+
+        totalmass (float):   The mass is distributed according to the geometry of the object.
+
+        color (vec3f):  The default color used for the rendering of the object.
+
+        translation (vec3f):   Apply a 3D translation to the object.
+
+        rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
+
+        scale (vec3f):   Apply an uniform scaling to the object.
+
+    Structure:
+            .. sourcecode:: qml
+
+                Node : {
+                    name : "rigidobject"
+                    MechanicalObject,
+                    UniformMass,
+                    UncoupledConstraintCorrection,
+
+                    Node : {
+                        name : "collision",
+                        Mesh,
+                        MechanicalObject,
+                        Triangle,
+                        Line,
+                        Point,
+                        RigidMapping
+                    }
+                    Node : {
+                       name : "visual"
+                       OglModel,
+                       RigidMapping
+                    }
+                }
     """
     #### mechanics
     cube =node.createChild(name)

@@ -2,9 +2,11 @@
 
 def DefaultSolver(node):
     '''
-    Add the basic element to simulate a scene in Sofa.
-    There is an EulerImplicit time integrator and a CGLinearSolver for the
-    numerical processing.
+    Adds EulerImplicit, CGLinearSolver
+
+    Components added:
+        EulerImplicit
+        CGLinearSolver
     '''
     node.createObject('EulerImplicit', name='timeintegration', firstOrder='1')
     node.createObject('CGLinearSolver', name='numericsolver')
