@@ -41,6 +41,10 @@ extensions = [
     #'sphinx.ext.githubpages'
     ]
 
+import sys
+import os
+sys.path.append(os.getcwd()+"/../../../python")
+
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
 autodoc_member_order = 'bysource'
