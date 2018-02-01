@@ -190,7 +190,17 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
+import sys
+from unittest import *
+from mock import MagicMock
 
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+            return MagicMock()
+
+MOCK_MODULES = ['Sofa', 'numpy']
+sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
 # Example configuration for intersphinx: refer to the Python standard library.

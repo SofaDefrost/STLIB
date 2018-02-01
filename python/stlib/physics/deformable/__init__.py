@@ -1,6 +1,16 @@
 # -*- coding: utf-8 -*-
 """
-ElasticMaterialObject.
+Templates for deformable objects.
+
+Content:
+********
+.. autosummary::
+
+    ElasticMaterialObject
+
+|
+
+.. autofunction:: ElasticMaterialObject
 
 """
 

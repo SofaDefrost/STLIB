@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 import Sofa
-import os
 import math
-path = os.path.dirname(os.path.abspath(__file__))
 
 class Animation(object):
     def __init__(self, duration, mode, cb, params):
@@ -32,6 +30,12 @@ class Animation(object):
         self.cb(factor=self.factor , **self.params)    
         
 class AnimationManagerController(Sofa.PythonScriptController):
+    """
+    Implements the AnimationManager as a PythonScriptController.
+
+    .. autoclass:: AnimationManagerController
+        :members: addAnimation
+    """
     def __init__(self, node):
         self.listening = True
         self.name = "AnimationManager"
@@ -64,12 +68,46 @@ def LinearRamp(beginValue, endValue, scale):
 
 manager = None
 def animate(cb, params, duration, mode="once"):
+    """Construct and starts an animation
+
+    Build a new animation from a callback function that computes the animation value,
+    a set of parameters, the animation duration and the type of animation repetition pattern.
+
+    Animation can be added from any code location (createScene, PythonScriptController)
+
+    Example:
+        .. sourcecode:: python
+
+            def myAnimate(target, factor):
+                print("I should do something on: "+target.name)
+
+
+            def createScene(rootNode)
+                AnimationManager(rootNode)
+                animate(myAnimate, {"target" : rootNode }, 10)
+    """
     if manager == None:
         raise Exception("Missing manager in this scene")
         
     manager.addAnimation(Animation(duration=duration, mode=mode, cb=cb, params=params)) 
 
 def AnimationManager(node):
+    """
+    Manage all animation in the scene.
+
+    Before using the animation framework an AnimationManager
+    must be added to the scene. It has in charge, at each time step
+    to update all the running animations.
+
+    Returns:
+        AnimationManagerController
+
+    Example:
+        .. sourcecode:: python
+
+            def createScene(rootNode)
+                AnimationManager(rootNode)
+    """
     global manager
     if manager != None:
         Sofa.msg_info(node, "There is already one animation manager in this scene...why do you need a second one ?") 
@@ -78,7 +116,7 @@ def AnimationManager(node):
     node.addObject(manager)    
     return manager
     
-### This function is just an example on how to use the DefaultHeader function. 
+### This function is just an example on how to use the DefaultHeader function. 
 def createScene(rootNode):
 	AnimationManager(rootNode) 	
     

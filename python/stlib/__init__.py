@@ -3,9 +3,11 @@
 The Sofa Template Library.
 ==========================
 
-Utility functions and scene templates for the real-time simulation framework SOFA.
+Utility functions and scene templates for the real-time simulation framework `Sofa <https://www.sofa-framework.org/>`_.
 The different templates are organized in types and abstract the complexity of object
-creation with SOFA.
+creation with `Sofa <https://www.sofa-framework.org/>`_.
+
+The library can be used with scenes written in python and `PSL <https://github.com/sofa-framework/sofa/tree/master/applications/plugins/PSL>`_.
 
 Example:
 ********
@@ -38,11 +40,12 @@ Content of the library
 .. autosummary::
     :toctree: _autosummary
 
+    stlib.animation
     stlib.physics
     stlib.visuals
     stlib.solver
     stlib.scene
-    stlib.tools
+    stlib.algorithms
 
 
 Indices and tables
@@ -53,4 +56,5 @@ Indices and tables
 * :ref:`search`
 
 """
-__all__=["physics", "visuals", "solver", "scene", "tools"]
+
+__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms"]

@@ -1,7 +1,25 @@
 # -*- coding: utf-8 -*-
-__all__=["animation"]
+"""
+Algorithms we often use.
 
-def find(rootNode, path):
+Content:
+********
+.. autosummary::
+
+    find
+
+|
+
+.. autofunction:: find
+
+"""
+def find(node, path):
+    """
+    Query a node or an object by its path from the provided node.
+
+    Example:
+        find(node, "/root/rigidcube1/visual/OglModel")
+    """
     s = path.split('/')
 
     if s[1] != rootNode.name:

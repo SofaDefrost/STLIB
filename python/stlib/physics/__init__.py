@@ -8,5 +8,6 @@ Templates for physical simulation.
 
     stlib.physics.rigid
     stlib.physics.deformable
+
 """
 __all__=["rigid", "deformable"]

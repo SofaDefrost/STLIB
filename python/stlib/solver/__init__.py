@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Templates for most of the common scene setups.
+Templates for most of the common time integration setups.
 
 Content:
 ********

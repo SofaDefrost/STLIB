@@ -1,12 +1,52 @@
 # -*- coding: utf-8 -*-
-#import Sofa
+import Sofa
 
 def ElasticMaterialObject(rootNode,
 		  name="elasticelasticobject", surface=None, volume=None, 
           rotation=[0.0, 0.0, 0.0], translation=[0.0, 0.0, 0.0], 
-          surfacecolor=[1.0, 1.0, 1.0],
+          color=[1.0, 1.0, 1.0],
           poisson=0.3, young=18000,
           totalmass=1.0):
+    """
+    Object with an elastic deformation law.
+
+    Args:
+        volume (str): Filepath to a volumetric mesh (VTK,VTU, GMESH)
+
+        youngModulus (float):  The young modulus.
+
+        poisson (float):  The poisson parameter.
+
+        totalmass (float):   The mass is distributed according to the geometry of the object.
+
+        surface (str): Filepath to a surface mesh (STL, OBJ). If missing there is no visual properties to this object.
+
+        color (vec3f):  The default color used for the rendering of the object.
+
+        translation (vec3f):   Apply a 3D translation to the object.
+
+        rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
+
+        scale (vec3f):   Apply an uniform scaling to the object.
+
+    Structure:
+        .. sourcecode:: qml
+
+            Node : {
+                name : "elasticobject"
+                MeshGmsgLoader or MeshVTKLoader,
+                MechanicalObject,
+                TetrahedronSetTopologyContainer,
+                UniformMass,
+                TetrahedronFEMForceField,
+
+                Node : {
+                   name : "visual"
+                   OglModel,
+                   BarycentricMapping
+                }
+            }
+    """
 
     if volume == None:
         Sofa.msg_error(rootNode, "Unable to create an elastic object because there is no volume mesh provided.") 
