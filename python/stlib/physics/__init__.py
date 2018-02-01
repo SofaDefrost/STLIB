@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-import deformable
+__all__=["rigid", "deformable"]

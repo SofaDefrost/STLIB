@@ -7,7 +7,7 @@ def ElasticMaterialObject(rootNode,
           surfacecolor=[1.0, 1.0, 1.0],
           poisson=0.3, young=18000,
           totalmass=1.0):
-                  
+
     if volume == None:
         Sofa.msg_error(rootNode, "Unable to create an elastic object because there is no volume mesh provided.") 
         return None
@@ -56,4 +56,4 @@ def createScene(rootNode):
     ElasticMaterialObject(rootNode, "ShouldFail")
     ElasticMaterialObject(rootNode, "NoVisual", volume="mesh/liver.msh", translation=[3.0, 0.0, 0.0])
     ElasticMaterialObject(rootNode, "WithVisual", surface="mesh/liver.obj", surfacecolor=[1.0, 0.0, 0.0], volume="mesh/liver.msh", translation=[-3, 0, 0])
-	
+

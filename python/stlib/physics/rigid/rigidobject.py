@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 def RigidObject(node, name="rigidobject", shapeFromFile=None,
                 translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0], scale=1.0,
                 totalmass=1.0,

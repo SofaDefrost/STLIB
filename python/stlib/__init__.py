@@ -1,3 +1,2 @@
 # -*- coding: utf-8 -*-
-
-import scene
+__all__=["visuals", "tools", "solver", "scene", "physics"]
