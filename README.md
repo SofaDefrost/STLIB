@@ -26,3 +26,6 @@ def createScene(rootNode):
 
     Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
 ```
+
+The API documentation is available at [readthedocs](http://stlib.readthedocs.io/en/latest/index.html)
+
