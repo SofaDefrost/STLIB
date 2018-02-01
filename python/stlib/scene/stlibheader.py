@@ -2,13 +2,15 @@
 
 def STLIBHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[]):
         '''
-        A STLIBHeader initialize a scene with the following components:
-            VisualStyle,
-            RequiredPlugin,
-            OglSceneFrame,
+        Adds: VisualStyle, RequiredPlugin, OglSceneFrame, ...
 
-        The template has the following parameters:
-            gravity,
+        Components added:
+            VisualStyle, RequiredPlugin, OglSceneFrame,
+            OglSceneFrame, FreeMotionAnimationLoop,
+            GenericConstraintSolver, Collision Pipeline, BruteForceDetection
+
+        Parameters:
+            gravity
             dt
             plugins
         '''
