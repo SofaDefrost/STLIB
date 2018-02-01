@@ -1,0 +1,5 @@
+stlib.visuals
+=============
+
+.. automodule:: stlib.visuals
+    :no-members:

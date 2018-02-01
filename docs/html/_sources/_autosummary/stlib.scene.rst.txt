@@ -1,0 +1,5 @@
+stlib.scene
+===========
+
+.. automodule:: stlib.scene
+    :no-members:

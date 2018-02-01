@@ -1,0 +1,5 @@
+stlib.solver
+============
+
+.. automodule:: stlib.solver
+    :no-members:

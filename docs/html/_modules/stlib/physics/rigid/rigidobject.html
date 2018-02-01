@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>stlib.physics.rigid.rigidobject &mdash; STLIB 1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../../../../genindex.html"/>
+        <link rel="search" title="Search" href="../../../../search.html"/>
+    <link rel="top" title="STLIB 1.0 documentation" href="../../../../index.html"/>
+        <link rel="up" title="stlib.physics.rigid" href="../rigid.html"/> 
+
+  
+  <script src="../../../../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../../../../index.html" class="icon icon-home"> STLIB
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/stlib.physics.html">stlib.physics</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/stlib.visuals.html">stlib.visuals</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/stlib.solver.html">stlib.solver</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/stlib.scene.html">stlib.scene</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../_autosummary/stlib.tools.html">stlib.tools</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">STLIB</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../rigid.html">stlib.physics.rigid</a> &raquo;</li>
+        
+      <li>stlib.physics.rigid.rigidobject</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for stlib.physics.rigid.rigidobject</h1><div class="highlight"><pre>
+<span></span><span class="c1"># -*- coding: utf-8 -*-</span>
+
+<div class="viewcode-block" id="RigidObject"><a class="viewcode-back" href="../../../../_autosummary/_autosummary/stlib.physics.rigid.html#stlib.physics.rigid.RigidObject">[docs]</a><span class="k">def</span> <span class="nf">RigidObject</span><span class="p">(</span><span class="n">node</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;rigidobject&quot;</span><span class="p">,</span> <span class="n">shapeFromFile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                <span class="n">translation</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="p">[</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">scale</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                <span class="n">totalmass</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+                <span class="n">color</span><span class="o">=</span><span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">]):</span>
+    <span class="sd">&quot;&quot;&quot;Creates a rigid body from a surface mesh.</span>
+<span class="sd">       The mass is distributed according to the geometry of the object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1">#### mechanics</span>
+    <span class="n">cube</span> <span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">createChild</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="n">cube</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;MechanicalObject&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;mstate&quot;</span><span class="p">,</span> <span class="n">template</span><span class="o">=</span><span class="s2">&quot;Rigid&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
+    <span class="n">cube</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;UniformMass&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;mass&quot;</span><span class="p">,</span> <span class="n">totalmass</span><span class="o">=</span><span class="n">totalmass</span><span class="p">)</span>
+    <span class="n">cube</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;UncoupledConstraintCorrection&#39;</span><span class="p">)</span>
+
+    <span class="c1">#### collision</span>
+    <span class="n">cubeCollis</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">createChild</span><span class="p">(</span><span class="s1">&#39;collision&#39;</span><span class="p">)</span>
+    <span class="n">cubeCollis</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;MeshObjLoader&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;loader&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">shapeFromFile</span><span class="p">,</span> <span class="n">triangulate</span><span class="o">=</span><span class="s2">&quot;true&quot;</span><span class="p">,</span>
+                             <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span> <span class="p">)</span>
+
+    <span class="n">cubeCollis</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;Mesh&#39;</span><span class="p">,</span> <span class="n">src</span><span class="o">=</span><span class="s2">&quot;@loader&quot;</span><span class="p">)</span>
+    <span class="n">cubeCollis</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;MechanicalObject&#39;</span><span class="p">)</span>
+    <span class="n">cubeCollis</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;Triangle&#39;</span><span class="p">)</span>
+    <span class="n">cubeCollis</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;Line&#39;</span><span class="p">)</span>
+    <span class="n">cubeCollis</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;Point&#39;</span><span class="p">)</span>
+    <span class="n">cubeCollis</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;RigidMapping&#39;</span><span class="p">)</span>
+
+    <span class="c1">#### visualization</span>
+    <span class="n">cubeVisu</span> <span class="o">=</span> <span class="n">cube</span><span class="o">.</span><span class="n">createChild</span><span class="p">(</span><span class="s1">&#39;visual&#39;</span><span class="p">)</span>
+    <span class="n">cubeVisu</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;OglModel&#39;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;visual&quot;</span><span class="p">,</span>
+                          <span class="n">fileMesh</span><span class="o">=</span><span class="n">shapeFromFile</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+                          <span class="n">scale</span><span class="o">=</span><span class="n">scale</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="n">translation</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="n">rotation</span><span class="p">)</span>
+    <span class="n">cubeVisu</span><span class="o">.</span><span class="n">createObject</span><span class="p">(</span><span class="s1">&#39;RigidMapping&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">cube</span></div>
+
+<span class="k">def</span> <span class="nf">createScene</span><span class="p">(</span><span class="n">rootNode</span><span class="p">):</span>
+    <span class="kn">from</span> <span class="nn">stlib.scene</span> <span class="k">import</span> <span class="n">STLIBHeader</span>
+    <span class="kn">from</span> <span class="nn">stlib.solver</span> <span class="k">import</span> <span class="n">DefaultSolver</span>
+
+    <span class="n">STLIBHeader</span><span class="p">(</span><span class="n">rootNode</span><span class="p">)</span>
+    <span class="n">DefaultSolver</span><span class="p">(</span><span class="n">rootNode</span><span class="p">)</span>
+    <span class="n">RigidObject</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">shapeFromFile</span><span class="o">=</span><span class="s2">&quot;mesh/smCube27.obj&quot;</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">])</span>
+    <span class="n">RigidObject</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">shapeFromFile</span><span class="o">=</span><span class="s2">&quot;mesh/dragon.obj&quot;</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="p">[</span> <span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">])</span>
+    <span class="n">RigidObject</span><span class="p">(</span><span class="n">rootNode</span><span class="p">,</span> <span class="n">shapeFromFile</span><span class="o">=</span><span class="s2">&quot;mesh/smCube27.obj&quot;</span><span class="p">,</span> <span class="n">translation</span><span class="o">=</span><span class="p">[</span> <span class="mf">5.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">])</span>
+</pre></div>
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, damien.marchal@univ-lille1.fr.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../../../../',
+            VERSION:'1.0',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../../../../_static/jquery.js"></script>
+      <script type="text/javascript" src="../../../../_static/underscore.js"></script>
+      <script type="text/javascript" src="../../../../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../../../../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+stlib.tools
+===========
+
+.. automodule:: stlib.tools
+    :no-members:
