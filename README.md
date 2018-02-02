@@ -15,8 +15,7 @@ from stlib.physics.deformable import ElasticMaterialObject
 def createScene(rootNode):
     STLIBHeader(rootNode)
     DefaultSolver(rootNode)
-    AnimationManager(rootNode)
-
+    
     Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
     Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
 
