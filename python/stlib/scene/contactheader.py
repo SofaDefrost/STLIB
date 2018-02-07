@@ -1,60 +1,30 @@
 # -*- coding: utf-8 -*-
-def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[]):
-        '''
-        Adds: VisualStyle, RequiredPlugin, OglSceneFrame, ...
-
-        Args:
-            gravity (vec3f): define the gravity vector.
-
-            dt  (float): define the timestep
-
-            plugins (list str): list of plugins to load
-
-            repositoryPaths (list str): list of path to the specific data repository
-
-        Structure:
-            .. sourcecode:: qml
-
-                rootNode : {
-                    gravity : gravity,
-                    dt : dt,
-                    VisualStyle,
-                    RepositoryPath,
-                    RequiredPlugin,
-                    OglSceneFrame,
-                    FreeMotionAnimationLoop,
-                    GenericConstraintSolver,
-                    DefaultContactManager
-                    DiscreteIntersection
-                }
-
-        '''
-	node.createObject('VisualStyle', displayFlags='showVisualModels showBehaviorModels showCollisionModels showForceFields showInteractionForceFields')
-
-        i=0
-        for repository in repositoryPaths:
-            node.createObject('AddResourceRepository', name="AddResourceRepository"+str(i), path=repository)
-            i+=1
-
-        node.findData('gravity').value=gravity;
-    	node.findData('dt').value=0.01
-
-        if "SofaMiscCollision" not in plugins:
-            plugins.append("SofaMiscCollision")
-
-        if "SofaPython" not in plugins:
-            plugins.append("SofaPython")
-
- 	for name in plugins:
-	 	node.createObject('RequiredPlugin', name=name)
-	 	
-    	node.createObject('OglSceneFrame', style="Arrows", alignment="TopRight")
-
-        node.createObject('FreeMotionAnimationLoop')
-        node.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
-
 
 def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0):
+    '''
+            Args:
+                applyTo (Sofa.Node): the node to attach the object to
+
+                alarmDistance (float): define the distance at which the contact are integrated into
+                                       the detection computation.
+
+                contactDistance (float): define the distance at which the contact response is
+                                         integrated into the computation.
+
+
+                withFrictionCoef (float, default=0.0): optional value, set to non-zero to enable
+                                                       a global friction in your scene.
+
+            Structure:
+                .. sourcecode:: qml
+                     {
+                        CollisionPipeline,
+                        BruteForceDetection,
+                        CollisionResponse,
+                        LocalMinDistance
+                     }
+
+    '''
     applyTo.createObject('CollisionPipeline')
     applyTo.createObject('BruteForceDetection')
     applyTo.createObject('CollisionResponse', response="FrictionContact", responseParams="mu="+str(withFrictionCoef))
@@ -64,6 +34,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0)
 ### This function is just an example on how to use the DefaultHeader function. 
 def createScene(rootNode):
         import os
+        from mainheader import MainHeader
 	MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython","SoftRobots"], repositoryPaths=[os.getcwd()])
-	
+	ContactHeader(rootNode, alarmDistance=0.1, contactDistance=0.1, withFrictionCoef=1.0)
     
