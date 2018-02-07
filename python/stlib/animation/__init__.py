@@ -2,18 +2,24 @@
 """
 Animation framework focusing in ease of use.
 
-Content:
+Modules:
 ********
 .. autosummary::
+    :toctree: _autosummary
 
-    AnimationManager
-    animate
+    stlib.animation.easing
 
-|
+Functions:
+**********
+.. autosummary::
 
-.. autofunction:: AnimationManager
-.. autofunction:: animate
+    stlib.animation.AnimationManager
+    stlib.animation.animate
+
+.. autofunction:: stlib.animation.AnimationManager
+.. autofunction:: stlib.animation.animate
+
 
 """
-
+__all__=["animate", "easing"]
 from animate import AnimationManager, animate

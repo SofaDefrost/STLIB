@@ -7,13 +7,13 @@ The templates should be compatible with .pyscn and PSL scenes. The library also 
 utilitary function we should always consider to use.
 
 ```python
-from stlib.scene import STLIBHeader
+from stlib.scene import MainHeader
 from stlib.solver import DefaultSolver
 from stlib.physics.rigid import Cube, Sphere, Floor
 from stlib.physics.deformable import ElasticMaterialObject
 
 def createScene(rootNode):
-    STLIBHeader(rootNode)
+    MainHeader(rootNode)
     DefaultSolver(rootNode)
     AnimationManager(rootNode)
 

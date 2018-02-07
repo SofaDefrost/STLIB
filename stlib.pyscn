@@ -1,10 +1,10 @@
-from stlib.scene import STLIBHeader
+from stlib.scene import MainHeader
 from stlib.solver import DefaultSolver
 from stlib.physics.rigid import Cube, Sphere, Floor
 from stlib.physics.deformable import ElasticMaterialObject
 
 def createScene(rootNode):
-    STLIBHeader(rootNode)
+    MainHeader(rootNode)
     DefaultSolver(rootNode)
 
     Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])

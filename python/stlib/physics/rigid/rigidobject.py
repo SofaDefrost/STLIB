@@ -1,23 +1,26 @@
+
 # -*- coding: utf-8 -*-
 
 def RigidObject(node, name="rigidobject", shapeFromFile=None,
-                translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0], scale=1.0,
-                totalmass=1.0,
-                color=[1.0, 1.0, 0.0]):
+                withTranslation=[0.0,0.0,0.0], withRotation=[0.0,0.0,0.0], withScale=1.0,
+                withTotalMass=1.0, withVolume=1.0, withInertiaMatrix=[1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+                withColor=[1.0, 1.0, 0.0], isAStaticObject=False):
     """Creates and adds rigid body from a surface mesh.
 
     Args:
         shapeFromFile (str):  The path or filename pointing to surface mesh file.
 
-        totalmass (float):   The mass is distributed according to the geometry of the object.
+        withTotalMass (float):   The mass is distributed according to the geometry of the object.
 
-        color (vec3f):  The default color used for the rendering of the object.
+        withColor (vec3f):  The default color used for the rendering of the object.
 
-        translation (vec3f):   Apply a 3D translation to the object.
+        withTranslation (vec3f):   Apply a 3D translation to the object.
 
-        rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
+        withRotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
 
-        scale (vec3f):   Apply an uniform scaling to the object.
+        withScale (vec3f):   Apply an uniform scaling to the object.
+
+        isAStaticObject (bool): The object does not move in the scen but react to collision.
 
     Structure:
             .. sourcecode:: qml
@@ -27,6 +30,8 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
                     MechanicalObject,
                     UniformMass,
                     UncoupledConstraintCorrection,
+                    *EulerImplicit,
+                    *SparseLDLSolver,
 
                     Node : {
                         name : "collision",
@@ -47,14 +52,23 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
     #### mechanics
     cube =node.createChild(name)
 
-    cube.createObject('MechanicalObject', name="mstate", template="Rigid", scale=scale, translation=translation, rotation=rotation)
-    cube.createObject('UniformMass', name="mass", totalmass=totalmass)
-    cube.createObject('UncoupledConstraintCorrection')
+    if not isAStaticObject:
+        cube.createObject('EulerImplicit', name='odesolver', firstOrder='1')
+        cube.createObject('CGLinearSolver', name='preconditioner')
+
+    cube.createObject('MechanicalObject', name="mstate", template="Rigid",
+                        scale=withScale,
+                        translation=withTranslation, rotation=withRotation)
+
+    cube.createObject('UniformMass', name="mass", mass=[withTotalMass, withVolume, withInertiaMatrix[:]])
+
+    if not isAStaticObject:
+        cube.createObject('UncoupledConstraintCorrection')
 
     #### collision
     cubeCollis = cube.createChild('collision')
     cubeCollis.createObject('MeshObjLoader', name="loader", filename=shapeFromFile, triangulate="true",
-                             scale=scale, translation=translation, rotation=rotation )
+                             scale=withScale)
 
     cubeCollis.createObject('Mesh', src="@loader")
     cubeCollis.createObject('MechanicalObject')
@@ -66,18 +80,18 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
     #### visualization
     cubeVisu = cube.createChild('visual')
     cubeVisu.createObject('OglModel', name="visual",
-                          fileMesh=shapeFromFile, color=color,
-                          scale=scale, translation=translation, rotation=rotation)
+                          fileMesh=shapeFromFile, color=withColor,
+                          scale=withScale)
     cubeVisu.createObject('RigidMapping')
 
     return cube
 
 def createScene(rootNode):
-    from stlib.scene import STLIBHeader
+    from stlib.scene import MainHeader
     from stlib.solver import DefaultSolver
 
-    STLIBHeader(rootNode)
+    MainHeader(rootNode)
     DefaultSolver(rootNode)
-    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", translation=[-5.0,0.0,0.0])
-    RigidObject(rootNode, shapeFromFile="mesh/dragon.obj", translation=[ 0.0,0.0,0.0])
-    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", translation=[ 5.0,0.0,0.0])
+    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[-5.0,0.0,0.0])
+    RigidObject(rootNode, shapeFromFile="mesh/dragon.obj", withTranslation=[ 0.0,0.0,0.0])
+    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[ 5.0,0.0,0.0])

@@ -14,13 +14,13 @@ Example:
 
 .. sourcecode:: python
 
-    from stlib.scene import STLIBHeader
+    from stlib.scene import MainHeader
     from stlib.solver import DefaultSolver
     from stlib.physics.rigid import Cube, Sphere, Floor
     from stlib.physics.deformable import ElasticMaterialObject
 
     def createScene(rootNode):
-        STLIBHeader(rootNode)
+        MainHeader(rootNode)
         DefaultSolver(rootNode)
         AnimationManager(rootNode)
 
@@ -40,13 +40,12 @@ Content of the library
 .. autosummary::
     :toctree: _autosummary
 
-    stlib.animation
     stlib.physics
     stlib.visuals
     stlib.solver
     stlib.scene
+    stlib.animation
     stlib.algorithms
-
 
 Indices and tables
 ******************

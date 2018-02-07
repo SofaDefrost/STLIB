@@ -13,12 +13,13 @@ endif()
 set(HEADER_FILES src/initPlugin.h)
 set(SOURCE_FILES src/initPlugin.cpp)
 
+file(GLOB_RECURSE RESOURCE_FILES  "*.md" "*.psl" "*.py" "*.pyscn" "*.scn" "*.rst")
+
 # Config files and install rules for pythons scripts
 sofa_set_python_directory(${PROJECT_NAME} "python")
 
-
-file(GLOB_RECURSE RESOURCE_FILES  "*.md" "*.psl" "*.py" "*.pyscn" "*.scn" "*.rst")
-
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
 
+## Install rules for the library and headers; CMake package configurations files
 
+sofa_create_package(STLIB ${PROJECT_VERSION} ${PROJECT_NAME} STLIB)

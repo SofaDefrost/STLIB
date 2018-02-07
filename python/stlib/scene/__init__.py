@@ -6,12 +6,15 @@ Content:
 ********
 .. autosummary::
 
-    STLIBHeader
+    MainHeader
+    ContactHeader
 
 |
 
-.. autofunction:: STLIBHeader
+.. autofunction:: MainHeader
+.. autofunction:: ContactHeader
 
 """
 
-from stlibheader import STLIBHeader
+from maingheader import MainHeader
+from contactheader import ContactHeader

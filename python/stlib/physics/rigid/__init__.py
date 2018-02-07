@@ -38,10 +38,10 @@ def Floor(node, **kwargs):
     return RigidObject(node, shapeFromFile="mesh/floor.obj", **kwargs)
 
 def createScene(rootNode):
-    from stlib.scene import STLIBHeader
+    from stlib.scene import MainHeader
     from stlib.solver import DefaultSolver
 
-    STLIBHeader(rootNode)
+    MainHeader(rootNode)
     DefaultSolver(rootNode)
     Cube(rootNode, translation=[5.0,0.0,0.0])
     Sphere(rootNode, translation=[-5.0,0.0,0.0])

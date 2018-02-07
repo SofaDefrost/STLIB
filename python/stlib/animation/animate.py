@@ -63,9 +63,6 @@ class AnimationManagerController(Sofa.PythonScriptController):
         self.animations = nextanimations        
         return 0
 
-def LinearRamp(beginValue, endValue, scale):
-    return (endValue-beginValue) * scale + beginValue
-
 manager = None
 def animate(cb, params, duration, mode="once"):
     """Construct and starts an animation
@@ -93,7 +90,7 @@ def animate(cb, params, duration, mode="once"):
 
 def AnimationManager(node):
     """
-    Manage all animation in the scene.
+    A Controller to manage all animations in the scene.
 
     Before using the animation framework an AnimationManager
     must be added to the scene. It has in charge, at each time step

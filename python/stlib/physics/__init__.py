@@ -8,6 +8,8 @@ Templates for physical simulation.
 
     stlib.physics.rigid
     stlib.physics.deformable
+    stlib.physics.constraints
+    stlib.physics.collision
 
 """
-__all__=["rigid", "deformable"]
+__all__=["rigid", "deformable","constraints", "collision"]
