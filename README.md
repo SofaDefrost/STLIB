@@ -2,7 +2,7 @@
 Sofa Template Library
 
 This library should contains sofa scene template.
-It shoul contains common scene template used regularly to make the writing of scene with Sofa easy. 
+It should contains common scene template used regularly to make the writing of scene with Sofa easy. 
 The templates should be compatible with .pyscn and PSL scenes. The library also contains cool
 utilitary function we should always consider to use.
 
@@ -15,8 +15,7 @@ from stlib.physics.deformable import ElasticMaterialObject
 def createScene(rootNode):
     MainHeader(rootNode)
     DefaultSolver(rootNode)
-    AnimationManager(rootNode)
-
+    
     Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
     Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
 
