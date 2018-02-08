@@ -22,16 +22,16 @@ Example:
     def createScene(rootNode):
         MainHeader(rootNode)
         DefaultSolver(rootNode)
-        AnimationManager(rootNode)
 
-        Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
-        Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
+        Sphere(rootNode, name="sphere", withTranslation=[-5.0, 0.0, 0.0])
+        Cube(rootNode, name="cube", withTranslation=[5.0,0.0,0.0])
 
         ElasticMaterialObject(rootNode, name="dragon",
-                              surface="mesh/dragon.obj", volume="mesh/liver.msh",
-                              translation=[0.0,0.0,0.0])
+                              fromVolumeMesh="mesh/liver.msh",
+                              withSurfaceMesh="mesh/dragon.stl"
+                              withTranslation=[0.0,0.0,0.0])
 
-        Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
+        Floor(rootNode, name="plane", withTranslation=[0.0, -1.0, 0.0])
 
 
 Content of the library
@@ -46,6 +46,7 @@ Content of the library
     stlib.scene
     stlib.animation
     stlib.algorithms
+    stlib.debug
 
 Indices and tables
 ******************
@@ -56,4 +57,4 @@ Indices and tables
 
 """
 
-__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms"]
+__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms", "debug"]
