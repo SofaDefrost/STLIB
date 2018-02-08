@@ -76,8 +76,8 @@ def ElasticMaterialObject(
     else:
         elasticobject.createObject('MeshVTKLoader', name='MeshLoader', filename=fromVolumeMesh, rotation=withRotation, translation=withTranslation)
     
-    elasticobject.createObject('EulerImplicit', firstOrder='1')
-    elasticobject.createObject('SparseLDLSolver')
+    elasticobject.createObject('EulerImplicit')
+    solver = elasticobject.createObject('SparseLDLSolver', name="Solver")
 
     elasticobject.createObject('TetrahedronSetTopologyContainer', src='@MeshLoader', name='container')
     elasticobject.createObject('MechanicalObject', template='Vec3d')
@@ -96,7 +96,7 @@ def ElasticMaterialObject(
                                 poissonRatio=withPoissonRatio,  youngModulus=withYoungModulus)
 
 
-    elasticobject.createObject('LinearSolverConstraintCorrection')
+    elasticobject.createObject('LinearSolverConstraintCorrection', solverName=solver.name)
    
     #################################################################################
     ## Collision

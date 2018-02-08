@@ -53,8 +53,8 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
     cube =node.createChild(name)
 
     if not isAStaticObject:
-        cube.createObject('EulerImplicit', name='odesolver', firstOrder='1')
-        cube.createObject('CGLinearSolver', name='preconditioner')
+        cube.createObject('EulerImplicit', name='odesolver')
+        cube.createObject('CGLinearSolver', name='Solver')
 
     cube.createObject('MechanicalObject', name="mstate", template="Rigid",
                         scale=withScale,
@@ -72,9 +72,16 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
 
     cubeCollis.createObject('Mesh', src="@loader")
     cubeCollis.createObject('MechanicalObject')
-    cubeCollis.createObject('Triangle')
-    cubeCollis.createObject('Line')
-    cubeCollis.createObject('Point')
+
+    if isAStaticObject:
+        cubeCollis.createObject('Triangle', moving=False, simulated=False)
+        cubeCollis.createObject('Line', moving=False, simulated=False)
+        cubeCollis.createObject('Point', moving=False, simulated=False)
+    else:
+        cubeCollis.createObject('Triangle')
+        cubeCollis.createObject('Line')
+        cubeCollis.createObject('Point')
+
     cubeCollis.createObject('RigidMapping')
 
     #### visualization

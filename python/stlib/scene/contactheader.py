@@ -24,11 +24,16 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0)
                         LocalMinDistance
                      }
 
+
     '''
     applyTo.createObject('CollisionPipeline')
     applyTo.createObject('BruteForceDetection')
-    applyTo.createObject('CollisionResponse', response="FrictionContact", responseParams="mu="+str(withFrictionCoef))
-    node.createObject('LocalMinDistance', alarmDistance=alarmDistance, contactDistance=contactDistance)
+
+    applyTo.createObject('RuleBasedContactManager', rules='0 * FrictionContact?mu='+str(withFrictionCoef),
+                                                    name='Response', response='FrictionContact')
+    applyTo.createObject('LocalMinDistance',
+                        alarmDistance=alarmDistance, contactDistance=contactDistance,
+                        angleCone=0.01)
 
 
 ### This function is just an example on how to use the DefaultHeader function. 
@@ -36,5 +41,5 @@ def createScene(rootNode):
         import os
         from mainheader import MainHeader
 	MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython","SoftRobots"], repositoryPaths=[os.getcwd()])
-	ContactHeader(rootNode, alarmDistance=0.1, contactDistance=0.1, withFrictionCoef=1.0)
+	ContactHeader(rootNode, alarmDistance=1, contactDistance=0.1, withFrictionCoef=1.0)
     

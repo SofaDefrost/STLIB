@@ -16,5 +16,5 @@ Content:
 
 """
 
-from maingheader import MainHeader
+from mainheader import MainHeader
 from contactheader import ContactHeader

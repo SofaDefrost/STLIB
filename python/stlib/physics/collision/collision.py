@@ -39,7 +39,7 @@ def CollisionMesh(attachedTo=None,
         collisionmodel.createObject('Line')
         collisionmodel.createObject('Triangle')
     
-    collisionmodel.createObject('BarycentricMapping', mapForces=False, mapMasses=False)
+    collisionmodel.createObject('BarycentricMapping')
 
     return collisionmodel
     
