@@ -16,14 +16,15 @@ def createScene(rootNode):
     MainHeader(rootNode)
     DefaultSolver(rootNode)
     
-    Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
-    Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
+    Sphere(rootNode, name="sphere", withTranslation=[-5.0, 0.0, 0.0])
+    Cube(rootNode, name="cube", withTranslation=[5.0,0.0,0.0])
 
     ElasticMaterialObject(rootNode, name="dragon",
-                          surface="mesh/dragon.obj", volume="mesh/liver.msh",
-                          translation=[0.0,0.0,0.0])
+                          fromVolumeMesh="mesh/liver.msh",
+                          withSurfaceMesh="mesh/dragon.stl"
+                          withTranslation=[0.0,0.0,0.0])
 
-    Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
+    Floor(rootNode, name="plane", withTranslation=[0.0, -1.0, 0.0])
 ```
 
 The API documentation is available at [readthedocs](http://stlib.readthedocs.io/en/latest/index.html)
