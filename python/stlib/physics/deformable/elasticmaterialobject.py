@@ -4,7 +4,7 @@ import Sofa
 def ElasticMaterialObject(
                   attachedTo=None,
                   fromVolumeMesh=None,
-                  withName="elasticelasticobject",
+                  withName="ElasticMaterialObject",
                   withRotation=[0.0, 0.0, 0.0],
                   withTranslation=[0.0, 0.0, 0.0],
                   withSurfaceMesh=None,
@@ -62,7 +62,7 @@ def ElasticMaterialObject(
     """
 
     if attachedTo == None:
-        Sofa.msg_error("Unable to create an elastic object because there is no volume mesh provided.")
+        Sofa.msg_error("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
         return None
 
     if fromVolumeMesh == None:
@@ -129,8 +129,7 @@ def ElasticMaterialObject(
 def createScene(rootNode):
     from stlib.scene import MainHeader
 
-    MainHeader(rootNode)
-    ElasticMaterialObject(rootNode, "ShouldFail")
-    ElasticMaterialObject(rootNode, "NoVisual", fromVolumeMesh="mesh/liver.msh", translation=[3.0, 0.0, 0.0])
-    ElasticMaterialObject(rootNode, "WithVisual", withSurfaceMesh="mesh/liver.obj", surfacecolor=[1.0, 0.0, 0.0], fromVolumeMesh="mesh/liver.msh", translation=[-3, 0, 0])
+    MainHeader(rootNode, gravity=" 0 0 0")
+    ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual" , withTranslation=[3.0, 0.0, 0.0])
+    ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", withTranslation=[-3, 0, 0], withSurfaceMesh="mesh/liver.obj", withSurfaceColor=[1.0, 0.0, 0.0])
 
