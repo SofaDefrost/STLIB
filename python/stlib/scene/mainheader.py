@@ -27,7 +27,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
                 }
 
         '''
-	node.createObject('VisualStyle', displayFlags='showVisualModels showBehaviorModels showCollisionModels showForceFields showInteractionForceFields')
+	node.createObject('VisualStyle')
 
         i=0
         for repository in repositoryPaths:
