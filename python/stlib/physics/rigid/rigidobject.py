@@ -18,9 +18,9 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
 
         withRotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
 
-        withScale (vec3f):   Apply an uniform scaling to the object.
+        withScale (vec3f):   Apply a uniform scaling to the object.
 
-        isAStaticObject (bool): The object does not move in the scen but react to collision.
+        isAStaticObject (bool): The object does not move in the scene (e.g. floor, wall) but react to collision.
 
     Structure:
             .. sourcecode:: qml
@@ -99,6 +99,6 @@ def createScene(rootNode):
 
     MainHeader(rootNode)
     DefaultSolver(rootNode)
-    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[-5.0,0.0,0.0])
+    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[-20.0,0.0,0.0])
     RigidObject(rootNode, shapeFromFile="mesh/dragon.obj", withTranslation=[ 0.0,0.0,0.0])
-    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[ 5.0,0.0,0.0])
+    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[ 20.0,0.0,0.0])
