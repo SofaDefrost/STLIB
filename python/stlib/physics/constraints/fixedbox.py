@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
-             withName="fixedbox",
+             withName="FixedBox",
              withVisualization=False,
              withConstraintStrength='1e12', doRecomputeDuringSimulation=False):
     """
@@ -28,7 +28,7 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
 
     """
 
-    c = applyTo.createChild("constraint")
+    c = applyTo.createChild(withName)
     c.createObject('BoxROI', name='BoxROI', box=atPositions, drawBoxes=withVisualization, doUpdate=doRecomputeDuringSimulation)
     c.createObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness='1e12')
     return c
