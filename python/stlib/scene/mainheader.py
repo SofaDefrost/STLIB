@@ -51,6 +51,8 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
         node.createObject('FreeMotionAnimationLoop')
         node.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
 
+        return node
+
 
 ### This function is just an example on how to use the DefaultHeader function. 
 def createScene(rootNode):

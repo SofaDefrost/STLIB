@@ -35,6 +35,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0)
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
 
+    return applyTo
 
 ### This function is just an example on how to use the DefaultHeader function. 
 def createScene(rootNode):

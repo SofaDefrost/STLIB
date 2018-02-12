@@ -7,7 +7,9 @@ Utility functions and scene templates for the real-time simulation framework `So
 The different templates are organized in types and abstract the complexity of object
 creation with `Sofa <https://www.sofa-framework.org/>`_.
 
-The library can be used with scenes written in python and `PSL <https://github.com/sofa-framework/sofa/tree/master/applications/plugins/PSL>`_.
+The library is hosted on `github https://github.com/SofaDefrost/STLIB/` and it can be used with scenes
+written in python and `PSL <https://github.com/sofa-framework/sofa/tree/master/applications/plugins/PSL>`_.
+
 
 Example:
 ********
