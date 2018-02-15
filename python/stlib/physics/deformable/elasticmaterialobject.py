@@ -9,6 +9,7 @@ def ElasticMaterialObject(
                   withTranslation=[0.0, 0.0, 0.0],
                   withSurfaceMesh=None,
                   withCollisionMesh=None,
+                  withConstrain=True,
                   withSurfaceColor=[1.0, 1.0, 1.0],
                   withPoissonRatio=0.3,
                   withYoungModulus=18000,
@@ -29,6 +30,8 @@ def ElasticMaterialObject(
 
         withCollisionMesh (str): Filepath to a surface mesh (STL, OBJ). If missing there is no collision properties to this object.
 
+        withConstrain (bool): Add by default a default constraint correction component (ei:LinearSolverConstraintCorrection)
+
         withSurfaceColor (vec3f):  The default color used for the rendering of the object.
 
         withTranslation (vec3f):   Apply a 3D translation to the object.
@@ -47,6 +50,7 @@ def ElasticMaterialObject(
                 TetrahedronSetTopologyContainer,
                 UniformMass,
                 TetrahedronFEMForceField,
+                LinearSolverConstraintCorrection,
                 EulerImplicit,
                 SparseLDLSolver
                 LinearSolverConstraintCorrection
@@ -96,7 +100,8 @@ def ElasticMaterialObject(
                                 poissonRatio=withPoissonRatio,  youngModulus=withYoungModulus)
 
 
-    elasticobject.createObject('LinearSolverConstraintCorrection', solverName=solver.name)
+    if withConstrain:
+        elasticobject.createObject('LinearSolverConstraintCorrection', solverName=solver.name)
    
     #################################################################################
     ## Collision
