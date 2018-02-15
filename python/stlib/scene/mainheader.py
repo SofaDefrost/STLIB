@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import Sofa
+
 def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[]):
         '''
         Args:
@@ -36,6 +38,10 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
 
         node.findData('gravity').value=gravity;
     	node.findData('dt').value=dt
+
+        if not isinstance(plugins, list):
+            Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
+            return node
 
         if "SofaMiscCollision" not in plugins:
             plugins.append("SofaMiscCollision")
