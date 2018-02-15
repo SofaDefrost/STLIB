@@ -35,7 +35,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
             i+=1
 
         node.findData('gravity').value=gravity;
-    	node.findData('dt').value=0.01
+    	node.findData('dt').value=dt
 
         if "SofaMiscCollision" not in plugins:
             plugins.append("SofaMiscCollision")
