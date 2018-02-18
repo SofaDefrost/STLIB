@@ -27,14 +27,20 @@ from rigidobject import RigidObject
 
 def Cube(node, **kwargs):
     """Create a rigid cube of unit dimension"""
+    if "name" not in kwargs:
+        kwargs["name"] = "Cube"
     return RigidObject(node, shapeFromFile="mesh/cube.obj", **kwargs)
 
 def Sphere(node, **kwargs):
     """Create a rigid sphere of unit dimension"""
+    if "name" not in kwargs:
+        kwargs["name"] = "Sphere"
     return RigidObject(node, shapeFromFile="mesh/ball.obj", **kwargs)
 
 def Floor(node, **kwargs):
     """Create a rigid floor of unit dimension"""
+    if "name" not in kwargs:
+        kwargs["name"] = "Floor"
     return RigidObject(node, shapeFromFile="mesh/floor.obj", **kwargs)
 
 def createScene(rootNode):

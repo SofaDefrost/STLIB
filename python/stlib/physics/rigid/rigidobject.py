@@ -1,7 +1,7 @@
 
 # -*- coding: utf-8 -*-
 
-def RigidObject(node, name="rigidobject", shapeFromFile=None,
+def RigidObject(node, name="RigidObject", shapeFromFile=None,
                 withTranslation=[0.0,0.0,0.0], withRotation=[0.0,0.0,0.0], withScale=1.0,
                 withTotalMass=1.0, withVolume=1.0, withInertiaMatrix=[1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
                 withColor=[1.0, 1.0, 0.0], isAStaticObject=False):
