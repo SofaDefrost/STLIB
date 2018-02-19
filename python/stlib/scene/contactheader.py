@@ -20,7 +20,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0)
                      {
                         CollisionPipeline,
                         BruteForceDetection,
-                        CollisionResponse,
+                        RuleBasedContactManager,
                         LocalMinDistance
                      }
 

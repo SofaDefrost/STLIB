@@ -113,7 +113,11 @@ def AnimationManager(node):
     node.addObject(manager)    
     return manager
     
-### This function is just an example on how to use the DefaultHeader function. 
+### This function is just an example on how to use the animate function.
 def createScene(rootNode):
-	AnimationManager(rootNode) 	
+    def myAnimate(target, factor):
+        print("I should do something on: "+target.name+" factor is: "+str(factor))
+
+    AnimationManager(rootNode)
+    animate(myAnimate, {"target" : rootNode }, 10)
     
