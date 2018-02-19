@@ -21,6 +21,6 @@ Content:
 from mainheader import MainHeader
 from contactheader import ContactHeader
 
-def Node(parentNode, Name):
-    """Create a new node and attach it to the provided node"""
-    return parentNode.createChild(Name)
+def Node(parentNode, name):
+    """Create a new node in the graph and attach it to a parent node."""
+    return parentNode.createChild(name)

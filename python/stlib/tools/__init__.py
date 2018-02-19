@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
 """
 Utilitary function to ease the writing of scenes.
+
+Functions:
+**********
+.. autosummary::
+
+    stlib.tools.loadPointListFromFile
+
+.. autofunction:: stlib.tools.loadPointListFromFile
+
 """
 __all__=[]
 
 
 def loadPointListFromFile(s):
-    return [[-17.5, 12.5, 2.5],
-          [-32.5, 12.5, 2.5],
-          [-47.5, 12.5, 2.5],
-                                [-62.5, 12.5, 2.5],
-                                [-77.5, 12.5, 2.5],
-                                [-83.5, 12.5, 4.5],
-                                [-85.5, 12.5, 6.5],
-                                [-85.5, 12.5, 8.5],
-                                [-83.5, 12.5, 10.5],
-                                [-77.5, 12.5, 12.5],
-                                [-62.5, 12.5, 12.5],
-                                [-47.5, 12.5, 12.5],
-                                [-32.5, 12.5, 12.5],
-                                [-17.5, 12.5, 12.5]]
+    import json
+
+    """Load a set of 3D point from a json file"""
+    return json.load(open(s))
