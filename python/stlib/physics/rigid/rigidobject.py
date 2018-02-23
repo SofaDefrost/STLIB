@@ -57,7 +57,6 @@ def RigidObject(node, name="RigidObject", shapeFromFile=None,
         cube.createObject('CGLinearSolver', name='Solver')
 
     cube.createObject('MechanicalObject', name="mstate", template="Rigid",
-                        scale=withScale,
                         translation=withTranslation, rotation=withRotation)
 
     cube.createObject('UniformMass', name="mass", mass=[withTotalMass, withVolume, withInertiaMatrix[:]])
