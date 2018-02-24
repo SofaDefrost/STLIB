@@ -10,30 +10,30 @@ def loaderFor(name):
         return "MeshVTKLoader"
    
 def CollisionMesh(attachedTo=None, 
-                  fromSurfaceMesh=None,
-                  withName="collision",
-                  withRotation=[0.0,0.0,0.0],
-                  withTranslation=[0.0,0.0,0.0],
-                  withACollisionGroup=None):
+                  surfaceMeshFileName=None,
+                  name="collision",
+                  rotation=[0.0,0.0,0.0],
+                  translation=[0.0,0.0,0.0],
+                  collisionGroup=None):
 
     if attachedTo == None:
         Sofa.msg_error("Cannot create a CollisionMesh that is not attached to node.")
         return None
 
-    collisionmodel = attachedTo.createChild(withName)
+    collisionmodel = attachedTo.createChild(name)
 
-    if fromSurfaceMesh == None:
+    if surfaceMeshFileName == None:
         Sofa.msg_error(collisionmodel, "Unable to create a CollisionMesh without a surface mesh")
         return None
 
-    collisionmodel.createObject(loaderFor(fromSurfaceMesh), name="loader", filename=fromSurfaceMesh,
-                                rotation=withRotation, translation=withTranslation)
+    collisionmodel.createObject(loaderFor(surfaceMeshFileName), name="loader", filename=surfaceMeshFileName,
+                                rotation=rotation, translation=translation)
     collisionmodel.createObject('Mesh', src="@loader")
     collisionmodel.createObject('MechanicalObject')
-    if withACollisionGroup:
-        collisionmodel.createObject('Point', group=withACollisionGroup)
-        collisionmodel.createObject('Line', group=withACollisionGroup)
-        collisionmodel.createObject('Triangle', group=withACollisionGroup)
+    if collisionGroup:
+        collisionmodel.createObject('Point', group=collisionGroup)
+        collisionmodel.createObject('Line', group=collisionGroup)
+        collisionmodel.createObject('Triangle', group=collisionGroup)
     else:    
         collisionmodel.createObject('Point')
         collisionmodel.createObject('Line')
@@ -50,11 +50,11 @@ def createScene(rootNode):
     from stlib.physics.constraints import FixedBox
 
     MainHeader(rootNode)
-    target = ElasticMaterialObject(fromVolumeMesh="mesh/liver.msh",
-                                   withTotalMass=0.5,
+    target = ElasticMaterialObject(volumeMeshFileName="mesh/liver.msh",
+                                   totalMass=0.5,
                                    attachedTo=rootNode)
 
     FixedBox(atPositions=[-4, 0, 0, 5, 5, 4], applyTo=target,
-             withVisualization=True)
+             doVisualization=True)
 
-    CollisionMesh(fromSurfaceMesh="mesh/liver.obj", attachedTo=target)
+    CollisionMesh(surfaceMeshFileName="mesh/liver.obj", attachedTo=target)
