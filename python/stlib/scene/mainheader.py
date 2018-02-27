@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import Sofa
+
 def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[]):
         '''
         Args:
@@ -22,12 +24,11 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
                     OglSceneFrame,
                     FreeMotionAnimationLoop,
                     GenericConstraintSolver,
-                    DefaultContactManager
                     DiscreteIntersection
                 }
 
         '''
-	node.createObject('VisualStyle', displayFlags='showVisualModels showBehaviorModels showCollisionModels showForceFields showInteractionForceFields')
+	node.createObject('VisualStyle')
 
         i=0
         for repository in repositoryPaths:
@@ -35,7 +36,11 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
             i+=1
 
         node.findData('gravity').value=gravity;
-    	node.findData('dt').value=0.01
+    	node.findData('dt').value=dt
+
+        if not isinstance(plugins, list):
+            Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
+            return node
 
         if "SofaMiscCollision" not in plugins:
             plugins.append("SofaMiscCollision")
@@ -50,6 +55,8 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
 
         node.createObject('FreeMotionAnimationLoop')
         node.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+
+        return node
 
 
 ### This function is just an example on how to use the DefaultHeader function. 

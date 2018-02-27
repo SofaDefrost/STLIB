@@ -7,13 +7,12 @@ Content:
 .. autosummary::
 
    FixedBox
-
+   PartiallyFixedBox
 |
 
-.. autofunction:: FixedBox
+.. autofunction:: FixedBox PartiallyFixedBox
 
 """
 
 from fixedbox import FixedBox
-
-
+from partiallyfixedbox import PartiallyFixedBox

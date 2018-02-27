@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0):
+def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
     '''
             Args:
                 applyTo (Sofa.Node): the node to attach the object to
@@ -12,7 +12,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0)
                                          integrated into the computation.
 
 
-                withFrictionCoef (float, default=0.0): optional value, set to non-zero to enable
+                frictionCoef (float, default=0.0): optional value, set to non-zero to enable
                                                        a global friction in your scene.
 
             Structure:
@@ -20,7 +20,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0)
                      {
                         CollisionPipeline,
                         BruteForceDetection,
-                        CollisionResponse,
+                        RuleBasedContactManager,
                         LocalMinDistance
                      }
 
@@ -29,17 +29,18 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, withFrictionCoef=0.0)
     applyTo.createObject('CollisionPipeline')
     applyTo.createObject('BruteForceDetection')
 
-    applyTo.createObject('RuleBasedContactManager', rules='0 * FrictionContact?mu='+str(withFrictionCoef),
+    applyTo.createObject('RuleBasedContactManager', rules='0 * FrictionContact?mu='+str(frictionCoef),
                                                     name='Response', response='FrictionContact')
     applyTo.createObject('LocalMinDistance',
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
 
+    return applyTo
 
 ### This function is just an example on how to use the DefaultHeader function. 
 def createScene(rootNode):
         import os
         from mainheader import MainHeader
 	MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython","SoftRobots"], repositoryPaths=[os.getcwd()])
-	ContactHeader(rootNode, alarmDistance=1, contactDistance=0.1, withFrictionCoef=1.0)
+	ContactHeader(rootNode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)
     

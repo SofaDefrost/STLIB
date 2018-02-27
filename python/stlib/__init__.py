@@ -7,7 +7,9 @@ Utility functions and scene templates for the real-time simulation framework `So
 The different templates are organized in types and abstract the complexity of object
 creation with `Sofa <https://www.sofa-framework.org/>`_.
 
-The library can be used with scenes written in python and `PSL <https://github.com/sofa-framework/sofa/tree/master/applications/plugins/PSL>`_.
+The library is hosted on `github https://github.com/SofaDefrost/STLIB/` and it can be used with scenes
+written in python and `PSL <https://github.com/sofa-framework/sofa/tree/master/applications/plugins/PSL>`_.
+
 
 Example:
 ********
@@ -23,15 +25,15 @@ Example:
         MainHeader(rootNode)
         DefaultSolver(rootNode)
 
-        Sphere(rootNode, name="sphere", withTranslation=[-5.0, 0.0, 0.0])
-        Cube(rootNode, name="cube", withTranslation=[5.0,0.0,0.0])
+        Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
+        Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
 
         ElasticMaterialObject(rootNode, name="dragon",
-                              fromVolumeMesh="mesh/liver.msh",
-                              withSurfaceMesh="mesh/dragon.stl"
-                              withTranslation=[0.0,0.0,0.0])
+                              volumeMeshFileName="mesh/liver.msh",
+                              surfaceMeshFileName="mesh/dragon.stl"
+                              translation=[0.0,0.0,0.0])
 
-        Floor(rootNode, name="plane", withTranslation=[0.0, -1.0, 0.0])
+        Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
 
 
 Content of the library
@@ -46,7 +48,7 @@ Content of the library
     stlib.scene
     stlib.animation
     stlib.algorithms
-    stlib.debug
+    stlib.tools
 
 Indices and tables
 ******************
@@ -57,4 +59,4 @@ Indices and tables
 
 """
 
-__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms", "debug"]
+__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms", "tools"]

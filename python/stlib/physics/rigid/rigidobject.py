@@ -1,26 +1,26 @@
 
 # -*- coding: utf-8 -*-
 
-def RigidObject(node, name="rigidobject", shapeFromFile=None,
-                withTranslation=[0.0,0.0,0.0], withRotation=[0.0,0.0,0.0], withScale=1.0,
-                withTotalMass=1.0, withVolume=1.0, withInertiaMatrix=[1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
-                withColor=[1.0, 1.0, 0.0], isAStaticObject=False):
+def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
+                translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0], uniformScale=1.0,
+                totalMass=1.0, volume=1.0, inertiaMatrix=[1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
+                color=[1.0, 1.0, 0.0], isAStaticObject=False):
     """Creates and adds rigid body from a surface mesh.
 
     Args:
-        shapeFromFile (str):  The path or filename pointing to surface mesh file.
+        surfaceMeshFileName (str):  The path or filename pointing to surface mesh file.
 
-        withTotalMass (float):   The mass is distributed according to the geometry of the object.
+        totalMass (float):   The mass is distributed according to the geometry of the object.
 
-        withColor (vec3f):  The default color used for the rendering of the object.
+        color (vec3f):  The default color used for the rendering of the object.
 
-        withTranslation (vec3f):   Apply a 3D translation to the object.
+        translation (vec3f):   Apply a 3D translation to the object.
 
-        withRotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
+        rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
 
-        withScale (vec3f):   Apply an uniform scaling to the object.
+        uniformScale (vec3f):   Apply a uniform scaling to the object.
 
-        isAStaticObject (bool): The object does not move in the scen but react to collision.
+        isAStaticObject (bool): The object does not move in the scene (e.g. floor, wall) but react to collision.
 
     Structure:
             .. sourcecode:: qml
@@ -57,18 +57,17 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
         cube.createObject('CGLinearSolver', name='Solver')
 
     cube.createObject('MechanicalObject', name="mstate", template="Rigid",
-                        scale=withScale,
-                        translation=withTranslation, rotation=withRotation)
+                      translation=translation, rotation=rotation)
 
-    cube.createObject('UniformMass', name="mass", mass=[withTotalMass, withVolume, withInertiaMatrix[:]])
+    cube.createObject('UniformMass', name="mass", mass=[totalMass, volume, inertiaMatrix[:]])
 
     if not isAStaticObject:
         cube.createObject('UncoupledConstraintCorrection')
 
     #### collision
     cubeCollis = cube.createChild('collision')
-    cubeCollis.createObject('MeshObjLoader', name="loader", filename=shapeFromFile, triangulate="true",
-                             scale=withScale)
+    cubeCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
+                            translation=translation, rotation=rotation,scale=uniformScale)
 
     cubeCollis.createObject('Mesh', src="@loader")
     cubeCollis.createObject('MechanicalObject')
@@ -87,8 +86,8 @@ def RigidObject(node, name="rigidobject", shapeFromFile=None,
     #### visualization
     cubeVisu = cube.createChild('visual')
     cubeVisu.createObject('OglModel', name="visual",
-                          fileMesh=shapeFromFile, color=withColor,
-                          scale=withScale)
+                          fileMesh=surfaceMeshFileName, color=color,
+                          translation=translation, rotation=rotation,scale=uniformScale)
     cubeVisu.createObject('RigidMapping')
 
     return cube
@@ -99,6 +98,6 @@ def createScene(rootNode):
 
     MainHeader(rootNode)
     DefaultSolver(rootNode)
-    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[-5.0,0.0,0.0])
-    RigidObject(rootNode, shapeFromFile="mesh/dragon.obj", withTranslation=[ 0.0,0.0,0.0])
-    RigidObject(rootNode, shapeFromFile="mesh/smCube27.obj", withTranslation=[ 5.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", translation=[-20.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[ 0.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", translation=[ 20.0,0.0,0.0])
