@@ -57,7 +57,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
         cube.createObject('CGLinearSolver', name='Solver')
 
     cube.createObject('MechanicalObject', name="mstate", template="Rigid",
-                        translation=translation, rotation=rotation)
+                      translation=translation, rotation=rotation)
 
     cube.createObject('UniformMass', name="mass", mass=[totalMass, volume, inertiaMatrix[:]])
 
@@ -67,7 +67,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     #### collision
     cubeCollis = cube.createChild('collision')
     cubeCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
-                             scale=uniformScale)
+                            translation=translation, rotation=rotation,scale=uniformScale)
 
     cubeCollis.createObject('Mesh', src="@loader")
     cubeCollis.createObject('MechanicalObject')
@@ -87,7 +87,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     cubeVisu = cube.createChild('visual')
     cubeVisu.createObject('OglModel', name="visual",
                           fileMesh=surfaceMeshFileName, color=color,
-                          scale=uniformScale)
+                          translation=translation, rotation=rotation,scale=uniformScale)
     cubeVisu.createObject('RigidMapping')
 
     return cube
