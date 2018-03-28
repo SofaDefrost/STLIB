@@ -18,7 +18,7 @@ def ElasticMaterialObject(
     Object with an elastic deformation law.
 
     Args:
-        volumeMeshFileName (str): Filepath to a volumetric mesh (VTK,VTU, GMESH)
+        volumeMeshFileName (str): Filepath to a volumetric mesh (VTK,VTU, GMESH, GID)
 
         youngModulus (float):  The young modulus.
 
@@ -77,6 +77,8 @@ def ElasticMaterialObject(
 
     if volumeMeshFileName.endswith(".msh"):
         elasticobject.createObject('MeshGmshLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
+    elif volumeMeshFileName.endswith(".gidmsh"):
+        elasticobject.createObject('GIDMeshLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
     else:
         elasticobject.createObject('MeshVTKLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
     
