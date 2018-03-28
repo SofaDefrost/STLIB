@@ -45,6 +45,9 @@ class AnimationManagerController(Sofa.PythonScriptController):
     def addAnimation(self, animation):
         self.animations.append(animation) 
 
+    def bwdInitGraph(self, root):
+        self.onBeginAnimationStep(0.0)
+
     def onBeginAnimationStep(self,dt):
         self.totalTime += dt
         

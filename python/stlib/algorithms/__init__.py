@@ -22,10 +22,8 @@ def find(node, path):
     """
     s = path.split('/')
 
-    if s[1] != rootNode.name:
+    if s[1] != node.name:
         return None
-
-    node = rootNode
 
     for child in s[2:]:
         newnode = node.getChild(child, warning=False)
@@ -34,6 +32,38 @@ def find(node, path):
 
         if newnode == None:
             return None
+
+        node = newnode
+    return node
+
+def get(node, path):
+    """
+    Query a node, an object or a data by its path from the provided node.
+
+    Example:
+        find(node, "/root/rigidcube1/visual/OglModel.position")
+    """
+    if path.startswith("/"):
+        raise Exception("InvalidPathPrefix for " + path)
+
+    if path.startswith("../"):
+        raise Exception("InvalidPathPrefix for " + path)
+
+    if path.startswith("./"):
+        path = path[2:]
+
+    s = path.split('/')
+    for child in s:
+        newnode = node.getChild(child, warning=False)
+        if newnode == None:
+            nn = child.split('.')
+            if len(nn) == 1:
+                newnode = node.getObject(nn[0], warning=False)
+            elif len(nn) == 2:
+                newnode = node.getObject(nn[0]).getData(nn[1])
+
+        if newnode == None:
+            raise Exception("Invalid Path Query")
 
         node = newnode
     return node

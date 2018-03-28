@@ -48,6 +48,7 @@ Content of the library
     stlib.scene
     stlib.animation
     stlib.algorithms
+    stlib.numerics
     stlib.tools
 
 Indices and tables
@@ -59,4 +60,4 @@ Indices and tables
 
 """
 
-__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms", "tools"]
+__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms", "numerics", "components", "tools", "debug"]
