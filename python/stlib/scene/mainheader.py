@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import Sofa
+from stlib.animation import AnimationManager
 
 def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[]):
         '''
@@ -53,8 +54,9 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
 	 	
     	node.createObject('OglSceneFrame', style="Arrows", alignment="TopRight")
 
-        node.createObject('FreeMotionAnimationLoop')
-        node.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+        AnimationManager(node)
+        #node.createObject('FreeMotionAnimationLoop')
+        #node.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
 
         return node
 
