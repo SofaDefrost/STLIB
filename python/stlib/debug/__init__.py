@@ -6,43 +6,130 @@ Scene debuging facilities.
 import Sofa
 import SofaPython
 from stlib.scene import Node
+import OpenGL
+OpenGL.ERROR_CHECKING = False
 from OpenGL.GL import *
+from OpenGL.GLU import *
+from OpenGL.GLUT import *
+
 
 SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GL")
+SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLU")
+SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLUT")
 
 debugManager=None
 def DebugManager(parentNode):
     global debugManager
-    debugManager = Node(parentNode, "DebugManager")
-    ImmediateRenderer(debugManager)
-    return debugManager
+    #debugManager = Node(parentNode, "DebugManager")
+    ImmediateRenderer(parentNode)
+    return parentNode
 
 currentImmediateRenderer = None
+def drawText(text, x, y):
+    global currentImmediateRenderer
+    if currentImmediateRenderer == None:
+        return
+    currentImmediateRenderer.addText(text,x,y)
 
 def drawLine(p0,p1):
+    global currentImmediateRenderer
     if currentImmediateRenderer == None:
         return
     currentImmediateRenderer.addEdge(p0, p1)
 
+def worldToScreenPoint(p):
+    return gluProject(p[0],p[1],p[2], currentImmediateRenderer.mvm,
+                      currentImmediateRenderer.pm, currentImmediateRenderer.viewport)
+
 class ImmediateRenderer(Sofa.PythonScriptController):
     def __init__(self, rootNode):
         global currentImmediateRenderer
+        self.name = "DebugManager"
         self.edges = []
+        self.textes = []
         currentImmediateRenderer = self
+        glutInit()
+        self.mvm = glGetDoublev(GL_MODELVIEW_MATRIX)
+        self.pm = glGetDoublev(GL_PROJECTION_MATRIX)
+        self.viewport = glGetInteger( GL_VIEWPORT )
+
+
+    def addText(self, text, x, y):
+        self.textes.append([text,int(x),int(y)])
 
     def addEdge(self, p0, p1):
         self.edges.append([p0,p1])
 
-    def draw(self):
+    def drawAll2D(self):
+        viewport = glGetInteger( GL_VIEWPORT );
+
+        glDepthMask(GL_FALSE)
+
+        glPushAttrib( GL_LIGHTING_BIT )
+        glPushAttrib( GL_ENABLE_BIT )
+        glEnable( GL_COLOR_MATERIAL )
         glDisable(GL_LIGHTING)
-        glEnable(GL_COLOR_MATERIAL)
+        glDisable(GL_DEPTH_TEST)
+        glEnable( GL_LINE_SMOOTH )
+        glEnable( GL_POLYGON_SMOOTH )
+        glHint( GL_LINE_SMOOTH_HINT, GL_NICEST )
+
+        glMatrixMode(GL_PROJECTION)
+        glPushMatrix()
+        glLoadIdentity()
+        gluOrtho2D(0, viewport[2], 0, viewport[3] )
+
+        glMatrixMode(GL_MODELVIEW)
+        glPushMatrix()
+        glLoadIdentity()
+
+        glLineWidth(1.0)
+        glBegin(GL_LINES)
+        glColor(1.0,1.0,1.0)
+        glVertex3d(-100,480,0)
+        glVertex3d(1000,480,0)
+        glEnd()
+
+        self.drawAllText()
+
+        glMatrixMode(GL_MODELVIEW)
+        glPopMatrix()
+
+        glMatrixMode(GL_PROJECTION)
+        glPopMatrix()
+        glMatrixMode(GL_MODELVIEW)
+
+        glPopAttrib()
+        glPopAttrib()
+
+        glDepthMask(GL_TRUE)
+
+    def drawAllText(self):
+        for text in self.textes:
+            glRasterPos2i( text[1], text[2] )
+            glColor(1.0,0.0,0.0)
+            for c in text[0]:
+                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
+
+    def onBeginAnimationStep(self, dt):
+        self.textes = []
+        self.edges = []
+
+    def draw(self):
+        self.mvm = glGetDoublev(GL_MODELVIEW_MATRIX)
+        self.pm = glGetDoublev(GL_PROJECTION_MATRIX)
+        self.viewport = glGetInteger( GL_VIEWPORT )
+
+        self.drawAll2D()
+
+        glDisable(GL_LIGHTING)
         glBegin(GL_LINES)
         glColor3f(1.0,0.0,0.0)
         for e in self.edges:
             glVertex3dv(e[0])
             glVertex3dv(e[1])
-        glEnd
-        self.edges = []
+        glEnd()
+
 
 class TracerLog(object):
     def __init__(self, filename):

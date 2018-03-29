@@ -113,7 +113,6 @@ def AnimationManager(node):
         Sofa.msg_info(node, "There is already one animation manager in this scene...why do you need a second one ?") 
         return manager 
     manager = AnimationManagerController(node)
-    node.addObject(manager)    
     return manager
     
 ### This function is just an example on how to use the animate function.
