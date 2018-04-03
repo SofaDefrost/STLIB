@@ -4,7 +4,11 @@ import math
 
 class Animation(object):
     def __init__(self, duration, mode, cb, params):
-        self.startTime = None
+        if 'startTime' in params :
+            self.startTime = params['startTime']
+        else: 
+            self.startTime = None
+
         self.duration = duration
         self.cb = cb
         self.params = params
@@ -52,6 +56,7 @@ class AnimationManagerController(Sofa.PythonScriptController):
         self.totalTime += dt
         
         nextanimations = []
+        print ('onBeginAnimationStep')
         for animation in self.animations:
             animation.update(self.totalTime)
             if animation.factor < 1.0 and animation.direction > 0.0:

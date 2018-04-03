@@ -8,11 +8,13 @@ Content:
 
    FixedBox
    PartiallyFixedBox
+   SubTopology
 |
 
-.. autofunction:: FixedBox PartiallyFixedBox
+.. autofunction:: FixedBox PartiallyFixedBox SubTopology
 
 """
 
 from fixedbox import FixedBox
 from partiallyfixedbox import PartiallyFixedBox
+from subTopology import SubTopology
