@@ -5,7 +5,6 @@ Scene debuging facilities.
 """
 import Sofa
 import SofaPython
-from stlib.scene import Node
 import OpenGL
 OpenGL.ERROR_CHECKING = False
 from OpenGL.GL import *
@@ -20,7 +19,6 @@ SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLUT
 debugManager=None
 def DebugManager(parentNode):
     global debugManager
-    #debugManager = Node(parentNode, "DebugManager")
     ImmediateRenderer(parentNode)
     return parentNode
 
@@ -41,6 +39,32 @@ def worldToScreenPoint(p):
     return gluProject(p[0],p[1],p[2], currentImmediateRenderer.mvm,
                       currentImmediateRenderer.pm, currentImmediateRenderer.viewport)
 
+
+def BluePrint(parentNode, name="BluePrint"):
+    class BluePrintController(Sofa.PythonScriptController):
+        def __init__(self, node):
+            self.name = "Controller"
+            self.rules
+
+        def addRule(self, origin=[0.0,0.0,0.0], direction=[1.0,0.0,0.0], spacing=1.0, length=10, text="cm"):
+            pass
+
+        def addCircle(self, origin, radius):
+            pass
+
+        def drawRule(self, o,d,s,t):
+            step = length / spacing
+            for i in range(0, int(step)):
+                drawLine()
+
+        def draw(self):
+            for rule in self.rules:
+                print("HEllow")
+
+    c = parentNode.createChild(name)
+    BluePrintController(c)
+    return c
+
 class ImmediateRenderer(Sofa.PythonScriptController):
     def __init__(self, rootNode):
         global currentImmediateRenderer
@@ -59,6 +83,9 @@ class ImmediateRenderer(Sofa.PythonScriptController):
 
     def addEdge(self, p0, p1):
         self.edges.append([p0,p1])
+
+    def addRenderable(self, r):
+        self.renderable.append(r)
 
     def drawAll2D(self):
         viewport = glGetInteger( GL_VIEWPORT );
