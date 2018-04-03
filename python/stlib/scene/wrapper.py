@@ -34,7 +34,7 @@ class Wrapper(object):
             return self.node.createObject(objectArg[0], **objectArg[1])
 
     def createChild(self, name):
-        return MORWrapper(self.node.createChild(name), self.attachedFunction ,self.datacache)    
+        return Wrapper(self.node.createChild(name), self.attachedFunction ,self.datacache)
     
     def __getattr__(self, value):
         return self.node.__getattribute__(value)
@@ -61,4 +61,4 @@ import mainheader
 # My new scene
 def createScene(rootNode):
     ## Call the old scene creation. 
-    mainheader.createScene(wrapper(rootNode, myAttachedFunction, myNewParam))     
+    mainheader.createScene(Wrapper(rootNode, myAttachedFunction, myNewParam))
