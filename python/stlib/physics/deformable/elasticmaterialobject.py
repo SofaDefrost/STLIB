@@ -13,7 +13,7 @@ def ElasticMaterialObject(
                   surfaceColor=[1.0, 1.0, 1.0],
                   poissonRatio=0.3,
                   youngModulus=18000,
-                  totalMass=1.0):
+                  totalMass=1.0, solver=None):
     """
     Object with an elastic deformation law.
 
@@ -82,8 +82,9 @@ def ElasticMaterialObject(
     else:
         elasticobject.createObject('MeshVTKLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
     
-    elasticobject.createObject('EulerImplicit')
-    solver = elasticobject.createObject('SparseLDLSolver', name="Solver")
+    if solver == None:
+        elasticobject.createObject('EulerImplicit')
+        solver = elasticobject.createObject('SparseLDLSolver', name="Solver")
 
     elasticobject.createObject('TetrahedronSetTopologyContainer', src='@MeshLoader', name='container')
     elasticobject.createObject('MechanicalObject', template='Vec3d')

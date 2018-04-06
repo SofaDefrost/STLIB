@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import Sofa
+from stlib.animation import AnimationManager
 
-def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[]):
+def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[], doDebug=False):
         '''
         Args:
             gravity (vec3f): define the gravity vector.
@@ -49,13 +50,15 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
             plugins.append("SofaPython")
 
  	for name in plugins:
-	 	node.createObject('RequiredPlugin', name=name)
+	 	node.createObject('RequiredPlugin', name=name, printLog=False)
 	 	
     	node.createObject('OglSceneFrame', style="Arrows", alignment="TopRight")
 
-        node.createObject('FreeMotionAnimationLoop')
-        node.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+        if doDebug:
+            from stlib.debug import DebugManager
+            DebugManager(node)
 
+        AnimationManager(node)
         return node
 
 

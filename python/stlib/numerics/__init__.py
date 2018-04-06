@@ -19,6 +19,23 @@ from math import pi
 def vadd(a,b):
     return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
 
+def vvadd(a,b):
+    return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
+
+def vvsub(a,b):
+    return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]
+
+def vsadd(a,b):
+    return [a[0]+b, a[1]+b, a[2]+b]
+
+def vssub(a,b):
+    return [a[0]-b, a[1]-b, a[2]-b]
+
+def vsmul(a,b):
+    return [a[0]*b, a[1]*b, a[2]*b]
+
+
+
 def to_radians(v):
     if isinstance(v, list):
         p = []

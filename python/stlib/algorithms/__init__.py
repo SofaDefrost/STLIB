@@ -44,10 +44,10 @@ def get(node, path):
         find(node, "/root/rigidcube1/visual/OglModel.position")
     """
     if path.startswith("/"):
-        raise Exception("InvalidPathPrefix for " + path)
+        raise Exception("InvalidPathPrefix for " + path+" in "+node.getLinkPath())
 
     if path.startswith("../"):
-        raise Exception("InvalidPathPrefix for " + path)
+        raise Exception("InvalidPathPrefix for " + path+" in "+node.getLinkPath())
 
     if path.startswith("./"):
         path = path[2:]
@@ -59,11 +59,13 @@ def get(node, path):
             nn = child.split('.')
             if len(nn) == 1:
                 newnode = node.getObject(nn[0], warning=False)
+                if newnode == None:
+                    newnode = node.getData(nn[0])
             elif len(nn) == 2:
                 newnode = node.getObject(nn[0]).getData(nn[1])
 
         if newnode == None:
-            raise Exception("Invalid Path Query")
+            raise Exception("Invalid Path Query for "+path+" in "+node.getLinkPath())
 
         node = newnode
     return node
