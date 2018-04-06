@@ -32,7 +32,7 @@ def OrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0
 
     depth = [scale[2]]
 
-    return transformPosition(position=pos, translation=translation, eulerRotation=eulerRotation, scale=scale) + depth
+    return transformPositions(position=pos, translation=translation, eulerRotation=eulerRotation, scale=scale) + depth
 
 def createScene(rootNode):
     from stlib.scene import MainHeader
