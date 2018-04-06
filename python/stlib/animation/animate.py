@@ -56,7 +56,6 @@ class AnimationManagerController(Sofa.PythonScriptController):
         self.totalTime += dt
         
         nextanimations = []
-        print ('onBeginAnimationStep')
         for animation in self.animations:
             animation.update(self.totalTime)
             if animation.factor < 1.0 and animation.direction > 0.0:

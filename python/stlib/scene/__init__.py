@@ -20,7 +20,9 @@ Content:
 
 from mainheader import MainHeader
 from contactheader import ContactHeader
+from stlib.algorithms import get
 
 def Node(parentNode, name):
     """Create a new node in the graph and attach it to a parent node."""
     return parentNode.createChild(name)
+

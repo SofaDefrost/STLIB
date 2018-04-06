@@ -19,6 +19,23 @@ from math import pi
 def vadd(a,b):
     return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
 
+def vvadd(a,b):
+    return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
+
+def vvsub(a,b):
+    return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]
+
+def vsadd(a,b):
+    return [a[0]+b, a[1]+b, a[2]+b]
+
+def vssub(a,b):
+    return [a[0]-b, a[1]-b, a[2]-b]
+
+def vsmul(a,b):
+    return [a[0]*b, a[1]*b, a[2]*b]
+
+
+
 def to_radians(v):
     if isinstance(v, list):
         p = []
@@ -51,6 +68,29 @@ def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
 
     return numpy.matmul( numpy.matmul(t,rr), s )
 
+def positionsTRS(positions, translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+
+    trs = TRS_to_matrix(translation=translation, eulerRotation=eulerRotation, scale=scale)
+    tp = []
+    for point in positions:
+        tp.append(pointTRS(point, trs).tolist())
+
+    return tp
+
+def pointTRS(point, matrixTRS):
+
+    if len(point) != 3:
+        raise Exception('A Point is defined by 3 coordinates [X,Y,Z] , point given : '+str(point))
+
+    elif all(isinstance(n, int) or isinstance(n, float) for n in point):
+        np = numpy.matmul( matrixTRS, numpy.append(point,1.0) )
+        tp = np[0:3]
+
+    else :
+        raise Exception('A Point is a list/array of int/float, point given : '+str(point))
+
+
+    return tp
 
 class Transform(object):
     def __init__(self, translation, orientation=None, eulerRotation=None):

@@ -16,17 +16,31 @@ Content:
 
 __all__=["all"]
 
-def OrientedBoxRoi(parentNode, position, translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0], name="BoxRoi"):
+def OrientedBoxRoi(parentNode, positions, name="BoxRoi", translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0], depth = [1.0]):
     from stlib.numerics import *
-    pos = [[-0.5, 0.0,-0.5, 1],
-           [-0.5, 0.0, 0.5, 1],
-           [ 0.5, 0.0, 0.5, 1]]
+    if len(positions) != 3:
+        raise Exception('An orientedBox is defined by 3 points, number of points given : %i' % len(positions))
 
-    trs = TRS_to_matrix(translation=translation, eulerRotation=eulerRotation, scale=scale)
-    tp = []
-    for p in pos:
-        np = numpy.matmul( trs, numpy.array( p[0:3]+[1.0] ) )
-        tp.append( np[0:3].tolist() )
 
-    depth = [1.0]
-    return parentNode.createObject("BoxROI", position=position, orientedBox=tp+depth, drawBoxes=True )
+    positionTRS = positionsTRS(positions=positions, translation=translation, eulerRotation=eulerRotation, scale=scale)
+
+    parentNode.createObject("BoxROI", name=name, position=positions, orientedBox=positionTRS+depth, drawBoxes=True )
+
+    return parentNode
+
+
+def createScene(rootNode):
+    from stlib.scene import MainHeader
+    from stlib.physics.rigid import Floor
+
+    MainHeader(rootNode,plugins=["SofaPython","SoftRobots","ModelOrderReduction"],
+                        dt=1,
+                        gravity=[0.0,-9810,0.0])
+
+    floor =Floor(rootNode,
+            name = "Plane",
+            color = [1.0, 0.0, 1.0],
+            isAStaticObject = True,
+            uniformScale = 10)
+
+    OrientedBoxRoi(floor,[[0.0, 0.0, 0], [150.0, 0, 0], [150.0, -100.0, 0]],translation=[0,100,0],eulerRotation=[650,0,0],depth=[50])
