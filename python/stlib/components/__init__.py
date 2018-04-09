@@ -16,18 +16,23 @@ Content:
 
 __all__=["all"]
 
-def OrientedBoxRoi(parentNode, positions, name="BoxRoi", translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0], depth = [1.0]):
-    from stlib.numerics import *
-    if len(positions) != 3:
-        raise Exception('An orientedBox is defined by 3 points, number of points given : %i' % len(positions))
-
-
-    positionTRS = positionsTRS(positions=positions, translation=translation, eulerRotation=eulerRotation, scale=scale)
-
-    parentNode.createObject("BoxROI", name=name, position=positions, orientedBox=positionTRS+depth, drawBoxes=True )
-
+def OrientedBoxRoi(parentNode, position, name="BoxRoi", translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+    
+    orientedBox = OrientedBoxFromTransform(translation,eulerRotation,scale)
+    parentNode.createObject("BoxROI", position=position, orientedBox=orientedBox, drawBoxes=True )
+    
     return parentNode
 
+def OrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+    from stlib.numerics import *
+    # BoxROI unitaire
+    pos = [[-0.5, 0.0,-0.5],
+           [-0.5, 0.0, 0.5],
+           [ 0.5, 0.0, 0.5]]
+
+    depth = [scale[2]]
+
+    return transformPositions(position=pos, translation=translation, eulerRotation=eulerRotation, scale=scale) + depth
 
 def createScene(rootNode):
     from stlib.scene import MainHeader
@@ -43,4 +48,7 @@ def createScene(rootNode):
             isAStaticObject = True,
             uniformScale = 10)
 
-    OrientedBoxRoi(floor,[[0.0, 0.0, 0], [150.0, 0, 0], [150.0, -100.0, 0]],translation=[0,100,0],eulerRotation=[650,0,0],depth=[50])
+    OrientedBoxRoi(floor, name="MyBoxRoi",position=[[50,0,0],[15,15,0],[60,70,25]],scale=[100,100,100])
+
+    myOrientedBox = OrientedBoxFromTransform(translation=[400,100,100],eulerRotation=[0,65,0],scale=[400,400,800])
+    floor.createObject("BoxROI", orientedBox=myOrientedBox, drawBoxes=True )

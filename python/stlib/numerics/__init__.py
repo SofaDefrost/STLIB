@@ -68,16 +68,16 @@ def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
 
     return numpy.matmul( numpy.matmul(t,rr), s )
 
-def positionsTRS(positions, translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+def transformPositions(position, translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
 
     trs = TRS_to_matrix(translation=translation, eulerRotation=eulerRotation, scale=scale)
     tp = []
-    for point in positions:
-        tp.append(pointTRS(point, trs).tolist())
+    for point in position:
+        tp.append(transformPosition(point, trs).tolist())
 
     return tp
 
-def pointTRS(point, matrixTRS):
+def transformPosition(point, matrixTRS):
 
     if len(point) != 3:
         raise Exception('A Point is defined by 3 coordinates [X,Y,Z] , point given : '+str(point))
