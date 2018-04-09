@@ -41,24 +41,27 @@ class Wrapper(object):
 
 ### This functions are just an example on how to use the Wrapper class. 
 
-# My param
-myNewParam = { "SofaPython" : 'SofaMiscCollision',
-               "SofaMiscCollision" : "SoftRobots",
-               "SoftRobots" : "SofaPython" }
+# !!    Doesn't Work Any More With Current MainHeader Implementation    !!
+#       A PR has to be made to make the Wrapper inherit from Sofa.Node
 
-# My function that will replace a riquered plugin by another
-def myAttachedFunction(node,type,newParam,initialParam):
-    if str(type) == 'RequiredPlugin':
-        for key in newParam:
-            if initialParam['name'] == key:
-                initialParam['name'] = newParam[key] 
-                return type , initialParam
+# # My param
+# myNewParam = { "SofaPython" : 'SofaMiscCollision',
+#                "SofaMiscCollision" : "SoftRobots",
+#                "SoftRobots" : "SofaPython" }
 
-    return None
+# # My function that will replace a riquered plugin by another
+# def myAttachedFunction(node,type,newParam,initialParam):
+#     if str(type) == 'RequiredPlugin':
+#         for key in newParam:
+#             if initialParam['name'] == key:
+#                 initialParam['name'] = newParam[key] 
+#                 return type , initialParam
 
-import mainheader
+#     return None
 
-# My new scene
-def createScene(rootNode):
-    ## Call the old scene creation. 
-    mainheader.createScene(Wrapper(rootNode, myAttachedFunction, myNewParam))
+# import mainheader
+
+# # My new scene
+# def createScene(rootNode):
+#     ## Call the old scene creation. 
+#     mainheader.createScene(Wrapper(rootNode, myAttachedFunction, myNewParam))
