@@ -2,18 +2,21 @@ import numpy
 
 class Vec3(numpy.ndarray):
 
-
     def __new__(cls, *args):
         """ Vec3 constructor expects zero, one or three arguments.
         Example:
         vec3(1.) will return [1.,1.,1.]
         vec3(1,2,3) will return [1,2,3]
+        vec3([1,2,3]) will return [1,2,3]
         Default vec3() will return [0.,0.,0]
         """
         if len(args)==0:
             return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([0.,0.,0.]))
-        elif len(args)==1:
-            return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0],args[0],args[0]]))
+        if len(args) == 1:
+            if hasattr(args[0],"__len__") and len(args[0])==3:
+                return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0][0],args[0][1],args[0]][2]))
+            else:
+                return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0],args[0],args[0]]))
         elif len(args)==3:
             return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0],args[1],args[2]]))
 
@@ -84,10 +87,9 @@ class Vec3(numpy.ndarray):
     def dot(self, *args):
         """ Function dot of class Vec3 computes the scalar product with the given vector. The function expects one or three arguments.
         Example: if v = [1.,1.,1.]
-        v.scale(1,2,3) will return 6
-        v.scale([1,2,3]) will return 6
+        v.dot(1,2,3) will return 6
+        v.dot([1,2,3]) will return 6
         """
-
         s = 0
         if len(args) == 1 and hasattr(args[0],"__len__") and len(args[0])==3:
             for i in range(0,3):

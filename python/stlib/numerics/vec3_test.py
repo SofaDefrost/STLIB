@@ -1,5 +1,4 @@
 import unittest
-import vector
 from vec3 import *
 
 class Vec3_test(unittest.TestCase):
@@ -9,7 +8,7 @@ class Vec3_test(unittest.TestCase):
         v2 = Vec3(1.)
         self.assertEqual(v1,v1)
         self.assertNotEqual(v1,v2)
-        
+
         self.assertEqual(v1,[0.,0.,0.])
         self.assertNotEqual(v1,[1.,1.,1.])
 
@@ -21,6 +20,11 @@ class Vec3_test(unittest.TestCase):
         self.assertEqual(v, [1.,1.,1.])
         v = Vec3(1.,2.,3.)
         self.assertEqual(v, [1.,2.,3.])
+        v = Vec3([1.,2.,3.])
+        self.assertEqual(v, [1.,2.,3.])
+        v1 = Vec3(2,2,2)
+        v = Vec3(v1)
+        self.assertEqual(v, v1)
 
         # If args are not expected should print the doc
         # v = Vec3(1,2)
