@@ -72,7 +72,7 @@ def ElasticMaterialObject(
     if volumeMeshFileName == None:
         Sofa.msg_error(attachedTo, "Unable to create an elastic object because there is no volume mesh provided.")
         return None
-    	
+
     elasticobject = attachedTo.createChild(name)
 
     if volumeMeshFileName.endswith(".msh"):
@@ -81,12 +81,12 @@ def ElasticMaterialObject(
         elasticobject.createObject('GIDMeshLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
     else:
         elasticobject.createObject('MeshVTKLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
-    
+
     if solver == None:
         elasticobject.createObject('EulerImplicit')
         solver = elasticobject.createObject('SparseLDLSolver', name="Solver")
 
-    elasticobject.createObject('TetrahedronSetTopologyContainer', src='@MeshLoader', name='container')
+    elasticobject.createObject('TetrahedronSetTopologyContainer', src='@MeshLoader')
     elasticobject.createObject('MechanicalObject', template='Vec3d')
 
     ## To be properly simulated and to interact with gravity or inertia forces, an elasticobject
@@ -105,13 +105,13 @@ def ElasticMaterialObject(
 
     if withConstrain:
         elasticobject.createObject('LinearSolverConstraintCorrection', solverName=solver.name)
-   
+
     #################################################################################
     ## Collision
     if collisionMesh:
         collisionNode = elasticobject.createChild('Collision')
         collisionNode.createObject('MeshSTLLoader', name='MeshLoader', filename=collisionMesh, rotation=rotation, translation=translation)
-        collisionNode.createObject('TriangleSetTopologyContainer', src='@MeshLoader', name='container')
+        collisionNode.createObject('TriangleSetTopologyContainer', src='@MeshLoader')
         collisionNode.createObject('MechanicalObject', name='MechanicalObject', template='Vec3d')
         collisionNode.createObject('Triangle')
         collisionNode.createObject('Line')
@@ -131,13 +131,12 @@ def ElasticMaterialObject(
 	    ## Add a BarycentricMapping to deform the rendering model to follow the ones of the
 	    ## mechanical model.
 	    elasticobjectVisu.createObject('BarycentricMapping')
-       
+
     return elasticobject
-    
+
 def createScene(rootNode):
     from stlib.scene import MainHeader
 
     MainHeader(rootNode, gravity=" 0 0 0")
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual" , translation=[3.0, 0.0, 0.0])
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj", surfaceColor=[1.0, 0.0, 0.0])
-
