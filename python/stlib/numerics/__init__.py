@@ -5,8 +5,10 @@ Numerics components we often use.
 Content:
 ********
 .. autosummary::
+    :toctree: _autosummary
 
-|
+.. automodule:: stlib.numerics.vec3
+    :members:
 
 
 """
