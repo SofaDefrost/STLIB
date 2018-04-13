@@ -1,4 +1,5 @@
 import numpy
+import math
 
 class Vec3(numpy.ndarray):
 
@@ -42,12 +43,24 @@ class Vec3(numpy.ndarray):
         return True
 
 
+    def norm(self, *args):
+        """ Function norm of class Vec3 returns the norm of the vector. The function expects no argument.
+        """
+        return math.sqrt(self.dot(self))
+
+
+    def normalize(self, *args):
+        """ Function normalize of class Vec3 normalize the vector. The function expects no argument.
+        """
+        self /= self.norm()
+
+
     def translate(self, *args):
         """ Function translate of class Vec3 expects one or three arguments.
-        Example: if v = [0.,0.,0.]
+        Example: if v = Vec3([0.,0.,0.])
         v.translate(1.) will set v = [1.,1.,1.]
-        v.translate(1,2,3) will set v = [1,2,3]
-        v.translate([1,2,3]) will set v = [1,2,3]
+        v.translate(1.,2.,3.) will set v = [1.,2.,3.]
+        v.translate([1.,2.,3.]) will set v = [1.,2.,3.]
         """
         if len(args) == 1:
             if hasattr(args[0],"__len__") and len(args[0])==3:
@@ -63,12 +76,15 @@ class Vec3(numpy.ndarray):
             print(self.translate.__doc__)
 
 
+    # def rotate(self, *args):
+
+
     def scale(self, *args):
         """ Function scale of class Vec3 expects one or three arguments.
-        Example: if v = [1.,2.,3.]
+        Example: if v = Vec3([1.,2.,3.])
         v.scale(2.) will set v = [2.,4.,6.]
-        v.scale(1,2,3) will set v = [1.,4.,9.]
-        v.scale([1,2,3]) will set v = [1.,4.,9.]
+        v.scale(1.,2.,3.) will set v = [1.,4.,9.]
+        v.scale([1.,2.,3.]) will set v = [1.,4.,9.]
         """
         if len(args) == 1:
             if hasattr(args[0],"__len__") and len(args[0])==3:
@@ -85,10 +101,10 @@ class Vec3(numpy.ndarray):
 
 
     def dot(self, *args):
-        """ Function dot of class Vec3 computes the scalar product with the given vector. The function expects one or three arguments.
-        Example: if v = [1.,1.,1.]
-        v.dot(1,2,3) will return 6
-        v.dot([1,2,3]) will return 6
+        """ Function dot of class Vec3 returns the scalar product with the given vector. The function expects one or three arguments.
+        Example: if v = Vec3([1.,1.,1.])
+        v.dot(1.,2.,3.) will return 6.
+        v.dot([1.,2.,3.]) will return 6.
         """
         s = 0
         if len(args) == 1 and hasattr(args[0],"__len__") and len(args[0])==3:
@@ -103,7 +119,22 @@ class Vec3(numpy.ndarray):
             print(self.dot.__doc__)
 
 
-    # def cross(self, *args):
-    # def rotate(self, *args):
-    # def norm(self, *args):
-    # def normalize(self, *args):
+    def cross(self, *args):
+        """ Function cross of class Vec3 returns the cross product with the given vector. The function expects one or three arguments.
+        Example: if v = Vec3([1.,1.,1.])
+        v.cross(1.,2.,3.) will return [1.,-2.,1.]
+        v.cross([1.,2.,3.]) will return [1.,-2.,1.]
+        """
+        v = Vec3()
+        u = Vec3()
+        if len(args) == 1 and hasattr(args[0],"__len__") and len(args[0])==3:
+            u = args[0]
+        elif len(args) == 3:
+            u = args
+        else:
+            print(self.cross.__doc__)
+
+        v[0]=self.take(1)*u[2]-self.take(2)*u[1]
+        v[1]=self.take(2)*u[0]-self.take(0)*u[2]
+        v[2]=self.take(0)*u[1]-self.take(1)*u[0]
+        return v
