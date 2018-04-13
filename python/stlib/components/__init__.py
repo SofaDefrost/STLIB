@@ -17,10 +17,10 @@ Content:
 __all__=["all"]
 
 def OrientedBoxRoi(parentNode, position, name="BoxRoi", translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
-    
+
     orientedBox = OrientedBoxFromTransform(translation,eulerRotation,scale)
     parentNode.createObject("BoxROI", position=position, orientedBox=orientedBox, drawBoxes=True )
-    
+
     return parentNode
 
 def OrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
@@ -30,7 +30,7 @@ def OrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0
            [-0.5, 0.0, 0.5],
            [ 0.5, 0.0, 0.5]]
 
-    depth = [scale[2]]
+    depth = [scale[1]]
 
     return transformPositions(position=pos, translation=translation, eulerRotation=eulerRotation, scale=scale) + depth
 
