@@ -16,12 +16,16 @@ class Vec3_test(unittest.TestCase):
         v = Vec3()
         self.assertTrue(len(v),3)
         self.assertEqual(v, [0.,0.,0.])
+
         v = Vec3(1.)
         self.assertEqual(v, [1.,1.,1.])
+
         v = Vec3(1.,2.,3.)
         self.assertEqual(v, [1.,2.,3.])
-        v = Vec3([1.,2.,3.])
+
+        v = Vec3([1,2,3])
         self.assertEqual(v, [1.,2.,3.])
+
         v1 = Vec3(2,2,2)
         v = Vec3(v1)
         self.assertEqual(v, v1)
@@ -42,10 +46,21 @@ class Vec3_test(unittest.TestCase):
         v = Vec3()
         v.translate(1.)
         self.assertEqual(v, [1.,1.,1.])
+
         v.translate(1.,2.,3.)
         self.assertEqual(v, [2.,3.,4.])
+
         v.translate([1.,2.,3.])
         self.assertEqual(v, [3.,5.,7.])
+
+        # Should also work with operators '+' and '-'
+        v1 = Vec3(1.)
+        v2 = Vec3(1.)
+        scalar = 1.
+        self.assertEqual(v1+v2,[2.,2.,2.])
+        self.assertEqual(v1+scalar,[2.,2.,2.])
+        self.assertEqual(v1-v2,[0.,0.,0.])
+        self.assertEqual(v1-scalar,[0.,0.,0.])
 
         # If args are not expected should print the doc
         # v.translate(1,2)
@@ -54,10 +69,21 @@ class Vec3_test(unittest.TestCase):
         v = Vec3(1.,1.,1.)
         v.scale(2.)
         self.assertEqual(v, [2.,2.,2.])
+
         v.scale(1.,2.,3.)
         self.assertEqual(v, [2.,4.,6.])
+        
         v.scale([1.,2.,3.])
         self.assertEqual(v, [2.,8.,18.])
+
+        # Should also work with operators '*' and '/'
+        v1 = Vec3(1)
+        v2 = Vec3(2.)
+        scalar = 2.
+        self.assertEqual(v1*v2,[2.,2.,2.])
+        self.assertEqual(v1*scalar,[2.,2.,2.])
+        self.assertEqual(v1/v2,[0.5,0.5,0.5])
+        self.assertEqual(v1/scalar,[0.5,0.5,0.5])
 
         # If args are not expected should print the doc
         # v.scale(2,1)
@@ -66,6 +92,7 @@ class Vec3_test(unittest.TestCase):
         v = Vec3(1.,1.,1.)
         s = v.dot(1.,2.,3.)
         self.assertEqual(s,6)
+
         s = v.dot([1.,2.,3.])
         self.assertEqual(s,6)
 

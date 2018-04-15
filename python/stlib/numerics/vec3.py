@@ -15,11 +15,11 @@ class Vec3(numpy.ndarray):
             return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([0.,0.,0.]))
         if len(args) == 1:
             if hasattr(args[0],"__len__") and len(args[0])==3:
-                return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0][0],args[0][1],args[0]][2]))
+                return super(Vec3,cls).__new__(cls, shape=(3,), dtype=type(args[0][0]), buffer=numpy.array([args[0][0],args[0][1],args[0]][2]))
             else:
-                return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0],args[0],args[0]]))
+                return super(Vec3,cls).__new__(cls, shape=(3,), dtype=type(args[0]), buffer=numpy.array([args[0],args[0],args[0]]))
         elif len(args)==3:
-            return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0],args[1],args[2]]))
+            return super(Vec3,cls).__new__(cls, shape=(3,), dtype=type(args[0]), buffer=numpy.array([args[0],args[1],args[2]]))
 
         print(cls.__new__.__doc__)
         return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0],args[0],args[0]]))
@@ -56,7 +56,7 @@ class Vec3(numpy.ndarray):
 
 
     def translate(self, *args):
-        """ Function translate of class Vec3 expects one or three arguments.
+        """ Function translate of class Vec3 expects one or three arguments. Note that you can also use the '+' and '-' operators.
         Example: if v = Vec3([0.,0.,0.])
         v.translate(1.) will set v = [1.,1.,1.]
         v.translate(1.,2.,3.) will set v = [1.,2.,3.]
@@ -80,7 +80,7 @@ class Vec3(numpy.ndarray):
 
 
     def scale(self, *args):
-        """ Function scale of class Vec3 expects one or three arguments.
+        """ Function scale of class Vec3 expects one or three arguments. Note that you can also use the '*' and '/' operators.
         Example: if v = Vec3([1.,2.,3.])
         v.scale(2.) will set v = [2.,4.,6.]
         v.scale(1.,2.,3.) will set v = [1.,4.,9.]
