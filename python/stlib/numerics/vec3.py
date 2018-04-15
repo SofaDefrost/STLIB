@@ -36,11 +36,7 @@ class Vec3(numpy.ndarray):
 
     def __ne__(self, other):
         """ Vec3 overriding of __ne__ so that it returns a boolean."""
-        results = (super(Vec3,self).__ne__(other))
-        for result in results:
-            if result == False:
-                return False
-        return True
+        return not (self == other)
 
 
     def norm(self, *args):
@@ -75,9 +71,21 @@ class Vec3(numpy.ndarray):
         else:
             print(self.translate.__doc__)
 
+    #def rotate(self, *args):
+    #   from quat import Quat
+    #   if len(args) == 1 and type(args[0]) == Quat:
+    #       rotateFromQuat(args[0])
+    #   elif ... 
 
-    # def rotate(self, *args):
+    #def rotateFromQuat():
+    #   from quat import Quat
 
+    #def rotateFromEuler():
+
+    #def rotateFromAxisAndAngle(self, axis, angle):
+    #   import quat.createQuatFromAxis
+    #   q = createQuatFromAxis(axis, angle)
+    #   self.rotateFromQuat(q)
 
     def scale(self, *args):
         """ Function scale of class Vec3 expects one or three arguments. Note that you can also use the '*' and '/' operators.

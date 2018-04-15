@@ -7,7 +7,9 @@ Content:
 .. autosummary::
     :toctree: _autosummary
 
-.. automodule:: stlib.numerics.vec3
+.. automodule::
+    stlib.numerics.vec3
+    stlib.numerics.quat
     :members:
 
 

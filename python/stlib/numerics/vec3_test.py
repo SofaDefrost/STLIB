@@ -72,7 +72,7 @@ class Vec3_test(unittest.TestCase):
 
         v.scale(1.,2.,3.)
         self.assertEqual(v, [2.,4.,6.])
-        
+
         v.scale([1.,2.,3.])
         self.assertEqual(v, [2.,8.,18.])
 
