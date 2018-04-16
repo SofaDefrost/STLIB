@@ -33,6 +33,10 @@ class Vec3_test(unittest.TestCase):
         # If args are not expected should print the doc
         # v = Vec3(1,2)
 
+
+## PUBLIC METHODS
+
+
     def test_norm(self):
         v = Vec3(1.,2.,2.)
         self.assertEqual(v.norm(), 3.)
