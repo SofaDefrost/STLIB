@@ -35,6 +35,9 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
 
+    applyTo.createObject('FreeMotionAnimationLoop')
+    applyTo.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+
     return applyTo
 
 ### This function is just an example on how to use the DefaultHeader function. 
