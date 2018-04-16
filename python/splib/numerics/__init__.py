@@ -1,242 +1,127 @@
 # -*- coding: utf-8 -*-
 """
-Scene debuging facilities.
+Numerics components we often use.
+
+Content:
+********
+.. autosummary::
+    :toctree: _autosummary
+
+.. automodule::
+    stlib.numerics.vec3
+    stlib.numerics.quat
+    :members:
+
 
 """
-import Sofa
-import SofaPython
-import OpenGL
-OpenGL.ERROR_CHECKING = False
-from OpenGL.GL import *
-from OpenGL.GLU import *
-from OpenGL.GLUT import *
-from stlib.numerics import *
+import numpy
+import numpy.linalg
+import SofaPython.Quaternion as Quaternion
+from SofaPython.Quaternion import from_euler, to_matrix
+from math import pi
 
-SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GL")
-SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLU")
-SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLUT")
+def vadd(a,b):
+    return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
 
-debugManager=None
-def DebugManager(parentNode):
-    global debugManager
-    ImmediateRenderer(parentNode)
-    return parentNode
+def vvadd(a,b):
+    return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
 
-currentImmediateRenderer = None
-def drawText(text, x, y):
-    global currentImmediateRenderer
-    if currentImmediateRenderer == None:
-        return
-    currentImmediateRenderer.addText(text,x,y)
+def vvsub(a,b):
+    return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]
 
-def drawLine(p0,p1):
-    global currentImmediateRenderer
-    if currentImmediateRenderer == None:
-        return
-    currentImmediateRenderer.addEdge(p0, p1)
+def vsadd(a,b):
+    return [a[0]+b, a[1]+b, a[2]+b]
 
-def worldToScreenPoint(p):
-    return gluProject(p[0],p[1],p[2], currentImmediateRenderer.mvm,
-                      currentImmediateRenderer.pm, currentImmediateRenderer.viewport)
+def vssub(a,b):
+    return [a[0]-b, a[1]-b, a[2]-b]
 
-
-class BluePrint(Sofa.PythonScriptController):
-        def __init__(self, node):
-            self.name = "BluePrintController"
-            self.rules = []
-            self.circles = []
-            
-        def addRule(self, origin=[0.0,0.0,0.0], direction=[1.0,0.0,0.0], spacing=1.0, length=10, text="cm"):
-            self.rules.append([origin,direction,spacing,length,text])
-
-        def addCircle(self, origin, radius):
-            self.circles((origin,radius))
-
-        def drawCircle(self, o, r):
-            for i in 10:
-                currentImmediateRenderer.addEdge( vvadd( o, vsmul(d, i)),
-                                                  vvadd( o, vsmul(d, i+1)))
-                
-
-        def drawRule(self, o,d,s,l,t):
-            global currentImmediateRenderer
-            """Emits the drawing code needed to visualize the rule"""
-            step = l / s
-            for i in range(0, int(step)):
-                currentImmediateRenderer.addEdge( vvadd( o, vsmul(d, i)),
-                                                  vvadd( o, vsmul(d, i+1)))
-                currentImmediateRenderer.addPoint( vvadd( o, vsmul(d, i)) )
-
-        def onBeginAnimationStep(self, s):
-            for rule in self.rules:
-                self.drawRule(rule[0], rule[1], rule[2], rule[3], rule[4])
-
-
-        def onIdle(self):
-            for rule in self.rules:
-                self.drawRule(rule[0], rule[1], rule[2], rule[3], rule[4])
+def vsmul(a,b):
+    return [a[0]*b, a[1]*b, a[2]*b]
 
 
 
-class ImmediateRenderer(Sofa.PythonScriptController):
-    def __init__(self, rootNode):
-        global currentImmediateRenderer
-        self.name = "DebugManager"
-        self.edges = []
-        self.edges2D = []
-        self.textes = []
-        self.points = []
-        currentImmediateRenderer = self
-        glutInit()
-        self.mvm = glGetDoublev(GL_MODELVIEW_MATRIX)
-        self.pm = glGetDoublev(GL_PROJECTION_MATRIX)
-        self.viewport = glGetInteger( GL_VIEWPORT )
+def to_radians(v):
+    if isinstance(v, list):
+        p = []
+        for tp in v:
+            p.append( tp * pi * 2.0 / 360.0 )
+        return p
+    return v * pi * 2.0 / 360.0
+
+def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
+    t = numpy.identity(4)
+    s = numpy.identity(4)
+    if eulerRotation != None:
+        rotation = from_euler( to_radians( eulerRotation ) )
+
+    if scale == None:
+        scale = [1.0,1.0,1.0]
+
+    r = to_matrix( rotation )
+
+    rr = numpy.identity(4)
+    rr[0:3, 0:3] = r
+
+    t[0,3]=translation[0]
+    t[1,3]=translation[1]
+    t[2,3]=translation[2]
+
+    s[0,0]=scale[0]
+    s[1,1]=scale[1]
+    s[2,2]=scale[2]
+
+    return numpy.matmul( numpy.matmul(t,rr), s )
+
+def transformPositions(position, translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+
+    trs = TRS_to_matrix(translation=translation, eulerRotation=eulerRotation, scale=scale)
+    tp = []
+    for point in position:
+        tp.append(transformPosition(point, trs).tolist())
+
+    return tp
+
+def transformPosition(point, matrixTRS):
+
+    if len(point) != 3:
+        raise Exception('A Point is defined by 3 coordinates [X,Y,Z] , point given : '+str(point))
+
+    elif all(isinstance(n, int) or isinstance(n, float) for n in point):
+        np = numpy.matmul( matrixTRS, numpy.append(point,1.0) )
+        tp = np[0:3]
+
+    else :
+        raise Exception('A Point is a list/array of int/float, point given : '+str(point))
 
 
-    def addText(self, text, x, y):
-        self.textes.append([text,int(x),int(y)])
+    return tp
 
-    def addEdge(self, p0, p1):
-        self.edges.append([p0,p1])
+class Transform(object):
+    def __init__(self, translation, orientation=None, eulerRotation=None):
+        self.translation = translation
 
-    def addPoint(self, p0):
-        self.points.append(p0)
+        if eulerRotation != None:
+            self.orientation = from_euler( to_radians( eulerRotation ) )
+        elif orientation != None:
+            self.orientation = orientation
+        else:
+            self.orientation = [0,0,0,1]
 
-    def addEdge2D(self, p0, p1):
-        self.edges2D.append([p0,p1])
+    def translate(self, v):
+        self.translation = vadd(self.translation, v)
+        return self
 
+    def toSofaRepr(self):
+            return self.translation + list(self.orientation)
 
-    def addRenderable(self, r):
-        self.renderable.append(r)
+    def getForward(self):
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], self.orientation), numpy.array([1.0,0.0,0.0,1.0]))
 
-    def drawAll2D(self):
-        viewport = glGetInteger( GL_VIEWPORT );
+    forward = property(getForward, None)
 
-        glDepthMask(GL_FALSE)
-
-        glPushAttrib( GL_LIGHTING_BIT )
-        glPushAttrib( GL_ENABLE_BIT )
-        glEnable( GL_COLOR_MATERIAL )
-        glDisable(GL_LIGHTING)
-        glDisable(GL_DEPTH_TEST)
-        glEnable( GL_LINE_SMOOTH )
-        glEnable( GL_POLYGON_SMOOTH )
-        glHint( GL_LINE_SMOOTH_HINT, GL_NICEST )
-
-        glMatrixMode(GL_PROJECTION)
-        glPushMatrix()
-        glLoadIdentity()
-        gluOrtho2D(0, viewport[2], 0, viewport[3] )
-
-        glMatrixMode(GL_MODELVIEW)
-        glPushMatrix()
-        glLoadIdentity()
-
-        self.drawAllText()
-
-        glMatrixMode(GL_MODELVIEW)
-        glPopMatrix()
-
-        glMatrixMode(GL_PROJECTION)
-        glPopMatrix()
-        glMatrixMode(GL_MODELVIEW)
-
-        glPopAttrib()
-        glPopAttrib()
-
-        glDepthMask(GL_TRUE)
-
-    def drawAllText(self):
-        for text in self.textes:
-            glRasterPos2i( text[1], text[2] )
-            glColor(1.0,0.0,0.0)
-            for c in text[0]:
-                glutBitmapCharacter(GLUT_BITMAP_TIMES_ROMAN_24, ord(c))
-
-    def onBeginAnimationStep(self, dt):
-        self.textes = []
-        self.edges = []
-        self.points = []
-
-    def onIdle(self):
-        self.textes = []
-        self.edges = []
-        self.points = []
-
-    def draw(self):
-        self.mvm = glGetDoublev(GL_MODELVIEW_MATRIX)
-        self.pm = glGetDoublev(GL_PROJECTION_MATRIX)
-        self.viewport = glGetInteger( GL_VIEWPORT )
-
-        self.drawAll2D()
-
-        glDisable(GL_LIGHTING)
-        glEnable( GL_LINE_SMOOTH )
-        glEnable( GL_POLYGON_SMOOTH )
-        glHint( GL_LINE_SMOOTH_HINT, GL_NICEST )
-        glLineWidth(2.0)
-
-        glBegin(GL_LINES)
-        glColor3f(0.8,0.7,1.0)
-        for e in self.edges:
-            glVertex3dv(e[0])
-            glVertex3dv(e[1])
-        glEnd()
-
-        glPointSize(5.0)
-        glColor3d(1.0,1.0,1.0)
-        glBegin(GL_POINTS)
-        for p in self.points:
-            glVertex3dv(p)
-
-        glEnd()
-
-class TracerLog(object):
-    def __init__(self, filename):
-        self.outfile = open(filename, "wt")
-
-    def writeln(self, s):
-        self.outfile.write(s+"\n")
-
-    def close(self):
-        self.outfile.close()
-
-
-def kwargs2str(kwargs):
-    s=""
-    for k in kwargs:
-        s+=", "+k+"="+repr(kwargs[k])
-    return s
-
-class Tracer(object):
-
-    def __init__(self, node, backlog, depth, context):
-        self.node = node
-        self.backlog = backlog
-        self.depth = depth
-        self.context = context
-
-    def createObject(self, type, **kwargs):
-        self.backlog.writeln(self.depth+self.node.name+".createObject('"+type+"' "+kwargs2str(kwargs)+")")
-        n = self.node.createObject(type, **kwargs)
-        return n
-
-    def createChild(self, name, **kwargs):
-        self.backlog.writeln("")
-        self.backlog.writeln(self.depth+"#========================= "+name+" ====================== ")
-        self.backlog.writeln(self.depth+name+" = "+self.node.name+".createChild('"+name+"' "+kwargs2str(kwargs)+")")
-        n = Tracer(self.node.createChild(name, **kwargs), self.backlog, self.depth, name)
-        return n
-
-    def getObject(self, name):
-        n = self.node.getObject(name)
-        return n
-
-    def addObject(self, tgt):
-        self.backlog.writeln(self.depth+self.node.name+".addObject('"+tgt.name+"')")
-        if isinstance(tgt, type(Tracer)):
-            return self.node.addObject(tgt.node)
-        return self.node.addObject(tgt)
-
-    def __getattr__(self, value):
-        return self.node.__getattribute__(value)
+def axisToQuat(axis, angle):
+    na  = numpy.zeros(3)
+    na[0] = axis[0]
+    na[1] = axis[1]
+    na[2] = axis[2]
+    return list(Quaternion.axisToQuat(na, angle))
