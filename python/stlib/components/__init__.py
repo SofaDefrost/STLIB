@@ -24,7 +24,7 @@ def OrientedBoxRoi(parentNode, position, name="BoxRoi", translation=[0.0,0.0,0.0
     return parentNode
 
 def OrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
-    from stlib.numerics import *
+    from splib.numerics import *
     # BoxROI unitaire
     pos = [[-0.5, 0.0,-0.5],
            [-0.5, 0.0, 0.5],

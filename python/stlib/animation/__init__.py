@@ -1,25 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-Animation framework focusing in ease of use.
-
-Modules:
-********
-.. autosummary::
-    :toctree: _autosummary
-
-    stlib.animation.easing
-
-Functions:
-**********
-.. autosummary::
-
-    stlib.animation.AnimationManager
-    stlib.animation.animate
-
-.. autofunction:: stlib.animation.AnimationManager
-.. autofunction:: stlib.animation.animate
-
-
 """
-__all__=["animate", "easing"]
-from animate import AnimationManager, animate
+import Sofa
+
+Sofa.msg_error("splib.animation", 
+"""The animation framework is now part of the splib instead of stlib. Please update your code base.
+Old code will not work until you replaced all 'stlib.animation' by 'splib.animation'.
+""")
+
+

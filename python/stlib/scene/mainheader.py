@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import Sofa
-from stlib.animation import AnimationManager
+from splib.animation import AnimationManager
 
 def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[], doDebug=False):
         '''
@@ -55,7 +55,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
     	node.createObject('OglSceneFrame', style="Arrows", alignment="TopRight")
 
         if doDebug:
-            from stlib.debug import DebugManager
+            from splib.debug import DebugManager
             DebugManager(node)
 
         AnimationManager(node)
