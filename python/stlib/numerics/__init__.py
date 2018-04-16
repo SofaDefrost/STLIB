@@ -14,7 +14,7 @@ Content:
 
 
 """
-
+import numpy
 import numpy.linalg
 import SofaPython.Quaternion as Quaternion
 from SofaPython.Quaternion import from_euler, to_matrix
@@ -107,12 +107,15 @@ class Transform(object):
         else:
             self.orientation = [0,0,0,1]
 
+    def translate(self, v):
+        self.translation = vadd(self.translation, v)
+        return self
 
     def toSofaRepr(self):
             return self.translation + list(self.orientation)
 
     def getForward(self):
-        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], self.orientation), numpy.array([5.0,0.0,0.0,1.0]))
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], self.orientation), numpy.array([1.0,0.0,0.0,1.0]))
 
     forward = property(getForward, None)
 
