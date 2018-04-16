@@ -67,7 +67,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     #### collision
     cubeCollis = cube.createChild('collision')
     cubeCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
-                            translation=translation, rotation=rotation,scale=uniformScale)
+                            scale=uniformScale)
 
     cubeCollis.createObject('Mesh', src="@loader")
     cubeCollis.createObject('MechanicalObject')
@@ -86,8 +86,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     #### visualization
     cubeVisu = cube.createChild('visual')
     cubeVisu.createObject('OglModel', name="visual",
-                          fileMesh=surfaceMeshFileName, color=color,
-                          translation=translation, rotation=rotation,scale=uniformScale)
+                          fileMesh=surfaceMeshFileName, color=color, scale=uniformScale)
     cubeVisu.createObject('RigidMapping')
 
     return cube
