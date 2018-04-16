@@ -29,7 +29,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
                 }
 
         '''
-	node.createObject('VisualStyle')
+        node.createObject('VisualStyle')
 
         i=0
         for repository in repositoryPaths:
@@ -49,8 +49,8 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
         if "SofaPython" not in plugins:
             plugins.append("SofaPython")
 
- 	for name in plugins:
-	 	node.createObject('RequiredPlugin', name=name, printLog=False)
+        for name in plugins:
+	 	    node.createObject('RequiredPlugin', name=name, printLog=False)
 	 	
     	node.createObject('OglSceneFrame', style="Arrows", alignment="TopRight")
 
