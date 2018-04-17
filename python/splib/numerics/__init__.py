@@ -96,10 +96,65 @@ def transformPosition(point, matrixTRS):
 
     return tp
 
+class RigidDof(object):
+    """Access a sofa mechanicalobject as a rigid transform composed of
+       a position and an orientation.
+
+       Examples:
+            r = RigidTransform( aMechanicalObject )
+            r.translate( ( r.forward * 0.2 ) )
+            r.position = Vec3.zero
+            r.orientation = Quat.unit
+    """
+    def __init__(self, rigidobject):
+        self.rigidobject = rigidobject
+
+    def getPosition(self):
+        return self.rigidobject.position[0][:3]
+
+    def setPosition(self, v):
+        self.rigidobject.position = v + self.rigidobject.position[0][3:]
+
+    position = property(getPosition, setPosition)
+
+    def setOrientation(self, q):
+        print("TODO q")
+
+    def getOrientation(self, q):
+        return self.rigidobject.position[0][3:]
+    orientation = property(getOrientation, setOrientation)
+
+    def getForward(self):
+        o = self.rigidobject.position[0][3:]
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,0.0,1.0,1.0]))
+    forward = property(getForward, None)
+
+    def getLeft(self):
+        o = self.rigidobject.position[0][3:]
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([1.0,0.0,0.0,1.0]))
+    left = property(getLeft, None)
+
+    def getUp(self):
+        o = self.rigidobject.position[0][3:]
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,1.0,0.0,1.0]))
+    up = property(getUp, None)
+
+    def copyFrom(self, t):
+        self.rigidobject.position = t.rigidobject.position
+
+    def translate(self, v):
+        to = self.rigidobject.position[0]
+        t = Transform(to[:3], orientation=to[3:])
+        t.translate(v)
+        self.rigidobject.position = t.toSofaRepr()
+
+    def rotateAround(self, axis, angle):
+        pq = self.rigidobject.position[0]
+        self.rigidobject.position =  pq[:3] + list(Quaternion.prod(axisToQuat(axis, angle), pq[3:]))
+
 class Transform(object):
     def __init__(self, translation, orientation=None, eulerRotation=None):
         self.translation = translation
-
         if eulerRotation != None:
             self.orientation = from_euler( to_radians( eulerRotation ) )
         elif orientation != None:
@@ -115,7 +170,7 @@ class Transform(object):
             return self.translation + list(self.orientation)
 
     def getForward(self):
-        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], self.orientation), numpy.array([1.0,0.0,0.0,1.0]))
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], self.orientation), numpy.array([0.0,0.0,1.0,1.0]))
 
     forward = property(getForward, None)
 
