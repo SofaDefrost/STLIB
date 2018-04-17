@@ -5,12 +5,17 @@ class Vec3_test(unittest.TestCase):
 
     def test_equal(self):
         v1 = Vec3(0.)
-        v2 = Vec3(1.)
+        v2 = Vec3(-1.)
         self.assertEqual(v1,v1)
         self.assertNotEqual(v1,v2)
 
         self.assertEqual(v1,[0.,0.,0.])
-        self.assertNotEqual(v1,[1.,1.,1.])
+        self.assertNotEqual(v1,[-1.,-1.,-1.])
+        self.assertEqual(v2,[-1.,-1.,-1.])
+
+        v = Vec3(0.,-1.,0.)
+        self.assertEqual(v,[0.,-1.,0.])
+
 
     def test_constructors(self):
         v = Vec3()
@@ -111,6 +116,45 @@ class Vec3_test(unittest.TestCase):
 
         # If args are not expected should print the doc
         # v.cross(2,1)
+
+    def test_rotateFromQuat(self):
+        from quat import Quat
+        from math import pi
+
+        v = Vec3(1.,1.,1.)
+        q = Quat.createFromAxisAngle(Vec3([1.,0.,0.]),pi/2.)
+        v.rotateFromQuat(q)
+
+        self.assertEqual(v[0],1.)
+        self.assertEqual(math.floor(v[1]),-1.)
+        self.assertEqual(v[2],1.)
+
+    def test_rotateFromEuler(self):
+        from math import pi
+
+        v = Vec3(1.,1.,1.)
+        v.rotateFromEuler([pi/2.,0.,0.])
+
+        self.assertAlmostEqual(v[0],1.)
+        self.assertAlmostEqual(v[1],-1.)
+        self.assertAlmostEqual(v[2],1.)
+
+        v = Vec3(1.,1.,1.)
+        v.rotateFromEuler([pi/2.,-pi/2.,0.],"rxyz")
+
+        self.assertAlmostEqual(v[0],-1.)
+        self.assertAlmostEqual(v[1],-1.)
+        self.assertAlmostEqual(v[2],1.)
+
+    def test_rotateFromAxisAngle(self):
+        from math import pi
+        
+        v = Vec3(1.,1.,1.)
+        v.rotateFromAxisAngle([1.,0.,0.],pi/2.)
+
+        self.assertEqual(v[0],1.)
+        self.assertEqual(math.floor(v[1]),-1.)
+        self.assertEqual(v[2],1.)
 
 
 if __name__ == '__main__':

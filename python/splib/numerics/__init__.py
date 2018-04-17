@@ -8,8 +8,8 @@ Content:
     :toctree: _autosummary
 
 .. automodule::
-    stlib.numerics.vec3
-    stlib.numerics.quat
+    splib.numerics.vec3
+    splib.numerics.quat
     :members:
 
 

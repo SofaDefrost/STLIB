@@ -6,12 +6,20 @@ class Vec3(numpy.ndarray):
     def __new__(cls, *args):
         """ Vec3 constructor expects zero, one or three arguments.
 
-        Example:
-        vec3(1.) will return [1.,1.,1.]
-        vec3(1,2,3) will return [1,2,3]
-        vec3([1,2,3]) will return [1,2,3]
+        Examples:
 
-        Default vec3() will return [0.,0.,0]
+        >>> v = vec3()
+        >>> print(v)
+        [0.,0.,0.]
+        >>> v = vec3(1.)
+        >>> print(v)
+        [1.,1.,1.]
+        >>> v = vec3(1,2,3)
+        >>> print(v)
+        [1,2,3]
+        >>> v = vec3([1,2,3])
+        >>> print(v)
+        [1,2,3]
         """
         if len(args)==0:
             return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([0.,0.,0.]))
@@ -58,10 +66,18 @@ class Vec3(numpy.ndarray):
     def translate(self, *args):
         """ Function translate of class Vec3 expects one or three arguments. Note that you can also use the '+' and '-' operators.
 
-        Example: if v = Vec3([0.,0.,0.])
-        v.translate(1.) will set v = [1.,1.,1.]
-        v.translate(1.,2.,3.) will set v = [1.,2.,3.]
-        v.translate([1.,2.,3.]) will set v = [1.,2.,3.]
+        Examples:
+
+        >>> v = Vec3([0.,0.,0.])
+        >>> v.translate(1.)
+        >>> print(v)
+        [1.,1.,1.]
+        >>> v.translate(1.,2.,3.)
+        >>> print(v)
+        [2.,3.,4.]
+        >>> v.translate([1.,2.,3.])
+        >>> print(v)
+        [3.,5.,7.]
         """
         if len(args) == 1:
             if hasattr(args[0],"__len__") and len(args[0])==3:
@@ -84,25 +100,70 @@ class Vec3(numpy.ndarray):
     #   elif ...
 
 
-    #def rotateFromQuat():
-    #   from quat import Quat
+    def rotateFromQuat(self, q):
+        """Function rotateFromQuat from the Vec3 class rotates the current vector by the rotation
+        represented by the Quat q. This is also the adjoint map for S^3
 
-    #def rotateFromEuler():
+        Example:
+
+        >>> v = Vec3(1.,1.,1.)
+        >>> q = Quat.(0.707,0.,0.,0.707)
+        >>> v.rotateFromQuat(q)
+        >>> print(v)
+        [1.,-1,1.]
+        """
+        from quat import Quat
+        self.put(range(3),(Quat.product(q,Quat.product(Quat(numpy.hstack((self, [0.]))), Quat.inverse(q)))).im())
 
 
-    #def rotateFromAxisAndAngle(self, axis, angle):
-    #   import quat.createQuatFromAxis
-    #   q = createQuatFromAxis(axis, angle)
-    #   self.rotateFromQuat(q)
+    def rotateFromEuler(self, v, axis="sxyz"):
+        """Function rotateFromEuler from the Vec3 class rotates the current vector from Euler angles [x,y,z].
+
+        Example:
+
+        >>> v = Vec3(1.,1.,1.)
+        >>> v.rotateFromEuler([pi/2.,0.,0.])
+        >>> print(v)
+        [1.,-1,1.]
+        """
+        from quat import Quat
+        q = Quat.createFromEuler(v, axis)
+        self.rotateFromQuat(q)
+
+
+    def rotateFromAxisAngle(self, axis, angle):
+        """Function rotateFromAxisAngle from the Vec3 class rotates the current vector from the quaternion
+        corresponding to the given axis and angle.
+
+        Example:
+
+        >>> v = Vec3(1.,1.,1.)
+        >>> v.rotateFromAxisAndAngle([1.,0.,0.],pi/2.)
+        >>> print(v)
+        [1.,-1,1.]
+        """
+        from quat import Quat
+        q = Quat.createFromAxisAngle(axis, angle)
+        self.rotateFromQuat(q)
 
 
     def scale(self, *args):
         """ Function scale of class Vec3 expects one or three arguments. Note that you can also use the '*' and '/' operators.
 
-        Example: if v = Vec3([1.,2.,3.])
-        v.scale(2.) will set v = [2.,4.,6.]
-        v.scale(1.,2.,3.) will set v = [1.,4.,9.]
-        v.scale([1.,2.,3.]) will set v = [1.,4.,9.]
+        Examples:
+
+        >>> v = Vec3([1.,2.,3.])
+        >>> v.scale(2.)
+        >>> print(v)
+        [2.,4.,6.]
+        >>> v = Vec3([1.,2.,3.])
+        >>> v.scale(1.,2.,3.)
+        >>> print(v)
+        [1.,4.,9.]
+        >>> v = Vec3([1.,2.,3.])
+        >>> v.scale([1.,2.,3.])
+        >>> print(v)
+        [1.,4.,9.]
         """
         if len(args) == 1:
             if hasattr(args[0],"__len__") and len(args[0])==3:
@@ -121,9 +182,15 @@ class Vec3(numpy.ndarray):
     def dot(self, *args):
         """ Function dot of class Vec3 returns the scalar product with the given vector. The function expects one or three arguments.
 
-        Example: if v = Vec3([1.,1.,1.])
-        v.dot(1.,2.,3.) will return 6.
-        v.dot([1.,2.,3.]) will return 6.
+        Examples:
+
+        >>> v = Vec3([1.,1.,1.])
+        >>> v.dot(1.,2.,3.)
+        >>> print(v)
+        6.
+        >>> v.dot([1.,2.,3.])
+        >>> print(v)
+        6.
         """
         s = 0
         if len(args) == 1 and hasattr(args[0],"__len__") and len(args[0])==3:
@@ -141,9 +208,15 @@ class Vec3(numpy.ndarray):
     def cross(self, *args):
         """ Function cross of class Vec3 returns the cross product with the given vector. The function expects one or three arguments.
 
-        Example: if v = Vec3([1.,1.,1.])
-        v.cross(1.,2.,3.) will return [1.,-2.,1.]
-        v.cross([1.,2.,3.]) will return [1.,-2.,1.]
+        Examples:
+
+        >>> v = Vec3([1.,1.,1.])
+        >>> v.cross(1.,2.,3.)
+        >>> print(v)
+        [1.,-2.,1.]
+        >>> v.cross([1.,2.,3.])
+        >>> print(v)
+        [1.,-2.,1.]
         """
         v = Vec3()
         u = Vec3()
