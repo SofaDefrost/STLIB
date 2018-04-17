@@ -70,3 +70,6 @@ def get(node, path):
         node = newnode
     return node
 
+def getLinkPath(node, path):
+    return get(node,path).getLinkPath()
+
