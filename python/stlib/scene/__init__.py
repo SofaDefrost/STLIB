@@ -17,11 +17,12 @@ Content:
 .. autofunction:: Node
 
 """
-from splib.objectmodel import SofaPrefab
+from splib.objectmodel import SofaPrefab, SofaObject
 from splib.scenegraph import get
 
 from mainheader import MainHeader
 from contactheader import ContactHeader
+from stlib.solver import DefaultSolver
 
 def Node(parentNode, name):
     """Create a new node in the graph and attach it to a parent node."""
@@ -29,7 +30,7 @@ def Node(parentNode, name):
 
 
 @SofaPrefab
-class Scene(object):
+class Scene(SofaObject):
     def __init__(self, node):
         self.node = node
         MainHeader(node)
