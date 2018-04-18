@@ -14,31 +14,14 @@ Content:
 
 
 """
+__all__=["vec3","quat"]
+
+from math import *
 import numpy
 import numpy.linalg
 import SofaPython.Quaternion as Quaternion
 from SofaPython.Quaternion import from_euler, to_matrix
 from math import pi
-
-def vadd(a,b):
-    return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
-
-def vvadd(a,b):
-    return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
-
-def vvsub(a,b):
-    return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]
-
-def vsadd(a,b):
-    return [a[0]+b, a[1]+b, a[2]+b]
-
-def vssub(a,b):
-    return [a[0]-b, a[1]-b, a[2]-b]
-
-def vsmul(a,b):
-    return [a[0]*b, a[1]*b, a[2]*b]
-
-
 
 def to_radians(v):
     if isinstance(v, list):
@@ -97,7 +80,7 @@ def transformPosition(point, matrixTRS):
     return tp
 
 class RigidDof(object):
-    """Access a sofa mechanicalobject as a rigid transform composed of
+    """Wrapper toward a sofa mechanicalobject template<rigid> as a rigid transform composed of
        a position and an orientation.
 
        Examples:
@@ -174,9 +157,21 @@ class Transform(object):
 
     forward = property(getForward, None)
 
+def getOrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+        # BoxROI unitaire
+        pos = [[-0.5, 0.0,-0.5],
+               [-0.5, 0.0, 0.5],
+               [ 0.5, 0.0, 0.5]]
+
+        depth = [scale[1]]
+        return transformPositions(position=pos, translation=translation, eulerRotation=eulerRotation, scale=scale) + depth
+
+
+
 def axisToQuat(axis, angle):
     na  = numpy.zeros(3)
     na[0] = axis[0]
     na[1] = axis[1]
     na[2] = axis[2]
     return list(Quaternion.axisToQuat(na, angle))
+
