@@ -68,7 +68,7 @@ class ElasticMaterialObject(SofaObject):
         ## Here, because the elasticobject is made of silicone, its mechanical behavior is assumed elastic.
         ## This behavior is available via the TetrahedronFEMForceField component.
         self.forcefield = self.node.createObject('TetrahedronFEMForceField', template='Vec3d',
-                         	        method='large', name='forcefield',
+                                        method='large', name='forcefield',
                                     poissonRatio=poissonRatio,  youngModulus=youngModulus)
 
         if withConstrain:
@@ -78,9 +78,9 @@ class ElasticMaterialObject(SofaObject):
             self.addCollisionModel(collisionMesh, rotation, translation)
 
         if surfaceMeshFileName:
-	        self.addVisualModel(surfaceMeshFileName, surfaceColor, rotation, translation)
+                self.addVisualModel(surfaceMeshFileName, surfaceColor, rotation, translation)
 
-    def addCollisionModel(self, collisionMesh):
+    def addCollisionModel(self, collisionMesh, rotation=[0.0,0.0,0.0], translation=[0.0,0.0,0.0]):
         self.collisionmodel = self.node.createChild('CollisionModel')
         self.collisionmodel.createObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation)
         self.collisionmodel.createObject('TriangleSetTopologyContainer', src='@loader', name='container')
@@ -93,12 +93,12 @@ class ElasticMaterialObject(SofaObject):
     def addVisualModel(self, filename, color, rotation, translation):
         self.visualmodel = SofaObject(self.node, "VisualModel")
 
-	    ## Add to this empty node a rendering model made of triangles and loaded from an stl file.
+            ## Add to this empty node a rendering model made of triangles and loaded from an stl file.
         self.visualmodel.model = self.visualmodel.node.createObject('OglModel', filename=filename,
-	                                                           template='ExtVec3f', color=color, rotation=rotation, translation=translation)
+                                                                   template='ExtVec3f', color=color, rotation=rotation, translation=translation)
 
-	    ## Add a BarycentricMapping to deform the rendering model to follow the ones of the
-	    ## mechanical model.
+            ## Add a BarycentricMapping to deform the rendering model to follow the ones of the
+            ## mechanical model.
         self.visualmodel.mapping = self.visualmodel.node.createObject('BarycentricMapping', name='mapping')
 
 
