@@ -60,4 +60,4 @@ Indices and tables
 
 """
 
-__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms", "numerics", "components", "tools", "debug"]
+__all__=["physics", "visuals", "solver", "scene", "animation", "algorithms", "loader", "numerics", "components", "tools", "debug"]
