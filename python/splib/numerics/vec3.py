@@ -231,3 +231,18 @@ class Vec3(numpy.ndarray):
         v[1]=self.take(2)*u[0]-self.take(0)*u[2]
         v[2]=self.take(0)*u[1]-self.take(1)*u[0]
         return v
+
+def vadd(a,b):
+    return [a[0]+b[0], a[1]+b[1], a[2]+b[2]]
+
+def vsub(a,b):
+    return [a[0]-b[0], a[1]-b[1], a[2]-b[2]]
+
+def sadd(a,b):
+    return [a[0]+b, a[1]+b, a[2]+b]
+
+def ssub(a,b):
+    return [a[0]-b, a[1]-b, a[2]-b]
+
+def smul(a,b):
+    return [a[0]*b, a[1]*b, a[2]*b]
