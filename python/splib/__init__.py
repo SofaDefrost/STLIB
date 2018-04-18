@@ -38,4 +38,4 @@ Indices and tables
 
 #__all__=["algorithms", "animation", "debug", "loaders", "numerics", "objectmodel", "scenegraph", "units"]
 
-__all__=["animation", "debug", "loaders", "numerics", "objectmodel", "scenegraph", "units"]
+__all__=["animation", "constants", "debug", "loaders", "numerics", "objectmodel", "scenegraph", "units"]
