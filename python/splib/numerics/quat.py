@@ -2,6 +2,29 @@ import numpy
 import math
 
 class Quat(numpy.ndarray):
+    """ The Quat class implements the following:
+
+    Public methods:
+    q = Quat() # several constructors are implemented
+
+    q.applyRotation(q1)
+    q.normalize()
+    q.flip()
+
+    q.getIm()
+    q.getRe()
+    q.getNorm()
+    q.getInverse()
+    q.getConjugate()
+    q.getMatrix()
+    q.getEulerAngles()
+    q.getAxisAngle()
+
+    Static methods:
+    q = Quat.product(q1,q2)
+    q = Quat.createFromEuler([x,y,z])
+    q = Quat.createFromAxisAngle([axis],angle)
+    """
 
     def __new__(cls, *args):
         """ Quat constructor expects zero, one, or four arguments. Quat has the Sofa format i.e (x,y,z,w).
@@ -45,50 +68,20 @@ class Quat(numpy.ndarray):
         return not (self == other)
 
 
-    def norm(self, *args):
-        """ Function norm of class Quat returns the norm of the vector. The function expects no argument.
-        """
-        return numpy.linalg.norm(self)
-
-
     def normalize(self, *args):
         """ Function normalize of class Quat normalize the vector. The function expects no argument.
         """
-        self /= self.norm()
+        self /= self.getNorm()
 
 
-    def re(self):
-        """Returns the real part of the Quat
-
-        Example:
-
-        >>> q = Quat(0.65,0.,0.,0.75)
-        >>> q.re()
-        0.75
-        """
-        return float(self.take(3))
-
-
-    def im(self):
-        """Returns the imaginary part of the Quat.
-
-        Example:
-
-        >>> q = Quat(0.65,0.,0.,0.75)
-        >>> q.im()
-        [0.65,0.,0.]
-        """
-        return numpy.array(self.take(range(3)))
-
-
-    def apply(self, qb):
-        """Function apply of class Quat combine the current Quat with the given one.
+    def applyRotation(self, qb):
+        """Function applyRotation of class Quat combine the current Quat with the given one.
 
         Examples:
 
         >>> q1 = Quat.createFromAxisAngle([1., 0., 0.], pi/2.)
         >>> q2 = Quat.createFromAxisAngle([0., 1., 0.], pi/2.)
-        >>> q1.apply(q2)
+        >>> q1.applyRotation(q2)
         >>> print(q1)
         [ 0.5 -0.5 -0.5  0.5]
         """
@@ -99,8 +92,157 @@ class Quat(numpy.ndarray):
     def flip(self):
         """Function flip of class Quat flips the quaternion to the real positive hemisphere if needed.
         """
-        if self.re() < 0:
+        if self.getRe() < 0:
             self.put(range(4),-1*self)
+
+
+
+    def getNorm(self):
+        """ Returns the norm of the quaternion.
+        """
+        return numpy.linalg.norm(self)
+
+
+    def getRe(self):
+        """Returns the real part of the quaternion.
+
+        Example:
+
+        >>> q = Quat(0.65,0.,0.,0.75)
+        >>> q.getRe()
+        0.75
+        """
+        return float(self.take(3))
+
+
+    def getIm(self):
+        """Returns the imaginary part of the quaternion.
+
+        Example:
+
+        >>> q = Quat(0.65,0.,0.,0.75)
+        >>> q.getIm()
+        [0.65,0.,0.]
+        """
+        return numpy.array(self.take(range(3)))
+
+
+    def getAxisAngle(self):
+        """ Returns rotation vector corresponding to unit quaternion in the form of [axis, angle]
+        """
+        import sys
+        q = Quat(self)
+        q.flip()  # flip q first to ensure that angle is in the [-0, pi] range
+
+        angle = 2.0* math.acos(q.getRe())
+
+        if angle > sys.float_info.epsilon:
+            return [ q.getIm() / math.sin(angle/2.), angle ]
+
+        norm = numpy.linalg.norm(q.getIm())
+        if norm > sys.float_info.epsilon:
+            sign = 1.0 if angle > 0 else -1.0
+            return [ q.getIm() * (sign / norm), angle ]
+
+        return [ numpy.zeros(3), angle ]
+
+    def getEulerAngles(self, axes='sxyz'):
+        """Returns the Euler angles in radian for specified axis sequence.
+        """
+
+        M = self.getMatrix()
+
+        try:
+            firstaxis, parity, repetition, frame = AXES_TO_TUPLE[axes.lower()]
+        except (AttributeError, KeyError):
+            TUPLE_TO_AXES[axes]  # validation
+            firstaxis, parity, repetition, frame = axes
+
+        i = firstaxis
+        j = NEXT_AXIS[i+parity]
+        k = NEXT_AXIS[i-parity+1]
+
+        a = numpy.empty((3, ))
+
+        if repetition:
+            sy = math.sqrt(M[i, j]*M[i, j] + M[i, k]*M[i, k])
+            if sy > EPS:
+                a[0] = math.atan2( M[i, j],  M[i, k])
+                a[1] = math.atan2( sy,       M[i, i])
+                a[2] = math.atan2( M[j, i], -M[k, i])
+            else:
+                a[0] = math.atan2(-M[j, k],  M[j, j])
+                a[1] = math.atan2( sy,       M[i, i])
+                a[2] = 0.0
+        else:
+            cy = math.sqrt(M[i, i]*M[i, i] + M[j, i]*M[j, i])
+            if cy > EPS:
+                a[0] = math.atan2( M[k, j],  M[k, k])
+                a[1] = math.atan2(-M[k, i],  cy)
+                a[2] = math.atan2( M[j, i],  M[i, i])
+            else:
+                a[0] = math.atan2(-M[j, k],  M[j, j])
+                a[1] = math.atan2(-M[k, i],  cy)
+                a[2] = 0.0
+
+        if parity:
+            a[0], a[1], a[2] = -a[0], -a[1], -a[2]
+        if frame:
+            a[0], a[2] = a[2], a[0]
+        return a
+
+
+    def getMatrix(self):
+        """Returns the convertion of the quaternion into rotation matrix form.
+        """
+        q = Quat(self)
+
+        # Repetitive calculations
+        q44 = q[3]**2
+        q12 = q[0] * q[1]
+        q13 = q[0] * q[2]
+        q14 = q[0] * q[3]
+        q23 = q[1] * q[2]
+        q24 = q[1] * q[3]
+        q34 = q[2] * q[3]
+
+        matrix = numpy.empty((3,3))
+
+        # The diagonal
+        matrix[0, 0] = 2.0 * (q[0]**2 + q44) - 1.0
+        matrix[1, 1] = 2.0 * (q[1]**2 + q44) - 1.0
+        matrix[2, 2] = 2.0 * (q[2]**2 + q44) - 1.0
+
+        # Off-diagonal
+        matrix[0, 1] = 2.0 * (q12 - q34)
+        matrix[0, 2] = 2.0 * (q13 + q24)
+        matrix[1, 2] = 2.0 * (q23 - q14)
+
+        matrix[1, 0] = 2.0 * (q12 + q34)
+        matrix[2, 0] = 2.0 * (q13 - q24)
+        matrix[2, 1] = 2.0 * (q23 + q14)
+
+        return matrix
+
+
+    def getConjugate(self):
+        """Returns the conjugate of the quaternion.
+
+        Example:
+
+        >>> q = Quat(0.707,0.,0.,0.707)
+        >>> q.getConjugate()
+        [-0.707,0.,0.,0.707]
+        """
+        return Quat(-self.take(0),-self.take(1),-self.take(2),self.take(3))
+
+
+    def getInverse(self):
+        """Returns the inverse of the quaternion.
+
+        If you are dealing with unit quaternions, use getConjugate() instead.
+        """
+        return  self.getConjugate() / self.getNorm()**2
 
 
     @staticmethod
@@ -209,136 +351,7 @@ class Quat(numpy.ndarray):
         # qa[3]*qb[1] + qb[3]*qa[1] + qa[2]*qb[0] - qa[0]*qb[2],
         # qa[3]*qb[2] + qb[3]*qa[2] + qa[0]*qb[1] - qa[1]*qb[0],
         # qa[3]*qb[3] - qb[0]*qa[0] - qa[1]*qb[1] - qa[2]*qb[2] ])
-        return Quat(numpy.hstack( (qa.re()*qb.im() + qb.re()*qa.im() + numpy.cross( qa.im(), qb.im() ), [qa.re() * qb.re() - numpy.dot( qa.im(), qb.im())] )))
-
-
-    @staticmethod
-    def angle(q):
-        """Returns the angle in radian of a given Quat.
-        """
-        return 2.0* math.acos(q.re())
-
-
-    @staticmethod
-    def axisAngle(q):
-        """ Returns rotation vector corresponding to unit quaternion q in the form of [axis, angle]
-        """
-        import sys
-        q.flip()  # flip q first to ensure that angle is in the [-0, pi] range
-
-        angle = Quat.angle(q)
-
-        if angle > sys.float_info.epsilon:
-            return [ q.im() / math.sin(angle/2.), angle ]
-
-        norm = numpy.linalg.norm(q.im())
-        if norm > sys.float_info.epsilon:
-            sign = 1.0 if angle > 0 else -1.0
-            return [ q.im() * (sign / norm), angle ]
-
-        return [ numpy.zeros(3), angle ]
-
-
-    @staticmethod
-    def euler(q, axes='sxyz'):
-        """Returns the Euler angles in radian from a given Quat, for specified axis sequence.
-        """
-
-        M = Quat.matrix(q)
-
-        try:
-            firstaxis, parity, repetition, frame = AXES_TO_TUPLE[axes.lower()]
-        except (AttributeError, KeyError):
-            TUPLE_TO_AXES[axes]  # validation
-            firstaxis, parity, repetition, frame = axes
-
-        i = firstaxis
-        j = NEXT_AXIS[i+parity]
-        k = NEXT_AXIS[i-parity+1]
-
-        a = numpy.empty((3, ))
-
-        if repetition:
-            sy = math.sqrt(M[i, j]*M[i, j] + M[i, k]*M[i, k])
-            if sy > EPS:
-                a[0] = math.atan2( M[i, j],  M[i, k])
-                a[1] = math.atan2( sy,       M[i, i])
-                a[2] = math.atan2( M[j, i], -M[k, i])
-            else:
-                a[0] = math.atan2(-M[j, k],  M[j, j])
-                a[1] = math.atan2( sy,       M[i, i])
-                a[2] = 0.0
-        else:
-            cy = math.sqrt(M[i, i]*M[i, i] + M[j, i]*M[j, i])
-            if cy > EPS:
-                a[0] = math.atan2( M[k, j],  M[k, k])
-                a[1] = math.atan2(-M[k, i],  cy)
-                a[2] = math.atan2( M[j, i],  M[i, i])
-            else:
-                a[0] = math.atan2(-M[j, k],  M[j, j])
-                a[1] = math.atan2(-M[k, i],  cy)
-                a[2] = 0.0
-
-        if parity:
-            a[0], a[1], a[2] = -a[0], -a[1], -a[2]
-        if frame:
-            a[0], a[2] = a[2], a[0]
-        return a
-
-
-    @staticmethod
-    def matrix(q):
-        """Returns the convertion of a quaternion into rotation matrix form.
-        """
-
-        # Repetitive calculations
-        q44 = q[3]**2
-        q12 = q[0] * q[1]
-        q13 = q[0] * q[2]
-        q14 = q[0] * q[3]
-        q23 = q[1] * q[2]
-        q24 = q[1] * q[3]
-        q34 = q[2] * q[3]
-
-        matrix = numpy.empty((3,3))
-
-        # The diagonal
-        matrix[0, 0] = 2.0 * (q[0]**2 + q44) - 1.0
-        matrix[1, 1] = 2.0 * (q[1]**2 + q44) - 1.0
-        matrix[2, 2] = 2.0 * (q[2]**2 + q44) - 1.0
-
-        # Off-diagonal
-        matrix[0, 1] = 2.0 * (q12 - q34)
-        matrix[0, 2] = 2.0 * (q13 + q24)
-        matrix[1, 2] = 2.0 * (q23 - q14)
-
-        matrix[1, 0] = 2.0 * (q12 + q34)
-        matrix[2, 0] = 2.0 * (q13 - q24)
-        matrix[2, 1] = 2.0 * (q23 + q14)
-
-        return matrix
-
-
-    @staticmethod
-    def conjugate(q):
-        """Returns the conjugate of a given Quat.
-
-        Example:
-
-        >>> q = Quat(0.707,0.,0.,0.707)
-        >>> Quat.conjugate(q)
-        [-0.707,0.,0.,0.707]
-        """
-        return Quat(-q[0],-q[1],-q[2],q[3])
-
-
-    @staticmethod
-    def inverse(q):
-        """Returns the inverse of a given Quat.
-
-        If you are dealing with unit quaternions, use getConjugate() instead.
-        """
-        return  Quat.conjugate(q) / q.norm()**2
+        return Quat(numpy.hstack( (qa.getRe()*qb.getIm() + qb.getRe()*qa.getIm() + numpy.cross( qa.getIm(), qb.getIm() ), [qa.getRe() * qb.getRe() - numpy.dot( qa.getIm(), qb.getIm())] )))
 
 
 ##### adapted from http://www.lfd.uci.edu/~gohlke/code/transformations.py.html

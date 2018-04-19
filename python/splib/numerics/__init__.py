@@ -10,6 +10,7 @@ Content:
 .. automodule::
     splib.numerics.vec3
     splib.numerics.quat
+    splib.numerics.matrix
     :members:
 
 
@@ -22,6 +23,7 @@ from SofaPython.Quaternion import from_euler, to_matrix
 from math import pi
 from vec3 import *
 from quat import *
+from matrix import *
 
 def to_radians(v):
     if isinstance(v, list):
@@ -174,4 +176,3 @@ def axisToQuat(axis, angle):
     na[1] = axis[1]
     na[2] = axis[2]
     return list(Quaternion.axisToQuat(na, angle))
-

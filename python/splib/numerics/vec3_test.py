@@ -42,9 +42,9 @@ class Vec3_test(unittest.TestCase):
 ## PUBLIC METHODS
 
 
-    def test_norm(self):
+    def test_getNorm(self):
         v = Vec3(1.,2.,2.)
-        self.assertEqual(v.norm(), 3.)
+        self.assertEqual(v.getNorm(), 3.)
 
     def test_normalize(self):
         v = Vec3(1.,2.,2.)
@@ -97,26 +97,6 @@ class Vec3_test(unittest.TestCase):
         # If args are not expected should print the doc
         # v.scale(2,1)
 
-    def test_dot(self):
-        v = Vec3(1.,1.,1.)
-        s = v.dot(1.,2.,3.)
-        self.assertEqual(s,6)
-
-        s = v.dot([1.,2.,3.])
-        self.assertEqual(s,6)
-
-        # If args are not expected should print the doc
-        # v.dot(2,1)
-
-    def test_cross(self):
-        v = Vec3(1.,1.,1.)
-        u = Vec3(1.,2.,3.)
-        self.assertEqual(v.cross(u),[1.,-2.,1.])
-        self.assertEqual(u.cross(v),[-1.,2.,-1.])
-
-        # If args are not expected should print the doc
-        # v.cross(2,1)
-
     def test_rotateFromQuat(self):
         from quat import Quat
         from math import pi
@@ -148,13 +128,26 @@ class Vec3_test(unittest.TestCase):
 
     def test_rotateFromAxisAngle(self):
         from math import pi
-        
+
         v = Vec3(1.,1.,1.)
         v.rotateFromAxisAngle([1.,0.,0.],pi/2.)
 
         self.assertEqual(v[0],1.)
         self.assertEqual(math.floor(v[1]),-1.)
         self.assertEqual(v[2],1.)
+
+## STATIC METHODS
+
+    def test_dot(self):
+        v1 = Vec3(1.,1.,1.)
+        v2 = Vec3(1.,2.,3.)
+        self.assertEqual(Vec3.dot(v1,v2),6)
+
+    def test_cross(self):
+        v = Vec3(1.,1.,1.)
+        u = Vec3(1.,2.,3.)
+        self.assertEqual(Vec3.cross(v,u),[1.,-2.,1.])
+        self.assertEqual(Vec3.cross(u,v),[-1.,2.,-1.])
 
 
 if __name__ == '__main__':

@@ -2,22 +2,39 @@ import numpy
 import math
 
 class Vec3(numpy.ndarray):
+    """ The Vec3 class implements the following:
 
+    Public methods:
+    v = Vec3() # several constructors are implemented
+
+    v.normalize()
+    v.translate()
+    v.scale()
+    v.rotateFromQuat()
+    v.rotateFromEuler()
+    v.rotateFromAxisAngle()
+
+    v.getNorm()
+
+    Static methods:
+    v = dot(v1,v2)
+    v = cross(v1,v2)
+    """
     def __new__(cls, *args):
         """ Vec3 constructor expects zero, one or three arguments.
 
         Examples:
 
-        >>> v = vec3()
+        >>> v = Vec3()
         >>> print(v)
         [0.,0.,0.]
-        >>> v = vec3(1.)
+        >>> v = Vec3(1.)
         >>> print(v)
         [1.,1.,1.]
-        >>> v = vec3(1,2,3)
+        >>> v = Vec3(1,2,3)
         >>> print(v)
         [1,2,3]
-        >>> v = vec3([1,2,3])
+        >>> v = Vec3([1,2,3])
         >>> print(v)
         [1,2,3]
         """
@@ -51,16 +68,16 @@ class Vec3(numpy.ndarray):
         return not (self == other)
 
 
-    def norm(self, *args):
-        """ Function norm of class Vec3 returns the norm of the vector. The function expects no argument.
+    def getNorm(self):
+        """ Returns the norm of the vector.
         """
-        return math.sqrt(self.dot(self))
+        return math.sqrt(Vec3.dot(self,self))
 
 
     def normalize(self, *args):
-        """ Function normalize of class Vec3 normalize the vector. The function expects no argument.
+        """ Normalize the vector.
         """
-        self /= self.norm()
+        self /= self.getNorm()
 
 
     def translate(self, *args):
@@ -113,7 +130,7 @@ class Vec3(numpy.ndarray):
         [1.,-1,1.]
         """
         from quat import Quat
-        self.put(range(3),(Quat.product(q,Quat.product(Quat(numpy.hstack((self, [0.]))), Quat.inverse(q)))).im())
+        self.put(range(3),(Quat.product(q,Quat.product(Quat(numpy.hstack((self, [0.]))), q.getInverse()))).getIm())
 
 
     def rotateFromEuler(self, v, axis="sxyz"):
@@ -179,57 +196,24 @@ class Vec3(numpy.ndarray):
             print(self.scale.__doc__)
 
 
-    def dot(self, *args):
-        """ Function dot of class Vec3 returns the scalar product with the given vector. The function expects one or three arguments.
-
-        Examples:
-
-        >>> v = Vec3([1.,1.,1.])
-        >>> v.dot(1.,2.,3.)
-        >>> print(v)
-        6.
-        >>> v.dot([1.,2.,3.])
-        >>> print(v)
-        6.
+    @staticmethod
+    def dot(v1, v2):
+        """ Function dot of class Vec3 returns the scalar product of the given vectors.
         """
         s = 0
-        if len(args) == 1 and hasattr(args[0],"__len__") and len(args[0])==3:
-            for i in range(0,3):
-                s += self.take(i)*args[0][i]
-            return s
-        elif len(args) == 3:
-            for i in range(0,3):
-                s += self.take(i)*args[i]
-            return s
-        else:
-            print(self.dot.__doc__)
+        for i in range(0,3):
+            s += v1[i]*v2[i]
+        return s
 
 
-    def cross(self, *args):
-        """ Function cross of class Vec3 returns the cross product with the given vector. The function expects one or three arguments.
-
-        Examples:
-
-        >>> v = Vec3([1.,1.,1.])
-        >>> v.cross(1.,2.,3.)
-        >>> print(v)
-        [1.,-2.,1.]
-        >>> v.cross([1.,2.,3.])
-        >>> print(v)
-        [1.,-2.,1.]
+    @staticmethod
+    def cross(v1, v2):
+        """ Function cross of class Vec3 returns the cross product of the given vectors.
         """
         v = Vec3()
-        u = Vec3()
-        if len(args) == 1 and hasattr(args[0],"__len__") and len(args[0])==3:
-            u = args[0]
-        elif len(args) == 3:
-            u = args
-        else:
-            print(self.cross.__doc__)
-
-        v[0]=self.take(1)*u[2]-self.take(2)*u[1]
-        v[1]=self.take(2)*u[0]-self.take(0)*u[2]
-        v[2]=self.take(0)*u[1]-self.take(1)*u[0]
+        v[0]=v1[1]*v2[2]-v1[2]*v2[1]
+        v[1]=v1[2]*v2[0]-v1[0]*v2[2]
+        v[2]=v1[0]*v2[1]-v1[1]*v2[0]
         return v
 
 def vadd(a,b):
