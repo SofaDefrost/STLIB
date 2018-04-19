@@ -14,14 +14,14 @@ Content:
 
 
 """
-__all__=["vec3","quat"]
-
 from math import *
 import numpy
 import numpy.linalg
 import SofaPython.Quaternion as Quaternion
 from SofaPython.Quaternion import from_euler, to_matrix
 from math import pi
+from vec3 import *
+from quat import *
 
 def to_radians(v):
     if isinstance(v, list):
