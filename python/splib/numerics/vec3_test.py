@@ -46,6 +46,10 @@ class Vec3_test(unittest.TestCase):
         v = Vec3(1.,2.,2.)
         self.assertEqual(v.getNorm(), 3.)
 
+    def test_toString(self):
+        v = Vec3(1.,2.,2.)
+        self.assertEqual(v.toString(), "1.0 2.0 2.0")
+
     def test_normalize(self):
         v = Vec3(1.,2.,2.)
         v.normalize()

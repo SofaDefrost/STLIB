@@ -112,26 +112,35 @@ class Quat_test(unittest.TestCase):
         self.assertEqual(q, [sin(pi/4.),0.,0.,cos(pi/4.)])
 
 
-    def test_createFromEuler_against_applyRotation(self):
+    def test_createFromEuler_against_rotateFromQuat(self):
         q1 = Quat.createFromEuler([pi/2.,-pi/2.,0.],"rxyz")
         q2 = Quat.createFromEuler([pi/2.,0.,0.],"sxyz")
         q3 = Quat.createFromEuler([0.,-pi/2.,0.],"sxyz")
-        q2.applyRotation(q3)
+        q2.rotateFromQuat(q3)
         self.assertEqual(q1,q2)
 
         q1 = Quat.createFromEuler([-pi/2.,pi/2.,0.],"ryxz")
         q2 = Quat.createFromEuler([pi/2.,0.,0.],"sxyz")
         q3 = Quat.createFromEuler([0.,-pi/2.,0.],"sxyz")
-        q3.applyRotation(q2)
+        q3.rotateFromQuat(q2)
         self.assertEqual(q1,q3)
 
         q1 = Quat.createFromEuler([pi/2.,-pi/2.,pi/2.],"rxyz")
         q2 = Quat.createFromEuler([pi/2.,0.,0.],"sxyz")
         q3 = Quat.createFromEuler([0.,-pi/2.,0.],"sxyz")
         q4 = Quat.createFromEuler([0.,0.,pi/2.],"sxyz")
-        q2.applyRotation(q3)
-        q2.applyRotation(q4)
+        q2.rotateFromQuat(q3)
+        q2.rotateFromQuat(q4)
         self.assertEqual(q1,q2)
+
+
+    def test_rotateFromEuler(self):
+        q = Quat.createFromAxisAngle([1., 0., 0.], pi/2.)
+        q.rotateFromEuler([0.,-pi/2.,0.])
+
+        r = [0.5,-0.5,-0.5,0.5]
+        for i in range(4):
+            self.assertAlmostEqual(q[i],r[i])
 
 
 if __name__ == '__main__':

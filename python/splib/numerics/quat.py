@@ -7,7 +7,8 @@ class Quat(numpy.ndarray):
     Public methods:
     q = Quat() # several constructors are implemented
 
-    q.applyRotation(q1)
+    q.rotateFromQuat(q1)
+    q.rotateFromEuler(v)
     q.normalize()
     q.flip()
 
@@ -19,6 +20,7 @@ class Quat(numpy.ndarray):
     q.getMatrix()
     q.getEulerAngles()
     q.getAxisAngle()
+    q.toString()
 
     Static methods:
     q = Quat.product(q1,q2)
@@ -74,19 +76,34 @@ class Quat(numpy.ndarray):
         self /= self.getNorm()
 
 
-    def applyRotation(self, qb):
-        """Function applyRotation of class Quat combine the current Quat with the given one.
+    def rotateFromQuat(self, qb):
+        """Function rotateFromQuat of class Quat rotates the current Quat from the given one.
 
         Examples:
 
         >>> q1 = Quat.createFromAxisAngle([1., 0., 0.], pi/2.)
-        >>> q2 = Quat.createFromAxisAngle([0., 1., 0.], pi/2.)
-        >>> q1.applyRotation(q2)
+        >>> q2 = Quat.createFromAxisAngle([0., -1., 0.], pi/2.)
+        >>> q1.rotateFromQuat(q2)
         >>> print(q1)
         [ 0.5 -0.5 -0.5  0.5]
         """
 
         self.put(range(4),self.product(self,qb))
+
+
+    def rotateFromEuler(self, v, axes="sxyz"):
+        """Function rotateFromEuler of class Quat combine the current Quat from euler angles.
+
+        Examples:
+
+        >>> q = Quat.createFromAxisAngle([1., 0., 0.], pi/2.)
+        >>> q.rotateFromEuler([0.,-pi/2.,0.])
+        >>> print(q)
+        [ 0.5 -0.5 -0.5  0.5]
+        """
+
+        q = Quat.createFromEuler(v)
+        self.put(range(4),self.product(self,q))
 
 
     def flip(self):
@@ -243,6 +260,12 @@ class Quat(numpy.ndarray):
         If you are dealing with unit quaternions, use getConjugate() instead.
         """
         return  self.getConjugate() / self.getNorm()**2
+
+
+    def toString(self):
+        """Returns the quaternion in string format.
+        """
+        return  str(self.take(0))+" "+str(self.take(1))+" "+str(self.take(2))+" "+str(self.take(3))
 
 
     @staticmethod

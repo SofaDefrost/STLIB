@@ -15,6 +15,7 @@ class Vec3(numpy.ndarray):
     v.rotateFromAxisAngle()
 
     v.getNorm()
+    v.toString()
 
     Static methods:
     v = dot(v1,v2)
@@ -72,6 +73,12 @@ class Vec3(numpy.ndarray):
         """ Returns the norm of the vector.
         """
         return math.sqrt(Vec3.dot(self,self))
+
+
+    def toString(self):
+        """ Returns the vector in string format.
+        """
+        return str(self.take(0))+" "+str(self.take(1))+" "+str(self.take(2))
 
 
     def normalize(self, *args):
