@@ -33,12 +33,17 @@ class VisualModel(SofaObject):
     def __init__(self, parent, surfaceMeshFileName, color=[1.0,1.0,1.0]):
         self.node  = Node(parent, "VisualModel")
 
-        self.loader = self.node.createObject('MeshSTLLoader',
-                                        name="loader",
-                                        filename=surfaceMeshFileName)
+        if surfaceMeshFileName.endswith(".stl"):
+            self.loader = self.node.createObject('MeshSTLLoader',
+                                            name="loader",
+                                            filename=surfaceMeshFileName)
+        elif surfaceMeshFileName.endswith(".obj"):
+            self.loader = self.node.createObject('MeshObjLoader',
+                                                 name="loader",
+                                                 filename=surfaceMeshFileName)
 
         self.model = self.node.createObject('OglModel',
                                         name="model",
                                         position='@loader.position',
                                         triangles='@loader.triangles',
-                                        color=color)
+                                        color=color, updateNormals=False)

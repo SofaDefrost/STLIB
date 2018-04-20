@@ -6,12 +6,14 @@ Content:
 ********
 .. autosummary::
 
+    Scene
     MainHeader
     ContactHeader
     Node
 
 |
 
+.. autoclass::    Scene
 .. autofunction:: MainHeader
 .. autofunction:: ContactHeader
 .. autofunction:: Node
@@ -23,6 +25,7 @@ from splib.scenegraph import get
 from mainheader import MainHeader
 from contactheader import ContactHeader
 from stlib.solver import DefaultSolver
+from interaction import Interaction
 
 def Node(parentNode, name):
     """Create a new node in the graph and attach it to a parent node."""
@@ -31,7 +34,20 @@ def Node(parentNode, name):
 
 @SofaPrefab
 class Scene(SofaObject):
-    def __init__(self, node,  gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[], doDebug=False):
+    """Create a scene with default properties.
+
+       Arg:
+        node (Sofa.Node)     the node where the scene will be attached
+        gravity (vec3f)      the gravity of the scene
+        dt (float)           the dt time
+        plugins (list(str))  set of plugins that are used in this scene
+        repositoryPath (list(str)) set of path where to read the data from
+        doDebug (bool        activate debugging facility (to print text)
+
+       There is method to add default solver and default contact management
+       on demand.
+    """
+    def __init__(self, node,  gravity=[0.0, -9.81, 0.0], dt=0.01, plugins=[], repositoryPaths=[], doDebug=False):
         self.node = node
         MainHeader(node, gravity=gravity, dt=dt, plugins=plugins, repositoryPaths=repositoryPaths, doDebug=doDebug)
         self.visualstyle = get(node, "VisualStyle")
@@ -39,4 +55,5 @@ class Scene(SofaObject):
     def addSolver(self):
         self.solver = DefaultSolver(self.node)
 
-
+    def addContact(self,  alarmDistance, contactDistance, frictionCoef=0.0):
+        ContactHeader(self.node,  alarmDistance, contactDistance, frictionCoef)
