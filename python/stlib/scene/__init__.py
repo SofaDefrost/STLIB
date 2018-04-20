@@ -31,9 +31,9 @@ def Node(parentNode, name):
 
 @SofaPrefab
 class Scene(SofaObject):
-    def __init__(self, node):
+    def __init__(self, node,  gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPaths=[], doDebug=False):
         self.node = node
-        MainHeader(node)
+        MainHeader(node, gravity=gravity, dt=dt, plugins=plugins, repositoryPaths=repositoryPaths, doDebug=doDebug)
         self.visualstyle = get(node, "VisualStyle")
 
     def addSolver(self):

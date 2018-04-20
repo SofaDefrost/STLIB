@@ -10,7 +10,7 @@ OpenGL.ERROR_CHECKING = False
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
-from stlib.numerics import *
+from splib.numerics import *
 
 SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GL")
 SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLU")
@@ -45,7 +45,7 @@ class BluePrint(Sofa.PythonScriptController):
             self.name = "BluePrintController"
             self.rules = []
             self.circles = []
-            
+
         def addRule(self, origin=[0.0,0.0,0.0], direction=[1.0,0.0,0.0], spacing=1.0, length=10, text="cm"):
             self.rules.append([origin,direction,spacing,length,text])
 
@@ -56,7 +56,7 @@ class BluePrint(Sofa.PythonScriptController):
             for i in 10:
                 currentImmediateRenderer.addEdge( vvadd( o, vsmul(d, i)),
                                                   vvadd( o, vsmul(d, i+1)))
-                
+
 
         def drawRule(self, o,d,s,l,t):
             global currentImmediateRenderer
