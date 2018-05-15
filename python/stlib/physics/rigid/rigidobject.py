@@ -56,8 +56,9 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
         cube.createObject('EulerImplicit', name='odesolver')
         cube.createObject('CGLinearSolver', name='Solver')
 
-    cube.createObject('MechanicalObject', name="mstate", template="Rigid",
-                      translation=translation, rotation=rotation)
+    cube.createObject('MechanicalObject', 
+                      name="mstate", template="Rigid",
+                      translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
     cube.createObject('UniformMass', name="mass", mass=[totalMass, volume, inertiaMatrix[:]])
 
@@ -97,6 +98,6 @@ def createScene(rootNode):
 
     MainHeader(rootNode)
     DefaultSolver(rootNode)
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", translation=[-20.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Left", translation=[-20.0,0.0,0.0])
     RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[ 0.0,0.0,0.0])
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", translation=[ 20.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[ 20.0,0.0,0.0])
