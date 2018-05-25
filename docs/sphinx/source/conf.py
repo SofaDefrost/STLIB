@@ -199,7 +199,7 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return MagicMock()
 
-MOCK_MODULES = ['Sofa', 'numpy']
+MOCK_MODULES = ['Sofa', 'numpy', 'splib']
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 
