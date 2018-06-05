@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
-"""Easing function to use in animation
-    
+"""
+Easing function to use in animation
+
+.. autosummary::
+
+   LinearRamp
+
+splib.animation.easing.LinearRamp
+*********************************
 .. autofunction:: LinearRamp
 
 """

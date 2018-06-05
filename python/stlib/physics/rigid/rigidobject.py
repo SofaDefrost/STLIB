@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 
 def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,

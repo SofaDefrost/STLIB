@@ -2,6 +2,7 @@
 import Sofa
 import math
 
+
 class Animation(object):
     def __init__(self, duration, mode, cb, params):
         if 'startTime' in params :
@@ -34,11 +35,7 @@ class Animation(object):
         self.cb(factor=self.factor , **self.params)    
         
 class AnimationManagerController(Sofa.PythonScriptController):
-    """
-    Implements the AnimationManager as a PythonScriptController.
-
-    .. autoclass:: AnimationManagerController
-        :members: addAnimation
+    """Implements the AnimationManager as a PythonScriptController
     """
     def __init__(self, node):
         self.listening = True
@@ -97,7 +94,7 @@ def animate(cb, params, duration, mode="once"):
 
 def AnimationManager(node):
     """
-    A Controller to manage all animations in the scene.
+    A Controller to manage all animations in the scene
 
     Before using the animation framework an AnimationManager
     must be added to the scene. It has in charge, at each time step

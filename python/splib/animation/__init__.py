@@ -2,24 +2,39 @@
 """
 Animation framework focusing in ease of use.
 
+**********
+Functions:
+**********
+
+.. autosummary::
+
+    animate
+    AnimationManager
+    AnimationManagerController
+
+
+splib.animation.animate
+***********************
+.. autofunction:: animate
+
+splib.animation.AnimationManager
+********************************
+.. autofunction:: AnimationManager
+
+splib.animation.AnimationManagerController
+******************************************
+.. autoclass:: AnimationManagerController(Sofa.PythonScriptController)
+   :members: addAnimation
+
+********
 Modules:
 ********
+
 .. autosummary::
     :toctree: _autosummary
 
-    stlib.animation.easing
-
-Functions:
-**********
-.. autosummary::
-
-    stlib.animation.AnimationManager
-    stlib.animation.animate
-
-.. autofunction:: stlib.animation.AnimationManager
-.. autofunction:: stlib.animation.animate
-
+    splib.animation.easing
 
 """
 __all__=["animate", "easing"]
-from animate import AnimationManager, animate
+from animate import AnimationManager, AnimationManagerController, animate 

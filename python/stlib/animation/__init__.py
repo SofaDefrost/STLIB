@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-"""
-"""
 import Sofa
 
 Sofa.msg_error("splib.animation", 

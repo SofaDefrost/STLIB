@@ -2,17 +2,36 @@
 """
 Numerics components we often use.
 
-Content:
-********
+**Content:**
+
 .. autosummary::
-    :toctree: _autosummary
 
-.. automodule::
-    splib.numerics.vec3
-    splib.numerics.quat
-    splib.numerics.matrix
-    :members:
+    RigidDof
+    Vec3
+    Quat
+    Matrix
 
+splib.numerics.RigidDof
+***********************
+.. autofunction:: RigidDof
+
+splib.numerics.Vec3
+*******************
+.. autoclass:: Vec3
+   :members:
+   :undoc-members:
+
+splib.numerics.Quat
+*******************
+.. autoclass:: Quat
+   :members:
+   :undoc-members:
+
+splib.numerics.Matrix
+*********************
+.. autoclass:: Matrix
+   :members:
+   :undoc-members:
 
 """
 from math import *

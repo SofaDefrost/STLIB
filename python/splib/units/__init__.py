@@ -2,12 +2,14 @@
 """
 Toolbox to manipulats units (time, mechanics, material)
 
-Content:
-********
+**Content:**
 
-.. automodule:: time
+.. autosummary::
+    :toctree: _autosummary
 
-
+    time
+    material
+    units
 
 """
-__all__=["time", "material"]
+__all__=["time", "material","units"]

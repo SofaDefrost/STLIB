@@ -2,14 +2,6 @@
 """
 Algorithms we often use.
 
-Content:
-********
-.. autosummary::
-
-    find
-
-|
-
-.. autofunction:: find
+**Content:**
 
 """

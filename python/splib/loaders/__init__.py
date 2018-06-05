@@ -2,13 +2,13 @@
 """
 Utilitary function to ease the writing of scenes.
 
-Functions:
-**********
 .. autosummary::
 
-    stlib.tools.loadPointListFromFile
+    loadPointListFromFile
 
-.. autofunction:: stlib.tools.loadPointListFromFile
+splib.loaders.loadPointListFromFile
+***********************************
+.. autofunction:: loadPointListFromFile
 
 """
 __all__=[]

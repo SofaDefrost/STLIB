@@ -2,15 +2,20 @@
 """
 Algorithms we often use.
 
-Content:
-********
+**Content:**
+
 .. autosummary::
 
     find
+    get
 
-|
-
+splib.scenegraph.find
+*********************
 .. autofunction:: find
+
+splib.scenegraph.get
+********************
+.. autofunction:: get
 
 """
 def find(node, path):

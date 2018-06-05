@@ -2,15 +2,17 @@
 """
 Templates for deformable objects.
 
-Content:
-********
+**Content:**
+
 .. autosummary::
 
-   FixedBox
+   CollisionMesh
 
 |
 
-.. autofunction:: FixedBox
+stlib.physics.collision.CollisionMesh
+*************************************
+.. autofunction:: CollisionMesh
 
 """
 

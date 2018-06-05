@@ -2,17 +2,27 @@
 """
 Templates for deformable objects.
 
-Content:
-********
+**Content**
+
 .. autosummary::
 
    FixedBox
    PartiallyFixedBox
    SubTopology
+
 |
 
-.. autofunction:: FixedBox PartiallyFixedBox SubTopology
+stlib.physics.constraints.FixedBox
+**********************************
+.. autofunction:: FixedBox
 
+stlib.physics.constraints.PartiallyFixedBox
+*******************************************
+.. autofunction:: PartiallyFixedBox
+
+stlib.physics.constraints.SubTopology
+*************************************
+.. autofunction:: SubTopology
 """
 
 from fixedbox import FixedBox

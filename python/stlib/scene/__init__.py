@@ -2,8 +2,10 @@
 """
 Templates for most of the common scene setups.
 
-Content:
-********
+**Content:**
+
+.. _sphinx_hyperlinks:
+
 .. autosummary::
 
     Scene
@@ -13,9 +15,33 @@ Content:
 
 |
 
-.. autoclass::    Scene
+stlib.scene.Scene
+*****************
+
+.. autoclass:: Scene
+   :members:
+   :undoc-members:
+
+stlib.scene.Interaction
+***********************
+
+.. autoclass:: Interaction
+   :members:
+   :undoc-members:
+
+stlib.scene.MainHeader
+**********************
+
 .. autofunction:: MainHeader
+
+stlib.scene.ContactHeader
+*************************
+
 .. autofunction:: ContactHeader
+
+stlib.scene.Node
+****************
+
 .. autofunction:: Node
 
 """
@@ -31,18 +57,24 @@ def Node(parentNode, name):
     """Create a new node in the graph and attach it to a parent node."""
     return parentNode.createChild(name)
 
-
 @SofaPrefab
 class Scene(SofaObject):
-    """Create a scene with default properties.
+    """Scene(SofaObject)
+    Create a scene with default properties.
 
        Arg:
+
         node (Sofa.Node)     the node where the scene will be attached
+
         gravity (vec3f)      the gravity of the scene
+
         dt (float)           the dt time
+
         plugins (list(str))  set of plugins that are used in this scene
+
         repositoryPath (list(str)) set of path where to read the data from
-        doDebug (bool        activate debugging facility (to print text)
+
+        doDebug (bool)       activate debugging facility (to print text)
 
        There is method to add default solver and default contact management
        on demand.
