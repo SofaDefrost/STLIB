@@ -13,26 +13,16 @@ Content:
 
 
 """
-
 __all__=["all"]
 
-def OrientedBoxRoi(parentNode, position, name="BoxRoi", translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
-    
-    orientedBox = OrientedBoxFromTransform(translation,eulerRotation,scale)
-    parentNode.createObject("BoxROI", position=position, orientedBox=orientedBox, drawBoxes=True )
-    
-    return parentNode
+from splib.numerics import getOrientedBoxFromTransform
+
+def addOrientedBoxRoi(parentNode, position, name="BoxRoi", translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+    orientedBox = getOrientedBoxFromTransform(translation,eulerRotation,scale)
+    return parentNode.createObject("BoxROI", position=position, orientedBox=orientedBox, drawBoxes=True )
 
 def OrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
-    from stlib.numerics import *
-    # BoxROI unitaire
-    pos = [[-0.5, 0.0,-0.5],
-           [-0.5, 0.0, 0.5],
-           [ 0.5, 0.0, 0.5]]
-
-    depth = [scale[2]]
-
-    return transformPositions(position=pos, translation=translation, eulerRotation=eulerRotation, scale=scale) + depth
+    raise Exception("This function is now deprecated and replaced with splib.numerics.getOrientedBoxFromTransform Please update your code.")
 
 def createScene(rootNode):
     from stlib.scene import MainHeader
@@ -48,7 +38,7 @@ def createScene(rootNode):
             isAStaticObject = True,
             uniformScale = 10)
 
-    OrientedBoxRoi(floor, name="MyBoxRoi",position=[[50,0,0],[15,15,0],[60,70,25]],scale=[100,100,100])
+    addOrientedBoxRoi(floor, name="MyBoxRoi",position=[[50,0,0],[15,15,0],[60,70,25]],scale=[100,100,100])
 
-    myOrientedBox = OrientedBoxFromTransform(translation=[400,100,100],eulerRotation=[0,65,0],scale=[400,400,800])
+    myOrientedBox = getOrientedBoxFromTransform(translation=[400,100,100],eulerRotation=[0,65,0],scale=[400,400,800])
     floor.createObject("BoxROI", orientedBox=myOrientedBox, drawBoxes=True )

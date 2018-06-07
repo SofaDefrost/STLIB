@@ -1,143 +1,110 @@
 # -*- coding: utf-8 -*-
 import Sofa
+from splib.objectmodel import SofaPrefab, SofaObject
+from stlib.scene import Node
 
-def ElasticMaterialObject(
-                  attachedTo=None,
-                  volumeMeshFileName=None,
-                  name="ElasticMaterialObject",
-                  rotation=[0.0, 0.0, 0.0],
-                  translation=[0.0, 0.0, 0.0],
-                  surfaceMeshFileName=None,
-                  collisionMesh=None,
-                  withConstrain=True,
-                  surfaceColor=[1.0, 1.0, 1.0],
-                  poissonRatio=0.3,
-                  youngModulus=18000,
-                  totalMass=1.0, solver=None):
-    """
-    Object with an elastic deformation law.
+@SofaPrefab
+class ElasticMaterialObject(SofaObject):
+    def __init__(self,
+                 attachedTo=None,
+                 volumeMeshFileName=None,
+                 name="ElasticMaterialObject",
+                 rotation=[0.0, 0.0, 0.0],
+                 translation=[0.0, 0.0, 0.0],
+                 surfaceMeshFileName=None,
+                 collisionMesh=None,
+                 withConstrain=True,
+                 surfaceColor=[1.0, 1.0, 1.0],
+                 poissonRatio=0.3,
+                 youngModulus=18000,
+                 totalMass=1.0, solver=None):
 
-    Args:
-        volumeMeshFileName (str): Filepath to a volumetric mesh (VTK,VTU, GMESH, GID)
+        self.node = Node(attachedTo, name)
+        ElasticMaterialObject.createPrefab(self,
+                                           volumeMeshFileName, name, rotation, translation, surfaceMeshFileName,
+                                           collisionMesh, withConstrain, surfaceColor, poissonRatio, youngModulus, totalMass, solver)
 
-        youngModulus (float):  The young modulus.
+    @staticmethod
+    def createPrefab(self, volumeMeshFileName=None,
+                 name="ElasticMaterialObject",
+                 rotation=[0.0, 0.0, 0.0],
+                 translation=[0.0, 0.0, 0.0],
+                 surfaceMeshFileName=None,
+                 collisionMesh=None,
+                 withConstrain=True,
+                 surfaceColor=[1.0, 1.0, 1.0],
+                 poissonRatio=0.3,
+                 youngModulus=18000,
+                 totalMass=1.0, solver=None):
+        if self.node == None:
+            Sofa.msg_error("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
+            return None
 
-        poissonRatio (float):  The poisson parameter.
+        if volumeMeshFileName == None:
+            Sofa.msg_error(self.node, "Unable to create an elastic object because there is no volume mesh provided.")
+            return None
 
-        totalMass (float):   The mass is distributed according to the geometry of the object.
+        if volumeMeshFileName.endswith(".msh"):
+            self.loader = self.node.createObject('MeshGmshLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
+        elif volumeMeshFileName.endswith(".gidmsh"):
+            self.loader = self.node.createObject('GIDMeshLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
+        else:
+            self.loader = self.node.createObject('MeshVTKLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
 
-        surfaceMeshFileName(str): Filepath to a surface mesh (STL, OBJ). If missing there is no visual properties to this object.
+        if solver == None:
+            self.integration = self.node.createObject('EulerImplicit', name='integration')
+            self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
-        collisionMesh (str): Filepath to a surface mesh (STL, OBJ). If missing there is no collision properties to this object.
+        self.container = self.node.createObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
+        self.dofs = self.node.createObject('MechanicalObject', template='Vec3d', name='dofs')
 
-        withConstrain (bool): Add by default a default constraint correction component (ei:LinearSolverConstraintCorrection)
+        ## To be properly simulated and to interact with gravity or inertia forces, an elasticobject
+        ## also needs a mass. You can add a given mass with a uniform distribution for an elasticobject
+        ## by adding a UniformMass component to the elasticobject node
+        self.mass = self.node.createObject('UniformMass', totalmass=totalMass, name='mass')
 
-        surfaceColor (vec3f):  The default color used for the rendering of the object.
+        ## The next component to add is a FEM forcefield which defines how the elasticobject reacts
+        ## to a loading (i.e. which deformations are created from forces applied onto it).
+        ## Here, because the elasticobject is made of silicone, its mechanical behavior is assumed elastic.
+        ## This behavior is available via the TetrahedronFEMForceField component.
+        self.forcefield = self.node.createObject('TetrahedronFEMForceField', template='Vec3d',
+                                        method='large', name='forcefield',
+                                    poissonRatio=poissonRatio,  youngModulus=youngModulus)
 
-        translation (vec3f):   Apply a 3D translation to the object.
+        if withConstrain:
+            self.node.createObject('LinearSolverConstraintCorrection', solverName=self.solver.name)
 
-        rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
+        if collisionMesh:
+            self.addCollisionModel(collisionMesh, rotation, translation)
 
-        attachedTo (Sofa.Node): Where the node is created;
+        if surfaceMeshFileName:
+                self.addVisualModel(surfaceMeshFileName, surfaceColor, rotation, translation)
 
-    Structure:
-        .. sourcecode:: qml
+    def addCollisionModel(self, collisionMesh, rotation=[0.0,0.0,0.0], translation=[0.0,0.0,0.0]):
+        self.collisionmodel = self.node.createChild('CollisionModel')
+        self.collisionmodel.createObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation)
+        self.collisionmodel.createObject('TriangleSetTopologyContainer', src='@loader', name='container')
+        self.collisionmodel.createObject('MechanicalObject', template='Vec3d', name='dofs')
+        self.collisionmodel.createObject('Triangle')
+        self.collisionmodel.createObject('Line')
+        self.collisionmodel.createObject('Point')
+        self.collisionmodel.createObject('BarycentricMapping')
 
-            Node : {
-                name : "elasticobject"
-                MeshGmsgLoader or MeshVTKLoader,
-                MechanicalObject,
-                TetrahedronSetTopologyContainer,
-                UniformMass,
-                TetrahedronFEMForceField,
-                LinearSolverConstraintCorrection,
-                EulerImplicit,
-                SparseLDLSolver
-                LinearSolverConstraintCorrection
-                Node : {
-                   name : "Collision"
-                }
-                Node : {
-                   name : "Visual"
-                   OglModel,
-                   BarycentricMapping
-                }
-            }
-    """
+    def addVisualModel(self, filename, color, rotation, translation):
+        self.visualmodel = SofaObject(self.node, "VisualModel")
 
-    if attachedTo == None:
-        Sofa.msg_error("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
-        return None
+            ## Add to this empty node a rendering model made of triangles and loaded from an stl file.
+        self.visualmodel.model = self.visualmodel.node.createObject('OglModel', filename=filename,
+                                                                   template='ExtVec3f', color=color, rotation=rotation, translation=translation)
 
-    if volumeMeshFileName == None:
-        Sofa.msg_error(attachedTo, "Unable to create an elastic object because there is no volume mesh provided.")
-        return None
-    	
-    elasticobject = attachedTo.createChild(name)
-
-    if volumeMeshFileName.endswith(".msh"):
-        elasticobject.createObject('MeshGmshLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
-    elif volumeMeshFileName.endswith(".gidmsh"):
-        elasticobject.createObject('GIDMeshLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
-    else:
-        elasticobject.createObject('MeshVTKLoader', name='MeshLoader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
-    
-    if solver == None:
-        elasticobject.createObject('EulerImplicit')
-        solver = elasticobject.createObject('SparseLDLSolver', name="Solver")
-
-    elasticobject.createObject('TetrahedronSetTopologyContainer', src='@MeshLoader', name='container')
-    elasticobject.createObject('MechanicalObject', template='Vec3d')
-
-    ## To be properly simulated and to interact with gravity or inertia forces, an elasticobject
-    ## also needs a mass. You can add a given mass with a uniform distribution for an elasticobject
-    ## by adding a UniformMass component to the elasticobject node
-    elasticobject.createObject('UniformMass', totalmass=totalMass)
-
-    ## The next component to add is a FEM forcefield which defines how the elasticobject reacts
-    ## to a loading (i.e. which deformations are created from forces applied onto it).
-    ## Here, because the elasticobject is made of silicone, its mechanical behavior is assumed elastic.
-    ## This behavior is available via the TetrahedronFEMForceField component.
-    elasticobject.createObject('TetrahedronFEMForceField', template='Vec3d',
-                         	method='large',
-                                poissonRatio=poissonRatio,  youngModulus=youngModulus)
-
-
-    if withConstrain:
-        elasticobject.createObject('LinearSolverConstraintCorrection', solverName=solver.name)
-   
-    #################################################################################
-    ## Collision
-    if collisionMesh:
-        collisionNode = elasticobject.createChild('Collision')
-        collisionNode.createObject('MeshSTLLoader', name='MeshLoader', filename=collisionMesh, rotation=rotation, translation=translation)
-        collisionNode.createObject('TriangleSetTopologyContainer', src='@MeshLoader', name='container')
-        collisionNode.createObject('MechanicalObject', name='MechanicalObject', template='Vec3d')
-        collisionNode.createObject('Triangle')
-        collisionNode.createObject('Line')
-        collisionNode.createObject('Point')
-        collisionNode.createObject('BarycentricMapping')
+            ## Add a BarycentricMapping to deform the rendering model to follow the ones of the
+            ## mechanical model.
+        self.visualmodel.mapping = self.visualmodel.node.createObject('BarycentricMapping', name='mapping')
 
 
-    #################################################################################
-    ## Visualization
-    if surfaceMeshFileName:
-	    elasticobjectVisu = elasticobject.createChild('Visual')
-
-	    ## Add to this empty node a rendering model made of triangles and loaded from an stl file.
-	    elasticobjectVisu.createObject('OglModel', filename=surfaceMeshFileName,
-	                            template='ExtVec3f', color=surfaceColor, rotation=rotation, translation=translation)
-
-	    ## Add a BarycentricMapping to deform the rendering model to follow the ones of the
-	    ## mechanical model.
-	    elasticobjectVisu.createObject('BarycentricMapping')
-       
-    return elasticobject
-    
 def createScene(rootNode):
     from stlib.scene import MainHeader
 
     MainHeader(rootNode, gravity=" 0 0 0")
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual" , translation=[3.0, 0.0, 0.0])
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj", surfaceColor=[1.0, 0.0, 0.0])
-

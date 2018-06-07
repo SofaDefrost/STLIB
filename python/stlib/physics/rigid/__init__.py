@@ -4,8 +4,8 @@
 This package is focused on implementing a standard rigid object for sofa. The object is
 made described by its surface mesh.
 
-Content:
-********
+**Content:**
+
 .. autosummary::
 
     RigidObject
@@ -13,11 +13,21 @@ Content:
     Sphere
     Floor
 
-|
 
+stlib.physics.rigid.RigidObject
+*******************************
 .. autofunction:: RigidObject
+
+stlib.physics.rigid.Cube
+************************
 .. autofunction:: Cube
+
+stlib.physics.rigid.Sphere
+**************************
 .. autofunction:: Sphere
+
+stlib.physics.rigid.Floor
+*************************
 .. autofunction:: Floor
 
 

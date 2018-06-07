@@ -6,7 +6,7 @@ SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
 SPHINXPROJ    = STLIB
 SOURCEDIR     = source
-BUILDDIR      = build
+BUILDDIR      = ../html
 
 # Put it first so that "make" without argument is like "make help".
 help:

@@ -1,4 +1,3 @@
-
 # -*- coding: utf-8 -*-
 
 def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
@@ -56,8 +55,9 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
         cube.createObject('EulerImplicit', name='odesolver')
         cube.createObject('CGLinearSolver', name='Solver')
 
-    cube.createObject('MechanicalObject', name="mstate", template="Rigid",
-                      translation=translation, rotation=rotation)
+    cube.createObject('MechanicalObject', 
+                      name="mstate", template="Rigid",
+                      translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
     cube.createObject('UniformMass', name="mass", mass=[totalMass, volume, inertiaMatrix[:]])
 
@@ -67,7 +67,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     #### collision
     cubeCollis = cube.createChild('collision')
     cubeCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
-                            translation=translation, rotation=rotation,scale=uniformScale)
+                            scale=uniformScale)
 
     cubeCollis.createObject('Mesh', src="@loader")
     cubeCollis.createObject('MechanicalObject')
@@ -86,8 +86,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     #### visualization
     cubeVisu = cube.createChild('visual')
     cubeVisu.createObject('OglModel', name="visual",
-                          fileMesh=surfaceMeshFileName, color=color,
-                          translation=translation, rotation=rotation,scale=uniformScale)
+                          fileMesh=surfaceMeshFileName, color=color, scale=uniformScale)
     cubeVisu.createObject('RigidMapping')
 
     return cube
@@ -98,6 +97,6 @@ def createScene(rootNode):
 
     MainHeader(rootNode)
     DefaultSolver(rootNode)
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", translation=[-20.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Left", translation=[-20.0,0.0,0.0])
     RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[ 0.0,0.0,0.0])
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", translation=[ 20.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[ 20.0,0.0,0.0])

@@ -1,21 +1,7 @@
 # -*- coding: utf-8 -*-
-"""
-Utilitary function to ease the writing of scenes.
+import Sofa
+Sofa.msg_error("splib.tools", 
+"""The animation framework is now part of the splib instead of stlib. Please update your code base.
+Old code will not work until you replaced all 'stlib.tools' by 'splib.loader'.
+""")
 
-Functions:
-**********
-.. autosummary::
-
-    stlib.tools.loadPointListFromFile
-
-.. autofunction:: stlib.tools.loadPointListFromFile
-
-"""
-__all__=[]
-
-
-def loadPointListFromFile(s):
-    import json
-
-    """Load a set of 3D point from a json file"""
-    return json.load(open(s))

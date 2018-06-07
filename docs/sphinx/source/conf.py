@@ -15,11 +15,10 @@
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
 
+import os
+import sys
+sys.path.append(os.getcwd()+"/../../../python")
 
 # -- General configuration ------------------------------------------------
 
@@ -41,9 +40,6 @@ extensions = [
     'sphinx.ext.githubpages'
     ]
 
-import sys
-import os
-sys.path.append(os.getcwd()+"/../../../python")
 
 ## Include Python objects as they appear in source files
 ## Default: alphabetically ('alphabetical')
@@ -199,9 +195,17 @@ class Mock(MagicMock):
     def __getattr__(cls, name):
             return MagicMock()
 
-MOCK_MODULES = ['Sofa', 'numpy']
+MOCK_MODULES = ['Sofa',
+                'SofaPython','Quaternion','SofaPython.Quaternion',  # Needed for numerics
+                'PythonScriptController', 'Sofa.PythonScriptController'] # for AnimationManagerController but doesn't work...
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
+autodoc_mock_imports= [ "math","numpy","vec3","quat","matrix", # Standard import
+                        "SofaPython.Quaternion", # Needed for numerics
+                        "OpenGL", # Needed for splib.debug
+                        "Sofa"]
+
+autoclass_content = 'both' # When auto doc a class it will automatically add the special method __init__ doc
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {'https://docs.python.org/': None}

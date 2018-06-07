@@ -2,6 +2,7 @@
 """
 Templates for physical simulation.
 
+**Content:**
 
 .. autosummary::
     :toctree: _autosummary

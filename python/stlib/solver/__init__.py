@@ -2,13 +2,17 @@
 """
 Templates for most of the common time integration setups.
 
-Content:
-********
+**Content:**
+
+.. _sphinx_hyperlinks:
+
 .. autosummary::
 
     DefaultSolver
 
-|
+
+stlib.solver.DefaultSolver
+**************************
 
 .. autofunction:: DefaultSolver
 
