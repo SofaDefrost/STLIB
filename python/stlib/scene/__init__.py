@@ -53,6 +53,8 @@ from contactheader import ContactHeader
 from stlib.solver import DefaultSolver
 from interaction import Interaction
 
+from wrapper import Wrapper
+
 def Node(parentNode, name):
     """Create a new node in the graph and attach it to a parent node."""
     return parentNode.createChild(name)
