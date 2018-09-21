@@ -61,7 +61,7 @@ class ElasticMaterialObject(SofaObject):
         ## To be properly simulated and to interact with gravity or inertia forces, an elasticobject
         ## also needs a mass. You can add a given mass with a uniform distribution for an elasticobject
         ## by adding a UniformMass component to the elasticobject node
-        self.mass = self.node.createObject('UniformMass', totalmass=totalMass, name='mass')
+        self.mass = self.node.createObject('UniformMass', totalMass=totalMass, name='mass')
 
         ## The next component to add is a FEM forcefield which defines how the elasticobject reacts
         ## to a loading (i.e. which deformations are created from forces applied onto it).
