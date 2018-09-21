@@ -46,13 +46,18 @@ def get(node, path):
     Query a node, an object or a data by its path from the provided node.
 
     Example:
-        find(node, "/root/rigidcube1/visual/OglModel.position")
+        get(node, "/rigidcube1/visual/OglModel.position")
     """
-    if path.startswith("/"):
-        raise Exception("InvalidPathPrefix for " + path+" in "+node.getLinkPath())
+
+    if path.startswith("@"):
+        raise Exception("InvalidPathPrefix for " + path+" in "+node.getLinkPath()+ " the @ are is indicating path query in .scn not in .py")
 
     if path.startswith("../"):
         raise Exception("InvalidPathPrefix for " + path+" in "+node.getLinkPath())
+
+    if path.startswith("/"):
+        node = node.getRoot()
+        path = path[1:]
 
     if path.startswith("./"):
         path = path[2:]

@@ -51,7 +51,7 @@ class ElasticMaterialObject(SofaObject):
         else:
             self.loader = self.node.createObject('MeshVTKLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation)
 
-        if solver == None:
+        if solver is not None:
             self.integration = self.node.createObject('EulerImplicit', name='integration')
             self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
@@ -71,7 +71,7 @@ class ElasticMaterialObject(SofaObject):
                                         method='large', name='forcefield',
                                     poissonRatio=poissonRatio,  youngModulus=youngModulus)
 
-        if withConstrain:
+        if withConstrain and solver is not None:
             self.node.createObject('LinearSolverConstraintCorrection', solverName=self.solver.name)
 
         if collisionMesh:
@@ -79,6 +79,11 @@ class ElasticMaterialObject(SofaObject):
 
         if surfaceMeshFileName:
                 self.addVisualModel(surfaceMeshFileName, surfaceColor, rotation, translation)
+
+    def addSubPoint(self, p):
+        s = self.node.createChild("subpoints")
+        s.createObject("MechanicalObject", name="dofs", position=p)
+        s.createObject("BarycentricMapping")
 
     def addCollisionModel(self, collisionMesh, rotation=[0.0,0.0,0.0], translation=[0.0,0.0,0.0]):
         self.collisionmodel = self.node.createChild('CollisionModel')

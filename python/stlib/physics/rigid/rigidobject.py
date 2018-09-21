@@ -56,7 +56,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
         cube.createObject('CGLinearSolver', name='Solver')
 
     cube.createObject('MechanicalObject', 
-                      name="mstate", template="Rigid",
+                      name="dofs", template="Rigid",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
     cube.createObject('UniformMass', name="mass", mass=[totalMass, volume, inertiaMatrix[:]])
