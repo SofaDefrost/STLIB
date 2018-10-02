@@ -21,6 +21,8 @@ class VisualModel(SofaObject):
             parent
             surfaceMeshFileName
             color
+            rotation
+            translation
 
        Content:
            Node
@@ -30,7 +32,7 @@ class VisualModel(SofaObject):
                 OglModel : "model'
            }
     """
-    def __init__(self, parent, surfaceMeshFileName, color=[1.0,1.0,1.0]):
+    def __init__(self, parent, surfaceMeshFileName, color=[1.0,1.0,1.0], rotation=[0.0,0.0,0.0], translation=[0.0,0.0,0.0]):
         self.node  = Node(parent, "VisualModel")
 
         if surfaceMeshFileName.endswith(".stl"):
@@ -41,9 +43,12 @@ class VisualModel(SofaObject):
             self.loader = self.node.createObject('MeshObjLoader',
                                                  name="loader",
                                                  filename=surfaceMeshFileName)
+        else:
+            print("Extension not handled in STLIB/python/stlib/visuals for file: "+str(surfaceMeshFileName))
 
         self.model = self.node.createObject('OglModel',
                                         name="model",
-                                        position='@loader.position',
-                                        triangles='@loader.triangles',
+                                        src="@loader",
+                                        rotation=rotation,
+                                        translation=translation,
                                         color=color, updateNormals=False)
