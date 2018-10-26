@@ -59,7 +59,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
                       name="mstate", template="Rigid",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
-    cube.createObject('UniformMass', name="mass", mass=[totalMass, volume, inertiaMatrix[:]])
+    cube.createObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
     if not isAStaticObject:
         cube.createObject('UncoupledConstraintCorrection')
