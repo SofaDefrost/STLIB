@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from stlib.visuals import VisualModel
 
 def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
                 translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0], uniformScale=1.0,
@@ -55,7 +56,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
         cube.createObject('EulerImplicit', name='odesolver')
         cube.createObject('CGLinearSolver', name='Solver')
 
-    cube.createObject('MechanicalObject', 
+    cube.createObject('MechanicalObject',
                       name="mstate", template="Rigid",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
@@ -84,9 +85,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     cubeCollis.createObject('RigidMapping')
 
     #### visualization
-    cubeVisu = cube.createChild('visual')
-    cubeVisu.createObject('OglModel', name="visual",
-                          fileMesh=surfaceMeshFileName, color=color, scale=uniformScale)
+    cubeVisu = VisualModel(parent=cube,surfaceMeshFileName=surfaceMeshFileName,color=color,scale=uniformScale)
     cubeVisu.createObject('RigidMapping')
 
     return cube

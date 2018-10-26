@@ -23,6 +23,7 @@ class VisualModel(SofaObject):
             color
             rotation
             translation
+            scale
 
        Content:
            Node
@@ -32,7 +33,7 @@ class VisualModel(SofaObject):
                 OglModel : "model'
            }
     """
-    def __init__(self, parent, surfaceMeshFileName, color=[1.0,1.0,1.0], rotation=[0.0,0.0,0.0], translation=[0.0,0.0,0.0]):
+    def __init__(self, parent, surfaceMeshFileName, color=[1.0,1.0,1.0], rotation=[0.0,0.0,0.0], translation=[0.0,0.0,0.0], scale=[0.0,0.0,0.0]):
         self.node  = Node(parent, "VisualModel")
 
         if surfaceMeshFileName.endswith(".stl"):
@@ -51,4 +52,5 @@ class VisualModel(SofaObject):
                                         src="@loader",
                                         rotation=rotation,
                                         translation=translation,
+                                        scale=scale,
                                         color=color, updateNormals=False)
