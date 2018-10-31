@@ -3,6 +3,8 @@ cmake_minimum_required(VERSION 3.5)
 # Force cmake to use the NEW policy regarding the "VERSION" management.
 cmake_policy(SET CMP0048 NEW)
 
+project(STLIB VERSION 1.0)
+
 ## Change default install prefix
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
@@ -21,9 +23,6 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${ARCHIVE_OUTPUT_DIRECTOR
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${RUNTIME_OUTPUT_DIRECTORY})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${LIBRARY_OUTPUT_DIRECTORY})
 
-project(STLIB VERSION 1.0)
-
-find_package(SofaFramework)
 find_package(SofaPython REQUIRED)
 
 set(HEADER_FILES src/initPlugin.h)
@@ -42,3 +41,8 @@ target_link_libraries(${PROJECT_NAME} SofaCore SofaPython)
 ## Install rules for the library and headers; CMake package configurations files
 
 sofa_create_package(STLIB ${PROJECT_VERSION} ${PROJECT_NAME} STLIB)
+
+install(DIRECTORY docs DESTINATION share/sofa/${PROJECT_NAME})
+
+
+include(CPack)

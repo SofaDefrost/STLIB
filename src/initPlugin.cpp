@@ -84,19 +84,7 @@ void initExternalModule()
             modulePath.resize( foundPos );
             modulePath = FileSystem::getParentDirectory( modulePath );
             std::cout << "modulePath = " << modulePath << std::endl;
-
-            // APPROACH 1: Read python path from .ini file and add it to python environment
-//            const std::string etcDir = modulePath + "/etc";
-//            const std::string moduleIniFilePath = etcDir + "/" + getModuleName() + ".ini";
-//            std::map<std::string, std::string> iniFileValues = Utils::readBasicIniFile(moduleIniFilePath);
-//            if (iniFileValues.find("PYTHON_DIR") != iniFileValues.end())
-//            {
-//                std::string iniFileValue = iniFileValues["PYTHON_DIR"];
-//                if (!FileSystem::isAbsolute(iniFileValue))
-//                    iniFileValue = etcDir + "/" + iniFileValue;
-//                PythonEnvironment::addPythonModulePathsFromConfigFile(iniFileValue);
-//            }
-
+            
             // APPROACH 2: Read python config file to get python module path
             // see PythonEnvironment::addPythonModulePathsFromConfigFile
             std::string configFilePath = modulePath + "/etc/sofa/python.d/" + getModuleName();
@@ -136,9 +124,6 @@ const char* getModuleDescription()
 
 const char* getModuleComponentList()
 {
-    /// string containing the names of the classes provided by the plugin
-//    static std::string classes = sofa::core::ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
-//    return classes.c_str();
     return "";
 }
 
