@@ -35,7 +35,6 @@ sofa_set_python_directory(${PROJECT_NAME} "python")
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
 
-set_target_properties(${PROJECT_NAME} PROPERTIES PUBLIC_HEADER "${HEADER_FILES}")
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_STLIB")
 target_link_libraries(${PROJECT_NAME} SofaCore SofaPython)
 target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>")
@@ -43,7 +42,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>"
 
 ## Install rules for the library and headers; CMake package configurations files
 
-sofa_create_package(STLIB ${PROJECT_VERSION} ${PROJECT_NAME} STLIB)
+sofa_create_package(STLIB ${PROJECT_VERSION} ${PROJECT_NAME} STLIB "src")
 
 install(DIRECTORY docs DESTINATION share/sofa/${PROJECT_NAME})
 install(FILES "README.md" "LICENSE" DESTINATION .)
