@@ -120,9 +120,6 @@ const char* getModuleDescription()
 
 const char* getModuleComponentList()
 {
-    /// string containing the names of the classes provided by the plugin
-//    static std::string classes = sofa::core::ObjectFactory::getInstance()->listClassesFromTarget(sofa_tostring(SOFA_TARGET));
-//    return classes.c_str();
     return "";
 }
 
