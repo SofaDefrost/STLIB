@@ -5,6 +5,9 @@ cmake_policy(SET CMP0048 NEW)
 
 project(STLIB VERSION 1.0)
 
+## Default build type
+set(CMAKE_BUILD_TYPE "Release")
+
 ## Change default install prefix
 if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
     set(CMAKE_INSTALL_PREFIX ${CMAKE_BINARY_DIR}/install CACHE PATH "Install path prefix, prepended onto install directories." FORCE)
