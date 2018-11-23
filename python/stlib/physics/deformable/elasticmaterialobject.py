@@ -2,6 +2,7 @@
 import Sofa
 from splib.objectmodel import SofaPrefab, SofaObject
 from stlib.scene import Node
+from stlib.visuals import VisualModel
 
 @SofaPrefab
 class ElasticMaterialObject(SofaObject):
@@ -61,7 +62,7 @@ class ElasticMaterialObject(SofaObject):
         ## To be properly simulated and to interact with gravity or inertia forces, an elasticobject
         ## also needs a mass. You can add a given mass with a uniform distribution for an elasticobject
         ## by adding a UniformMass component to the elasticobject node
-        self.mass = self.node.createObject('UniformMass', totalmass=totalMass, name='mass')
+        self.mass = self.node.createObject('UniformMass', totalMass=totalMass, name='mass')
 
         ## The next component to add is a FEM forcefield which defines how the elasticobject reacts
         ## to a loading (i.e. which deformations are created from forces applied onto it).
@@ -91,11 +92,7 @@ class ElasticMaterialObject(SofaObject):
         self.collisionmodel.createObject('BarycentricMapping')
 
     def addVisualModel(self, filename, color, rotation, translation):
-        self.visualmodel = SofaObject(self.node, "VisualModel")
-
-            ## Add to this empty node a rendering model made of triangles and loaded from an stl file.
-        self.visualmodel.model = self.visualmodel.node.createObject('OglModel', filename=filename,
-                                                                   template='ExtVec3f', color=color, rotation=rotation, translation=translation)
+        self.visualmodel = VisualModel(parent=self.node,surfaceMeshFileName=filename,color=color,rotation=rotation,translation=translation)
 
             ## Add a BarycentricMapping to deform the rendering model to follow the ones of the
             ## mechanical model.

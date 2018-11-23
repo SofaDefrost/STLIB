@@ -14,7 +14,10 @@ def CollisionMesh(attachedTo=None,
                   name="collision",
                   rotation=[0.0,0.0,0.0],
                   translation=[0.0,0.0,0.0],
-                  collisionGroup=None):
+                  collisionGroup=None, mappingType='BarycentricMapping'):
+    '''
+
+    '''
 
     if attachedTo == None:
         Sofa.msg_error("Cannot create a CollisionMesh that is not attached to node.")
@@ -39,7 +42,9 @@ def CollisionMesh(attachedTo=None,
         collisionmodel.createObject('Line')
         collisionmodel.createObject('Triangle')
     
-    collisionmodel.createObject('BarycentricMapping')
+    if mappingType!=None:
+        collisionmodel.createObject(mappingType)
+
 
     return collisionmodel
     

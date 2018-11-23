@@ -114,9 +114,14 @@ class RigidDof(object):
         self.rigidobject = rigidobject
 
     def getPosition(self):
-        return self.rigidobject.position[0][:3]
+        return numpy.array(self.rigidobject.position[0][:3])
+
+    def getRestPosition(self):
+        return numpy.array(self.rigidobject.rest_position[0][:3])
 
     def setPosition(self, v):
+        if(not isinstance(v,list)):
+            v = list(v)
         self.rigidobject.position = v + self.rigidobject.position[0][3:]
 
     position = property(getPosition, setPosition)
@@ -125,22 +130,22 @@ class RigidDof(object):
         print("TODO q")
 
     def getOrientation(self, q):
-        return self.rigidobject.position[0][3:]
+        return numpy.array(self.rigidobject.position[0][3:])
     orientation = property(getOrientation, setOrientation)
 
     def getForward(self):
         o = self.rigidobject.position[0][3:]
-        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,0.0,1.0,1.0]))
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,0.0,1.0,1.0]))[:3]
     forward = property(getForward, None)
 
     def getLeft(self):
         o = self.rigidobject.position[0][3:]
-        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([1.0,0.0,0.0,1.0]))
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([1.0,0.0,0.0,1.0]))[:3]
     left = property(getLeft, None)
 
     def getUp(self):
         o = self.rigidobject.position[0][3:]
-        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,1.0,0.0,1.0]))
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,1.0,0.0,1.0]))[:3]
     up = property(getUp, None)
 
     def copyFrom(self, t):

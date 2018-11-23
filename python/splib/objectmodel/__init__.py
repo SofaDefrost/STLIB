@@ -12,10 +12,10 @@ class SofaPrefab(object):
     def __call__(self, *args, **kwargs):
             o = self.cls(*args, **kwargs)
             frameinfo = getframeinfo(currentframe().f_back)
-            o.node.addNewData("Prefab type", "Infos", "","s", str(o.__class__.__name__))
-            o.node.addNewData("Defined in", "Infos", "","s", str(self.definedloc))
-            o.node.addNewData("Instantiated in", "Infos", "","s", str((frameinfo.filename, frameinfo.lineno)))
-            o.node.addNewData("Help", "Infos", "", "s", str(getdoc(o)))
+            o.node.addNewData("Prefab type", "Infos", "","string", str(o.__class__.__name__))
+            o.node.addNewData("Defined in", "Infos", "","string", str(self.definedloc))
+            o.node.addNewData("Instantiated in", "Infos", "","string", str((frameinfo.filename, frameinfo.lineno)))
+            o.node.addNewData("Help", "Infos", "", "string", str(getdoc(o)))
 
             ## This is the kind of hack that make me love python
             def sofaprefab_getattr(self, name):
@@ -77,4 +77,3 @@ class SofaObjectWrapper(object):
             raise Exception("Missing attribute '"+name+"' in "+str(self) )
 
         return tmp
-

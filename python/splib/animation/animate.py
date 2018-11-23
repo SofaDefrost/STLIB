@@ -20,8 +20,10 @@ class Animation(object):
     def update(self, currentTime):
         if self.startTime == None:
             self.startTime = currentTime
-            
-        if self.direction > 0.0:
+      
+        if self.duration == 0.0:
+            self.factor = 1.0
+        elif self.direction > 0.0:
             self.factor = (currentTime-self.startTime) / self.duration
         else:
             self.factor = 1.0-(currentTime-self.startTime) / self.duration
