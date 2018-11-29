@@ -1,24 +1,25 @@
 # -*- coding: utf-8 -*-
 
 class Wrapper(object):
+    '''
+    Args:
+        node : the current node we are working on
+
+        attachedFunction : the function that will be called at each object creation 
+                           to do some stuff replace/insert/delete ...
+
+                           This function will take as arguments the node, the type of the object to create,
+                           datacache & also the current arguments of the object .
+
+                           This function as to return a tuple containing parameters 
+                           of the object we want to create (ie: his type and a dictionary 
+                           with all the other arguments) or None 
+
+        datacache : the data we will use in our attachedFunction as parameters or else
+
+    '''
+    
     def __init__(self, node, attachedFunction, datacache):
-        '''
-        Args:
-            node : the current node we are working on
-
-            attachedFunction : the function that will be called at each object creation 
-                               to do some stuff replace/insert/delete ...
-
-                               This function will take as arguments the node, the type of the object to create,
-                               datacache & also the current arguments of the object .
-
-                               This function as to return a tuple containing parameters 
-                               of the object we want to create (ie: his type and a dictionary 
-                               with all the other arguments) or None 
-
-            datacache : the data we will use in our attachedFunction as parameters or else
-
-        '''
         self.node = node
         self.attachedFunction = attachedFunction
         self.datacache = datacache
