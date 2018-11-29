@@ -12,6 +12,7 @@ Templates for most of the common scene setups.
     MainHeader
     ContactHeader
     Node
+    Wrapper
 
 |
 
@@ -43,6 +44,14 @@ stlib.scene.Node
 ****************
 
 .. autofunction:: Node
+
+stlib.scene.Wrapper
+****************
+
+.. autoclass:: Wrapper
+   :members:
+   :undoc-members:
+   :special-members: __getattr__
 
 """
 from splib.objectmodel import SofaPrefab, SofaObject
