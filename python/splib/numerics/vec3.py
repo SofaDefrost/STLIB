@@ -237,3 +237,6 @@ def ssub(a,b):
 
 def smul(a,b):
     return [a[0]*b, a[1]*b, a[2]*b]
+
+def sdiv(a,b):
+    return [a[0]/b, a[1]/b, a[2]/b]
