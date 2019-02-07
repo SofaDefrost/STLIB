@@ -29,3 +29,17 @@ def createScene(rootNode):
 
 The API documentation is available at [readthedocs](http://stlib.readthedocs.io/en/latest/index.html)
 
+# To build STLIB 
+First you need to have [SOFA](https://github.com/Sofa-framework/sofa) on your machine, since to build STLIB you will need to build it through SOFA.
+
+`git clone https://github.com/sofa-framework/sofa.git`
+
+Then clone STLIB
+
+`git clone https://github.com/SofaDefrost/STLIB.git`
+
+In the configurations of SOFA build settings, set PLUGIN_SOFAPYTHON to ON and SOFA_EXTERNAL_DIRECTORIES to the absolute path of STLIB (your_path/STLIB)
+
+Then build SOFA
+
+Now you should be able to use `import stlib` in python from inside SOFA (running the .py from runSofa)
