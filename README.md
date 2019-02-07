@@ -21,7 +21,7 @@ def createScene(rootNode):
 
     ElasticMaterialObject(rootNode, name="dragon",
                           volumeMeshFileName="mesh/liver.msh",
-                          surfaceMeshFileName="mesh/dragon.stl"
+                          surfaceMeshFileName="mesh/dragon.stl",
                           translation=[0.0,0.0,0.0])
 
     Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
@@ -38,7 +38,7 @@ Then clone STLIB
 
 `git clone https://github.com/SofaDefrost/STLIB.git`
 
-In the configurations of SOFA build settings, set PLUGIN_SOFAPYTHON to ON and SOFA_EXTERNAL_DIRECTORIES to the absolute path of STLIB (your_path/STLIB)
+In the configurations of SOFA build settings, set `PLUGIN_SOFAPYTHON` to `ON` and `SOFA_EXTERNAL_DIRECTORIES` to the absolute path of STLIB `your_path/STLIB`
 
 Then build SOFA
 
