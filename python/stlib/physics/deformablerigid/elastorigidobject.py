@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
-from splib.numerics import Vec3, Quat, sdiv, getOrientedBoxFromTransform
+from splib.numerics import Vec3, Quat, sdiv
 from stlib.scene import MainHeader
 from stlib.physics.deformable import ElasticMaterialObject
+from stlib.components import addOrientedBoxRoi
 
 
 # TODO List
 # Crash when root contains MechanicalObject
 # TODO(dmarchal) Add gather the Rigid DOF-mapping inside rigidified part.
 # TODO(dmarchal) Instead of boxframe
-def ElastoRigidObject(targetObject, sourceObject, frameOrientation, orientedBoxes):
+def ElastoRigidObject(targetObject, sourceObject, frameOrientation, indicesLists, pointsLists):
         """
             :param targetObject: parent node where to attach the final object.
             :param sourceObject: node containing the deformable object.
@@ -16,7 +17,10 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, orientedBoxe
                                     of rigid component. The orientation are given in eulerAngles (in degree) by passing
                                     three values or using a quaternion by passing four values.
                                     [[0,10,20], [0.1,0.5,0.3,0.4]]
-            :param orientedBoxes: list of orientedBoxes to select the elements to rigidify
+            :param indicesLists: array of indices to rigidify. The length of the array should be equal to the number
+                                of rigid component.
+            :param pointsLists: array of points to rigidify. The length of the array should be equal to the number
+                                of rigid component.
 
         """
         sourceObject.init()
@@ -30,19 +34,13 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, orientedBoxe
         centers = []
         selectedIndices = []
         indicesMap = []
-        for index in range(len(orientedBoxes)):
-            orientedBox = orientedBoxes[index]
+        for index in range(len(indicesLists)):
             boxFrame = frameOrientation[index]
-            box = elastoRigidObject.createObject("BoxROI", name="filters",
-                                                 orientedBox=orientedBox,
-                                                 position=sourceObject.container.position,
-                                                 drawBoxes=True, drawPoints=True, drawSize=1.0)
-            box.init()
             orientation = Quat.createFromEuler(boxFrame)
-            center = sdiv(sum(map(Vec3, box.pointsInROI)), float(len(box.pointsInROI))) + list(orientation)
+            center = sdiv(sum(map(Vec3, pointsLists[index])), float(len(pointsLists[index]))) + list(orientation)
             centers.append(center)
-            selectedIndices += map(lambda x: x[0], box.indices)
-            indicesMap += [index] * len(box.indices)
+            selectedIndices += map(lambda x: x[0], indicesLists[index])
+            indicesMap += [index] * len(indicesLists[index])
 
         otherIndices = filter(lambda x: x not in selectedIndices, allIndices)
         Kd = {v: None for k, v in enumerate(allIndices)}
@@ -91,6 +89,7 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, orientedBoxe
 
         return elastoRigidObject
 
+
 def createScene(rootNode):
 
         MainHeader(rootNode, plugins=["SofaSparseSolver"])
@@ -105,14 +104,24 @@ def createScene(rootNode):
 
         simulation = rootNode.createChild("Simulation")
 
+        elasticobject.init()
+        box1 = addOrientedBoxRoi(elasticobject, elasticobject.loader.position,
+                                 translation=[20, 0, 10],
+                                 eulerRotation=[0., 0., 90],
+                                 scale=[50.0, 50.0, 50.0],
+                                 name='filters1')
+        box1.init()
+        box2 = addOrientedBoxRoi(elasticobject, elasticobject.loader.position,
+                                 translation=[100, -10, 50],
+                                 eulerRotation=[0., 0., 90],
+                                 scale=[40.0, 40.0, 40.0],
+                                 name='filters2')
+        box2.init()
+        indices = [box1.indices, box2.indices]
+        points = [box1.pointsInROI, box2.pointsInROI]
+
         o = ElastoRigidObject(simulation, elasticobject,
                               frameOrientation=[[0, 0, 0], [0, 0, 0]],
-                              orientedBoxes=[getOrientedBoxFromTransform(translation=[20, 0, 10],
-                                                                         eulerRotation=[0, 90, 0],
-                                                                         scale=[50.0, 50.0, 50.0]),
-                                             getOrientedBoxFromTransform(translation=[100, -10, 50],
-                                                                         eulerRotation=[0, 90, 0],
-                                                                         scale=[40.0, 40.0, 40.0])
-                                            ])
+                              indicesLists=indices, pointsLists=points)
 
         o.RigidParts.createObject("FixedConstraint", indices=0)
