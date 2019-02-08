@@ -24,8 +24,6 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, indicesLists
 
         """
         sourceObject.init()
-        targetObject.createObject("EulerImplicitSolver", rayleighStiffness=0.01)
-        targetObject.createObject("CGLinearSolver")
         elastoRigidObject = targetObject.createChild("ElastoRigidObject")
 
         allPositions = sourceObject.container.position
@@ -50,7 +48,7 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, indicesLists
         freeParticules = elastoRigidObject.createChild("DeformableParts")
         freeParticules.createObject("MechanicalObject", template="Vec3", name="freedofs",
                                     position=[allPositions[i] for i in otherIndices],
-                                    showObject=True, showObjectScale=5, showColor=[1.0, 0.0, 1.0, 1.0])
+                                    showObject=True, showObjectScale=2, showColor=[1.0, 0.0, 1.0, 1.0])
 
         rigidParts = elastoRigidObject.createChild("RigidParts")
         rigidParts.createObject("MechanicalObject", template="Rigid", name="dofs", reserve=len(centers),
@@ -59,7 +57,7 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, indicesLists
         rigidifiedParticules = rigidParts.createChild("RigidifiedParticules")
         rigidifiedParticules.createObject("MechanicalObject", template="Vec3", name="dofs",
                                           position=[allPositions[i] for i in selectedIndices],
-                                          showObject=True, showObjectScale=5, showColor=[1.0, 1.0, 0.0, 1.0])
+                                          showObject=True, showObjectScale=2, showColor=[1.0, 1.0, 0.0, 1.0])
         rigidifiedParticules.createObject("RigidMapping", globalToLocalCoords='true', rigidIndexPerPoint=indicesMap)
 
         interactions = elastoRigidObject.createChild("MaterialCoupling")
@@ -67,6 +65,7 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, indicesLists
         sourceObject.removeObject(sourceObject.solver)
         sourceObject.removeObject(sourceObject.integration)
         sourceObject.removeObject(sourceObject.LinearSolverConstraintCorrection)
+
 
         interactions.createObject("MechanicalObject",
                                   template="Vec3", name="dofs",
@@ -77,10 +76,10 @@ def ElastoRigidObject(targetObject, sourceObject, frameOrientation, indicesLists
                                   output='@.',
                                   indexPairs=indexPairs)
 
+        interactions.addObject(c)
         interactions.createObject("TetrahedronFEMForceField", youngModulus=sourceObject.forcefield.youngModulus, poissonRatio=sourceObject.forcefield.poissonRatio)
         interactions.createObject("UniformMass", name="mass", vertexMass=sourceObject.mass.vertexMass)
 
-        interactions.addObject(c)
 
         rigidifiedParticules.addChild(interactions)
         freeParticules.addChild(interactions)
@@ -103,6 +102,8 @@ def createScene(rootNode):
                                               youngModulus=100, poissonRatio=0.3, scale=[100, 100, 100], translation=[30, -20, 20], totalMass=3.5)
 
         simulation = rootNode.createChild("Simulation")
+        simulation.createObject("EulerImplicit")
+        simulation.createObject("CGLinearSolver")
 
         elasticobject.init()
         box1 = addOrientedBoxRoi(elasticobject, elasticobject.loader.position,
