@@ -116,6 +116,9 @@ class RigidDof(object):
     def getPosition(self, index=0):
         return self.rigidobject.position[index][:3]
 
+    def getRestPosition(self):
+        return numpy.array(self.rigidobject.rest_position[0][:3])
+
     def setPosition(self, v):
         if(not isinstance(v,list)):
             v = list(v)
