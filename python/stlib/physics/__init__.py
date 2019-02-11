@@ -8,6 +8,7 @@ Templates for physical simulation.
     :toctree: _autosummary
 
     stlib.physics.rigid
+    stlib.physics.mixedmaterial
     stlib.physics.deformable
     stlib.physics.constraints
     stlib.physics.collision

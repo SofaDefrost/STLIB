@@ -1,16 +1,23 @@
 # -*- coding: utf-8 -*-
 """
+Templates to rigidify a deformable object.
+The rigidification consist in mixing in a single object rigid and deformable parts.
+The rigid and deformable parts are interacting together. 
+
+**Content:**
+
 .. autosummary::
-    :toctree: _autosummary
+   Rigidify
     
-@contributors: 
+Contributors: 
         damien.marchal@univ-lille.fr
         eulalie.coevoet@inria.fr
 """
 from splib.numerics import Vec3, Quat, sdiv, RigidDof, getOrientedBoxFromTransform 
 
 def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, name=None):
-        """
+        """ Transform a deformable object into a mixed one containing both rigid and deformable parts.
+            
             :param targetObject: parent node where to attach the final object.
             :param sourceObject: node containing the deformable object. The object should be following 
                                  the ElasticMaterialObject template. 
@@ -47,7 +54,6 @@ def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, name=No
         selectedIndices=[]
         for index in range(len(groupIndices)):
                 selectedPoints = mfilter(groupIndices[index], allIndices, sourcePoints)                 
-                                
         
                 if len(frameOrientation[index])==3:
                         orientation = Quat.createFromEuler(frameOrientation[index])
@@ -105,7 +111,6 @@ def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, name=No
 
 def createScene(rootNode):
         """
-        Example for rigidication
         """
         from stlib.scene import MainHeader
         from stlib.physics.deformable import ElasticMaterialObject
