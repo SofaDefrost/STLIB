@@ -5,7 +5,7 @@ Templates to rigidify a deformable object.
 The rigidification consist in mixing in a single object rigid and deformable parts.
 The rigid and deformable parts are interacting together. 
 
-**Content:**
+**Sofa Templates:**
 
 .. autosummary::
 
@@ -20,7 +20,6 @@ Contributors:
         damien.marchal@univ-lille.fr
         eulalie.coevoet@inria.fr
 """
-
 
 
 from splib.numerics import Vec3, Quat, sdiv, RigidDof, getOrientedBoxFromTransform 
