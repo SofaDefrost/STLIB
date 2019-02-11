@@ -2,6 +2,9 @@ from inspect import currentframe, getframeinfo,getdoc
 import types
 import Sofa
 
+def setData(d, **kwargs):
+        for k in kwargs:
+            d.getData(str(k)).value = kwargs[k]
 
 class SofaPrefab(object):
     def __init__(self, cls):
