@@ -7,11 +7,11 @@ Templates for physical simulation.
 .. autosummary::
     :toctree: _autosummary
 
-    stlib.physics.rigid
-    stlib.physics.mixedmaterial
-    stlib.physics.deformable
     stlib.physics.constraints
     stlib.physics.collision
-
+    stlib.physics.deformable
+    stlib.physics.mixedmaterial
+    stlib.physics.rigid
+    
 """
 __all__=["rigid", "deformable","constraints", "collision", "mixedmaterial"]

@@ -1,18 +1,28 @@
 # -*- coding: utf-8 -*-
 """
 Templates to rigidify a deformable object.
+
 The rigidification consist in mixing in a single object rigid and deformable parts.
 The rigid and deformable parts are interacting together. 
 
 **Content:**
 
 .. autosummary::
-   Rigidify
+
+    Rigidify
+
+stlib.physics.mixedmaterial.Rigidify
+*******************************
+.. autofunction:: Rigidify
+
     
 Contributors: 
         damien.marchal@univ-lille.fr
         eulalie.coevoet@inria.fr
 """
+
+
+
 from splib.numerics import Vec3, Quat, sdiv, RigidDof, getOrientedBoxFromTransform 
 
 def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, name=None):
