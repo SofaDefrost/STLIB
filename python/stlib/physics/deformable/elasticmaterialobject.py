@@ -7,6 +7,7 @@ from stlib.visuals import VisualModel
 
 @SofaPrefab
 class ElasticMaterialObject(SofaObject):
+    """Creates an object composed of an elastic material."""
     def __init__(self,
                  attachedTo=None,
                  volumeMeshFileName=None,

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Templates for deformable objects.
+Templates for external constraints.
 
 **Content**
 

@@ -45,6 +45,10 @@ from quat import *
 from matrix import *
 
 def to_radians(v):
+    """Converts degree to radians
+    
+       :param v: the angle to convert
+    """
     if isinstance(v, list):
         p = []
         for tp in v:
@@ -104,7 +108,8 @@ class RigidDof(object):
     """Wrapper toward a sofa mechanicalobject template<rigid> as a rigid transform composed of
        a position and an orientation.
 
-       Examples:
+       Examples::
+           
             r = RigidTransform( aMechanicalObject )
             r.translate( ( r.forward * 0.2 ) )
             r.position = Vec3.zero

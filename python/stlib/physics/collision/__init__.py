@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Templates for deformable objects.
+Templates to ease collision and contact handling.
 
 **Content:**
 
