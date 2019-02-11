@@ -13,4 +13,4 @@ Templates for physical simulation.
     stlib.physics.collision
 
 """
-__all__=["rigid", "deformable","constraints", "collision"]
+__all__=["rigid", "deformable","constraints", "collision", "mixedmaterial"]
