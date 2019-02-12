@@ -1,4 +1,7 @@
 # STLIB
+
+[![Documentation](https://img.shields.io/badge/doc-on_website-blue.svg)](https://stlib.readthedocs.io/en/latest/index.html)
+
 Sofa Template Library
 
 This library should contains sofa scene template.
