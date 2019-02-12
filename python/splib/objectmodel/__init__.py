@@ -1,3 +1,8 @@
+# -*- coding: utf-8 -*-
+"""
+Sofa Prefab
+
+"""
 from inspect import currentframe, getframeinfo,getdoc
 import types
 import Sofa

@@ -37,8 +37,8 @@ splib.numerics.Matrix
 from math import *
 import numpy
 import numpy.linalg
-import SofaPython.Quaternion as Quaternion
-from SofaPython.Quaternion import from_euler, to_matrix
+# import SofaPython.Quaternion as Quaternion
+# from SofaPython.Quaternion import from_euler, to_matrix
 from math import pi
 from vec3 import *
 from quat import *
