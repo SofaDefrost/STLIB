@@ -7,38 +7,40 @@ Numerics components we often use.
 .. autosummary::
 
     RigidDof
-    Vec3
-    Quat
-    Matrix
+    # Vec3
+    # Quat
+    # Matrix
 
 splib.numerics.RigidDof
 ***********************
-.. autofunction:: RigidDof
-
-splib.numerics.Vec3
-*******************
 .. autoclass:: Vec3
    :members:
    :undoc-members:
 
-splib.numerics.Quat
-*******************
-.. autoclass:: Quat
-   :members:
-   :undoc-members:
+# splib.numerics.Vec3
+# *******************
+# .. autoclass:: Vec3
+#    :members:
+#    :undoc-members:
 
-splib.numerics.Matrix
-*********************
-.. autoclass:: Matrix
-   :members:
-   :undoc-members:
+# splib.numerics.Quat
+# *******************
+# .. autoclass:: Quat
+#    :members:
+#    :undoc-members:
+
+# splib.numerics.Matrix
+# *********************
+# .. autoclass:: Matrix
+#    :members:
+#    :undoc-members:
 
 """
 from math import *
 import numpy
 import numpy.linalg
-# import SofaPython.Quaternion as Quaternion
-# from SofaPython.Quaternion import from_euler, to_matrix
+import SofaPython.Quaternion as Quaternion
+from SofaPython.Quaternion import from_euler, to_matrix
 from math import pi
 from vec3 import *
 from quat import *
