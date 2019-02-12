@@ -203,7 +203,8 @@ sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 autodoc_mock_imports= [ "math","numpy","vec3","quat","matrix", # Standard import
                         "SofaPython.Quaternion", # Needed for numerics
                         "OpenGL", # Needed for splib.debug
-                        "Sofa"]
+                        "Sofa",
+                        "splib"]
 
 autoclass_content = 'both' # When auto doc a class it will automatically add the special method __init__ doc
 
