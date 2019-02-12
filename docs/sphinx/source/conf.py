@@ -197,7 +197,7 @@ class Mock(MagicMock):
 
 MOCK_MODULES = ['Sofa',
                 'SofaPython','Quaternion','SofaPython.Quaternion',  # Needed for numerics
-                'PythonScriptController', 'Sofa.PythonScriptController'] # for AnimationManagerController but doesn't work...
+                'PythonScriptController', 'Sofa.PythonScriptController',"splib"] # for AnimationManagerController but doesn't work...
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
 autodoc_mock_imports= [ "math","numpy","vec3","quat","matrix", # Standard import
