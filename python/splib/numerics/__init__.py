@@ -7,35 +7,40 @@ Numerics components we often use.
 .. autosummary::
 
     RigidDof
-    # Vec3
-    # Quat
-    # Matrix
+    Vec3
+    Quat
+    Matrix
 
 splib.numerics.RigidDof
 ***********************
+.. autoclass:: RigidDof
+   :members:
+   :undoc-members:
+
+splib.numerics.Vec3
+*******************
 .. autoclass:: Vec3
    :members:
    :undoc-members:
 
-# splib.numerics.Vec3
-# *******************
-# .. autoclass:: Vec3
-#    :members:
-#    :undoc-members:
+splib.numerics.Quat
+*******************
+.. autoclass:: Quat
+   :members:
+   :undoc-members:
 
-# splib.numerics.Quat
-# *******************
-# .. autoclass:: Quat
-#    :members:
-#    :undoc-members:
-
-# splib.numerics.Matrix
-# *********************
-# .. autoclass:: Matrix
-#    :members:
-#    :undoc-members:
+splib.numerics.Matrix
+*********************
+.. autoclass:: Matrix
+   :members:
+   :undoc-members:
 
 """
+__all__=["matrix","quat","vec3"]
+from matrix import Matrix
+from quat import Quat
+from vec3 import Vec3
+
 from math import *
 import numpy
 import numpy.linalg
