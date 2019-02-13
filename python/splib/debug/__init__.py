@@ -11,7 +11,7 @@ from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
 import sys
-print("------------------------> "sys.version)
+print("------------------------> ",sys.version)
 print(sys.modules.keys())
 from splib.numerics import *
 print("================")
