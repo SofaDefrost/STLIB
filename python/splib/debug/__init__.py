@@ -10,8 +10,11 @@ OpenGL.ERROR_CHECKING = False
 from OpenGL.GL import *
 from OpenGL.GLU import *
 from OpenGL.GLUT import *
+import sys
+print("------------------------> "sys.version)
+print(sys.modules.keys())
 from splib.numerics import *
-
+print("================")
 SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GL")
 SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLU")
 SofaPython.__SofaPythonEnvironment_modulesExcludedFromReload.append("OpenGL.GLUT")
