@@ -106,6 +106,8 @@ class Quat_test(unittest.TestCase):
     def test_createFromEuler(self):
         q = Quat.createFromEuler([pi/2.,0.,0.])
         self.assertEqual(q, [sin(pi/4.),0.,0.,cos(pi/4.)])
+        q = Quat.createFromEuler([90.,0.,0.], inDegree=True)
+        self.assertEqual(q, [sin(pi/4.),0.,0.,cos(pi/4.)])
         q = Quat.createFromEuler([0.,-pi/2.,0.])
         self.assertEqual(q, [0.,-sin(pi/4.),0.,cos(pi/4.)])
         q = Quat.createFromEuler([0.,pi/2.,0.],"syxz")
