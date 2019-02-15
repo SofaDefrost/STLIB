@@ -84,8 +84,6 @@ def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, framePo
                 center = poscenter + list(orientation)
                 rigids.append(center)
 
-                print(rigids)
-
                 selectedIndices += map(lambda x: x, groupIndices[i])
                 indicesMap += [i] * len(groupIndices[i])
 
