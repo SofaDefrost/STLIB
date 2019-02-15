@@ -63,6 +63,9 @@ class ElasticMaterialObject(SofaObject):
             self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
         self.container = self.node.createObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
+        self.node.createObject('TetrahedronSetTopologyModifier', name="topologymodifier")
+        self.node.createObject('TetrahedronSetTopologyAlgorithms', name="topologyalgorithms")
+        self.node.createObject('TetrahedronSetGeometryAlgorithms', name="geometryalgorithms")
         self.dofs = self.node.createObject('MechanicalObject', template='Vec3d', name='dofs')
 
         # To be properly simulated and to interact with gravity or inertia forces, an elasticobject
