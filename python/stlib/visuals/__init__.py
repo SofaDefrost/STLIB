@@ -7,6 +7,7 @@ from stlib.scene import Node
 
 __all__ = []
 
+
 def ShowGrid(node):
     node.createObject("OglGrid", nbSubdiv=10, size=1000)
 
@@ -33,13 +34,14 @@ class VisualModel(SofaObject):
                 OglModel : "model'
            }
     """
-    def __init__(self, parent, surfaceMeshFileName, color=[1.0,1.0,1.0], rotation=[0.0,0.0,0.0], translation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
-        self.node  = Node(parent, "VisualModel")
+
+    def __init__(self, parent, surfaceMeshFileName, color=[1., 1., 1.], rotation=[0., 0., 0.], translation=[0., 0., 0.], scale=[1., 1., 1.]):
+        self.node = Node(parent, "VisualModel")
 
         if surfaceMeshFileName.endswith(".stl"):
             self.loader = self.node.createObject('MeshSTLLoader',
-                                                name="loader",
-                                                filename=surfaceMeshFileName)
+                                                 name="loader",
+                                                 filename=surfaceMeshFileName)
         elif surfaceMeshFileName.endswith(".obj"):
             self.loader = self.node.createObject('MeshObjLoader',
                                                  name="loader",
