@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import Sofa
 
+
 def SubTopology(attachedTo=None,
                 containerLink=None,
                 boxRoiLink=None,
@@ -35,11 +36,11 @@ def SubTopology(attachedTo=None,
                 TetrahedronFEMForceField
             }
     """
-    if attachedTo == None:
+    if attachedTo is None:
         Sofa.msg_error("Your SubTopology isn't child of any node, please set the argument attachedTo")
         return None
 
-    if containerLink == None or boxRoiLink == None:
+    if containerLink is None or boxRoiLink is None:
         Sofa.msg_error("You have to specify at least a container & boxROI link ")
         return None
 
@@ -57,50 +58,61 @@ def SubTopology(attachedTo=None,
     strTmp = strTmp[start:end]
     argument = strTmp[::-1]
 
-    # print linkTypeUp
-    # print argument
-
     modelSubTopo = attachedTo.createChild(name)
-    modelSubTopo.createObject(	linkTypeUp+'SetTopologyContainer',
-                                name='container',
-                                position=containerLink)
+    modelSubTopo.createObject(linkTypeUp+'SetTopologyContainer',
+                              name='container',
+                              position=containerLink)
 
     modelSubTopo.getObject('container').findData(argument).value = boxRoiLink
 
-    modelSubTopo.createObject(	linkTypeUp+'FEMForceField',
-                                name='FEM',
-                                method='large',
-                                poissonRatio=poissonRatio,
-                                youngModulus=youngModulus)
+    modelSubTopo.createObject(linkTypeUp+'FEMForceField',
+                              name='FEM',
+                              method='large',
+                              poissonRatio=poissonRatio,
+                              youngModulus=youngModulus)
 
     return modelSubTopo
-	
-# Exemple scene of the 3 differents subTopology working 
+
+
+# Exemple scene of the 3 differents subTopology working
 # tetrahedron/triangle/hexahedron
 def createScene(rootNode):
     from stlib.scene import MainHeader
     from stlib.physics.deformable import ElasticMaterialObject
 
     MainHeader(rootNode)
-    target = ElasticMaterialObject(	volumeMeshFileName="mesh/liver.msh",
-                                    totalMass=0.5,
-                                    attachedTo=rootNode)
 
-    target.createObject('BoxROI', name='boxROI', box=[-20,-20,-20,20,20,20], drawBoxes='true')
+    # Tetrahedron and triangle subtopology
+    target = ElasticMaterialObject(volumeMeshFileName="mesh/liver2.msh",
+                                   totalMass=0.5,
+                                   attachedTo=rootNode)
 
-    SubTopology(attachedTo=	target,
-                containerLink=	'@../container.position',
+    target.createObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
+
+    SubTopology(attachedTo=target,
+                containerLink='@../container.position',
                 boxRoiLink='@../boxROI.tetrahedraInROI',
                 name='Default-tetrahedron')
 
-    SubTopology(attachedTo=	target,
-                containerLink=	'@../container.position',
-                linkType= 'triangle',
+    SubTopology(attachedTo=target,
+                containerLink='@../container.position',
+                linkType='triangle',
                 boxRoiLink='@../boxROI.trianglesInROI',
                 name='Triangles')
 
-    SubTopology(attachedTo=	target,
-                containerLink=	'@../container.position',
-                linkType= 'hexahedron',
-                boxRoiLink='@../boxROI.hexahedraInROI',
-                name='Hexahedron')
+    # Hexahedron subtopology : (eulalie) Need fix, HexahedronFEMForceField segfault...
+    # target = ElasticMaterialObject(volumeMeshFileName="mesh/SimpleBeamHexa.msh",
+    #                                totalMass=0.5,
+    #                                attachedTo=rootNode)
+    # target.removeObject(target.container)
+    # target.removeObject(target.forcefield)
+    # target.createObject("HexahedronSetTopologyContainer", name="container", position=target.loader.position, hexahedra=target.loader.hexahedra)
+    # target.createObject("HexahedronFEMForceField", name="forcefield")
+
+    # target.createObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
+
+    # SubTopology(attachedTo=target,
+    #             containerLink='@../container.position',
+    #             linkType='hexahedron',
+    #             boxRoiLink='@../boxROI.hexahedraInROI',
+    #             name='Hexahedron')
