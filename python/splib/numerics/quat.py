@@ -1,5 +1,6 @@
 import numpy
 import math
+from math import pi
 
 class Quat(numpy.ndarray):
     """ The Quat class implements the following:
@@ -292,8 +293,8 @@ class Quat(numpy.ndarray):
 
 
     @staticmethod
-    def createFromEuler(a, axes='sxyz'):
-        """Returns a quaternion from Euler angles and axis sequence.
+    def createFromEuler(a, axes='sxyz', inDegree=False):
+        """Returns a quaternion from Euler angles (in radian) and axis sequence.
         The quaternion is of type Quat.
 
         Args:
@@ -311,6 +312,10 @@ class Quat(numpy.ndarray):
         >>> print(q)
         [ 0.5 -0.5  0.5  0.5]
         """
+
+        if inDegree:
+            a = [a[0]*pi/180, a[1]*pi/180, a[2]*pi/180]
+
         try:
             firstaxis, parity, repetition, frame = AXES_TO_TUPLE[axes.lower()]
         except (AttributeError, KeyError):

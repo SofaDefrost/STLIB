@@ -1,10 +1,17 @@
 # -*- coding: utf-8 -*-
 from stlib.visuals import VisualModel
 
-def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
-                translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0], uniformScale=1.0,
-                totalMass=1.0, volume=1.0, inertiaMatrix=[1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0],
-                color=[1.0, 1.0, 0.0], isAStaticObject=False):
+
+def RigidObject(node, name="RigidObject",
+                surfaceMeshFileName=None,
+                translation=[0., 0., 0.],
+                rotation=[0., 0., 0.],
+                uniformScale=1.,
+                totalMass=1.,
+                volume=1.,
+                inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
+                color=[1., 1., 0.],
+                isAStaticObject=False):
     """Creates and adds rigid body from a surface mesh.
 
     Args:
@@ -50,14 +57,14 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
                 }
     """
     #### mechanics
-    cube =node.createChild(name)
+    cube = node.createChild(name)
 
     if not isAStaticObject:
         cube.createObject('EulerImplicit', name='odesolver')
         cube.createObject('CGLinearSolver', name='Solver')
 
     cube.createObject('MechanicalObject',
-                      name="mstate", template="Rigid",
+                      name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
     cube.createObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
@@ -85,7 +92,7 @@ def RigidObject(node, name="RigidObject", surfaceMeshFileName=None,
     cubeCollis.createObject('RigidMapping')
 
     #### visualization
-    cubeVisu = VisualModel(parent=cube,surfaceMeshFileName=surfaceMeshFileName,color=color,scale=uniformScale)
+    cubeVisu = VisualModel(parent=cube, surfaceMeshFileName=surfaceMeshFileName, color=color, scale=[uniformScale]*3)
     cubeVisu.createObject('RigidMapping')
 
     return cube
@@ -96,6 +103,6 @@ def createScene(rootNode):
 
     MainHeader(rootNode)
     DefaultSolver(rootNode)
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Left", translation=[-20.0,0.0,0.0])
-    RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[ 0.0,0.0,0.0])
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[ 20.0,0.0,0.0])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Left", translation=[-20., 0., 0.])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[0., 0., 0.])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[ 20., 0., 0.])

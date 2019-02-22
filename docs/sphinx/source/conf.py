@@ -114,7 +114,7 @@ html_theme_path = ["_themes", ]
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+# html_static_path = ['_static']
 
 # Custom sidebar templates, must be a dictionary that maps document names
 # to template names.
@@ -203,7 +203,8 @@ sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 autodoc_mock_imports= [ "math","numpy","vec3","quat","matrix", # Standard import
                         "SofaPython.Quaternion", # Needed for numerics
                         "OpenGL", # Needed for splib.debug
-                        "Sofa"]
+                        "Sofa",
+                        "splib"]
 
 autoclass_content = 'both' # When auto doc a class it will automatically add the special method __init__ doc
 

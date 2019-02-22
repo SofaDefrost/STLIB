@@ -45,6 +45,10 @@ from quat import *
 from matrix import *
 
 def to_radians(v):
+    """Converts degree to radians
+    
+       :param v: the angle to convert
+    """
     if isinstance(v, list):
         p = []
         for tp in v:
@@ -76,9 +80,9 @@ def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
 
     return numpy.matmul( numpy.matmul(t,rr), s )
 
-def transformPositions(position, translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+def transformPositions(position, translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
 
-    trs = TRS_to_matrix(translation=translation, eulerRotation=eulerRotation, scale=scale)
+    trs = TRS_to_matrix(translation=translation, rotation=rotation, eulerRotation=eulerRotation, scale=scale)
     tp = []
     for point in position:
         tp.append(transformPosition(point, trs).tolist())
@@ -104,7 +108,8 @@ class RigidDof(object):
     """Wrapper toward a sofa mechanicalobject template<rigid> as a rigid transform composed of
        a position and an orientation.
 
-       Examples:
+       Examples::
+           
             r = RigidTransform( aMechanicalObject )
             r.translate( ( r.forward * 0.2 ) )
             r.position = Vec3.zero
@@ -113,8 +118,8 @@ class RigidDof(object):
     def __init__(self, rigidobject):
         self.rigidobject = rigidobject
 
-    def getPosition(self):
-        return numpy.array(self.rigidobject.position[0][:3])
+    def getPosition(self, index=0):
+        return self.rigidobject.position[index][:3]
 
     def getRestPosition(self):
         return numpy.array(self.rigidobject.rest_position[0][:3])
@@ -129,8 +134,8 @@ class RigidDof(object):
     def setOrientation(self, q):
         print("TODO q")
 
-    def getOrientation(self, q):
-        return numpy.array(self.rigidobject.position[0][3:])
+    def getOrientation(self):
+        return self.rigidobject.position[0][3:]
     orientation = property(getOrientation, setOrientation)
 
     def getForward(self):
@@ -183,14 +188,17 @@ class Transform(object):
 
     forward = property(getForward, None)
 
-def getOrientedBoxFromTransform(translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0], scale=[1.0,1.0,1.0]):
+def getOrientedBoxFromTransform(translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
         # BoxROI unitaire
         pos = [[-0.5, 0.0,-0.5],
                [-0.5, 0.0, 0.5],
                [ 0.5, 0.0, 0.5]]
 
+        if eulerRotation is not None:
+            rotation=eulerRotation
+
         depth = [scale[1]]
-        return transformPositions(position=pos, translation=translation, eulerRotation=eulerRotation, scale=scale) + depth
+        return transformPositions(position=pos, translation=translation, rotation=rotation, eulerRotation=eulerRotation, scale=scale) + depth
 
 
 
