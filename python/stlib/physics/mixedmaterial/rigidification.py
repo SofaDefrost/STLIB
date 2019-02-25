@@ -32,7 +32,7 @@ def getBarycenter(selectedPoints):
     return poscenter
 
 
-def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, frameOrientations=None):
+def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, frameOrientation=None):
         """ Transform a deformable object into a mixed one containing both rigid and deformable parts.
 
             :param targetObject: parent node where to attach the final object.
@@ -51,9 +51,9 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
             :param str name: specify the name of the Rigidified object, is none provided use the name of the SOurceObject.
         """
         # Deprecation Warning
-        if frameOrientations is not None:
+        if frameOrientation is not None:
             Sofa.msg_warning("The parameter frameOrientations of the function Rigidify is now deprecated. Please use frames instead.")
-            frames = frameOrientations
+            frames = frameOrientation
 
         if frames is None:
             frames = [[0., 0., 0.]]*len(groupIndices)
