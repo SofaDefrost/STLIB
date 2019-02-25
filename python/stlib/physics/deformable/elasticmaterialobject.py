@@ -3,6 +3,7 @@ import Sofa
 from splib.objectmodel import SofaPrefab, SofaObject
 from stlib.scene import Node
 from stlib.visuals import VisualModel
+from stlib.components.topology import Topology
 
 
 @SofaPrefab
@@ -62,10 +63,8 @@ class ElasticMaterialObject(SofaObject):
             self.integration = self.node.createObject('EulerImplicit', name='integration')
             self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
-        self.container = self.node.createObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
-        self.node.createObject('TetrahedronSetTopologyModifier', name="topologymodifier")
-        self.node.createObject('TetrahedronSetTopologyAlgorithms', name="topologyalgorithms")
-        self.node.createObject('TetrahedronSetGeometryAlgorithms', name="geometryalgorithms")
+        Topology(self.node, type="tetrahedron", src="@loader")
+        self.container = self.node.container
         self.dofs = self.node.createObject('MechanicalObject', template='Vec3d', name='dofs')
 
         # To be properly simulated and to interact with gravity or inertia forces, an elasticobject

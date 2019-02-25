@@ -3,6 +3,7 @@
 .. autosummary::
     :toctree: _autosummary
 
+    stlib.components
     stlib.physics
     stlib.visuals
     stlib.solver

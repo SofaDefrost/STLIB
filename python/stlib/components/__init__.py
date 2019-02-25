@@ -8,12 +8,14 @@ Content:
 .. autosummary::
     :toctree: _autosummary
 
+    stlib.components.topology
+
 .. automodule:: stlib.components.all
     :members:
 
 
 """
-__all__=["all"]
+__all__=["all", "topology"]
 
 from splib.numerics import getOrientedBoxFromTransform
 
