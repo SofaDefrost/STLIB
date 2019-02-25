@@ -86,17 +86,17 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
                 selectedPoints = mfilter(groupIndices[i], allIndices, sourcePoints)
 
                 if len(frames[i]) == 3:
-                        orientation = Quat.createFromEuler(frames[i])
+                        orientation = Quat.createFromEuler(frames[i], inDegree=True)
                         poscenter = getBarycenter(selectedPoints)
                 elif len(frames[i]) == 4:
                         orientation = frames[i]
                         poscenter = getBarycenter(selectedPoints)
                 elif len(frames[i]) == 6:
-                        orientation = Quat.createFromEuler([frames[3], frames[4], frames[5]])
-                        poscenter = list(frames[0], frames[1], frames[2])
+                        orientation = Quat.createFromEuler([frames[i][3], frames[i][4], frames[i][5]], inDegree=True)
+                        poscenter = [frames[i][0], frames[i][1], frames[i][2]]
                 elif len(frames[i]) == 7:
-                        orientation = frames[i]
-                        poscenter = [frames[0], frames[1], frames[2]]
+                        orientation = [frames[i][3], frames[i][4], frames[i][5], frames[i][6]]
+                        poscenter = [frames[i][0], frames[i][1], frames[i][2]]
                 else:
                         Sofa.msg_error("Do not understand the size of a frame.")
 
