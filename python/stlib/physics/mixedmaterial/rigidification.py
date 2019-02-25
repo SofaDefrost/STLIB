@@ -21,28 +21,44 @@ Contributors:
         eulalie.coevoet@inria.fr
 """
 
-
+import Sofa
 from splib.numerics import Vec3, Quat, sdiv
 
 
-def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, framePosition=None, name=None):
+def getBarycenter(selectedPoints):
+    poscenter = [0., 0., 0.]
+    if len(selectedPoints) != 0:
+            poscenter = sdiv(sum(selectedPoints), float(len(selectedPoints)))
+    return poscenter
+
+
+def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, frameOrientations=None):
         """ Transform a deformable object into a mixed one containing both rigid and deformable parts.
 
             :param targetObject: parent node where to attach the final object.
             :param sourceObject: node containing the deformable object. The object should be following
                                  the ElasticMaterialObject template.
-            :param list framesOrientation: array of orientations. The length of the array should be equal to the number
-                                    of rigid component. The orientation are given in eulerAngles (in degree) by passing
-                                    three values or using a quaternion by passing four values.
-                                    [[0,10,20], [0.1,0.5,0.3,0.4]]
             :param list groupIndices: array of array indices to rigidify. The length of the array should be equal to the number
-                                of rigid component.
-            :param list framePosition: array of positions. The length of the array, if given, should be equal to the number
-                                    of rigid component. If no potisions are given, the position of the rigids will be
-                                    the barycenter of the region to rigidify.
+                                      of rigid component.
+            :param list frames: array of frames. The length of the array should be equal to the number
+                                of rigid component. The orientation are given in eulerAngles (in degree) by passing
+                                three values or using a quaternion by passing four values.
+                                [[rx,ry,rz], [qx,qy,qz,w]]
+                                User can also specify the position of the frame by passing six values (position and orientation in degree)
+                                or seven values (position and quaternion).
+                                [[x,y,z,rx,ry,rz], [x,y,z,qx,qy,qz,w]]
+                                If the position is not specified, the position of the rigids will be the barycenter of the region to rigidify.
             :param str name: specify the name of the Rigidified object, is none provided use the name of the SOurceObject.
         """
-        assert len(groupIndices) == len(frameOrientation), "size mismatch."
+        # Deprecation Warning
+        if frameOrientations is not None:
+            Sofa.msg_warning("The parameter frameOrientations of the function Rigidify is now deprecated. Please use frames instead.")
+            frames = frameOrientations
+
+        if frames is None:
+            frames = [[0., 0., 0.]]*len(groupIndices)
+
+        assert len(groupIndices) == len(frames), "size mismatch."
 
         if name is None:
                 name = sourceObject.name
@@ -69,20 +85,22 @@ def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, framePo
         for i in range(len(groupIndices)):
                 selectedPoints = mfilter(groupIndices[i], allIndices, sourcePoints)
 
-                if len(frameOrientation[i]) == 3:
-                        orientation = Quat.createFromEuler(frameOrientation[i])
+                if len(frames[i]) == 3:
+                        orientation = Quat.createFromEuler(frames[i])
+                        poscenter = getBarycenter(selectedPoints)
+                elif len(frames[i]) == 4:
+                        orientation = frames[i]
+                        poscenter = getBarycenter(selectedPoints)
+                elif len(frames[i]) == 6:
+                        orientation = Quat.createFromEuler([frames[3], frames[4], frames[5]])
+                        poscenter = list(frames[0], frames[1], frames[2])
+                elif len(frames[i]) == 7:
+                        orientation = frames[i]
+                        poscenter = [frames[0], frames[1], frames[2]]
                 else:
-                        orientation = frameOrientation[i]
+                        Sofa.msg_error("Do not understand the size of a frame.")
 
-                if framePosition is not None:
-                    poscenter = framePosition[i]
-                else:
-                    poscenter = [0., 0., 0.]
-                    if len(selectedPoints) != 0:
-                            poscenter = sdiv(sum(selectedPoints), float(len(selectedPoints)))
-
-                center = poscenter + list(orientation)
-                rigids.append(center)
+                rigids.append(poscenter + list(orientation))
 
                 selectedIndices += map(lambda x: x, groupIndices[i])
                 indicesMap += [i] * len(groupIndices[i])
@@ -102,7 +120,7 @@ def Rigidify(targetObject, sourceObject, frameOrientation, groupIndices, framePo
 
         rigidifiedParticules = rigidParts.createChild("RigidifiedParticules")
         rigidifiedParticules.createObject("MechanicalObject", template="Vec3", name="dofs",
-                                           position=[allPositions[i] for i in selectedIndices])
+                                          position=[allPositions[i] for i in selectedIndices])
         rigidifiedParticules.createObject("RigidMapping", name="mapping", globalToLocalCoords='true', rigidIndexPerPoint=indicesMap)
 
         sourceObject.removeObject(sourceObject.solver)
@@ -144,7 +162,7 @@ def createScene(rootNode):
         o = Rigidify(modelNode,
                      elasticobject,
                      name="RigidifiedStructure",
-                     frameOrientation=[[0., 0., 0], [0., 0., 0]],
+                     frames=[[0., 0., 0], [0., 0., 0]],
                      groupIndices=[[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], [48, 49, 50, 51]])
 
         # Activate some rendering on the rigidified object.
