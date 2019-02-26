@@ -1,8 +1,4 @@
 cmake_minimum_required(VERSION 3.5)
-
-# Force cmake to use the NEW policy regarding the "VERSION" management.
-cmake_policy(SET CMP0048 NEW)
-
 project(STLIB VERSION 1.0)
 
 find_package(SofaFramework REQUIRED)
