@@ -65,6 +65,10 @@ class AnimationManagerController(Sofa.PythonScriptController):
                 animation.direction = -animation.direction
                 animation.startTime = None
                 nextanimations.append(animation)
+            elif animation.mode == "loop":
+                animation.direction = animation.direction
+                animation.startTime = None
+                nextanimations.append(animation)
                         
         self.animations = nextanimations        
         return 0
