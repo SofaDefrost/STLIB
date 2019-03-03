@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import Sofa
 
+
 def loaderFor(name):
     if name.endswith(".obj"):
         return "MeshObjLoader"
@@ -8,6 +9,7 @@ def loaderFor(name):
         return "MeshSTLLoader"
     elif name.endswith(".vtk"):
         return "MeshVTKLoader"
+
 
 def CollisionMesh(attachedTo=None,
                   surfaceMeshFileName=None,
@@ -46,7 +48,6 @@ def CollisionMesh(attachedTo=None,
 
     if mappingType is not None:
         collisionmodel.createObject(mappingType)
-
 
     return collisionmodel
 
