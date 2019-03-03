@@ -3,12 +3,14 @@ import Sofa
 from splib.objectmodel import SofaPrefab, SofaObject
 from stlib.scene import Node
 from stlib.visuals import VisualModel
-from stlib.components.topology import Topology
+from stlib.physics.collision import CollisionMesh
+from stlib.components.topology import addTopology, addTopologyAlgorithms
 
 
 @SofaPrefab
 class ElasticMaterialObject(SofaObject):
     """Creates an object composed of an elastic material."""
+
     def __init__(self,
                  attachedTo=None,
                  volumeMeshFileName=None,
@@ -63,7 +65,7 @@ class ElasticMaterialObject(SofaObject):
             self.integration = self.node.createObject('EulerImplicit', name='integration')
             self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
-        Topology(self.node, type="tetrahedron", src="@loader")
+        addTopology(self.node, type="tetrahedron")
         self.container = self.node.container
         self.dofs = self.node.createObject('MechanicalObject', template='Vec3d', name='dofs')
 
@@ -89,22 +91,18 @@ class ElasticMaterialObject(SofaObject):
         if surfaceMeshFileName:
                 self.addVisualModel(surfaceMeshFileName, surfaceColor, rotation, translation, scale)
 
+    def addTopologyAlgorithms(self, type="tetrahedron"):
+        self.topologyalgorithms = addTopologyAlgorithms(self.node, type=type)
+
     def addCollisionModel(self, collisionMesh, rotation=[0.0, 0.0, 0.0], translation=[0.0, 0.0, 0.0], scale=[1., 1., 1.]):
-        self.collisionmodel = self.node.createChild('CollisionModel')
-        self.collisionmodel.createObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation, scale=scale)
-        self.collisionmodel.createObject('TriangleSetTopologyContainer', src='@loader', name='container')
-        self.collisionmodel.createObject('MechanicalObject', template='Vec3d', name='dofs')
-        self.collisionmodel.createObject('Triangle')
-        self.collisionmodel.createObject('Line')
-        self.collisionmodel.createObject('Point')
-        self.collisionmodel.createObject('BarycentricMapping')
+        self.collisionmodel = CollisionMesh(attachedTo=self.node, surfaceMeshFileName=collisionMesh, rotation=rotation, translation=translation, scale=scale, mappingType="BarycentricMapping")
 
     def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
         self.visualmodel = VisualModel(parent=self.node, surfaceMeshFileName=filename, color=color, rotation=rotation, translation=translation)
 
         # Add a BarycentricMapping to deform the rendering model to follow the ones of the
         # mechanical model.
-        self.visualmodel.mapping = self.visualmodel.node.createObject('BarycentricMapping', name='mapping')
+        self.visualmodel.addMapping(type="BarycentricMapping")
 
 
 def createScene(rootNode):

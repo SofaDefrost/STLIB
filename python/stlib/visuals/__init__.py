@@ -2,6 +2,7 @@
 """
 Templates for rendering.
 """
+import Sofa
 from splib.objectmodel import SofaPrefab, SofaObject
 from stlib.scene import Node
 
@@ -56,3 +57,14 @@ class VisualModel(SofaObject):
                                             translation=translation,
                                             scale3d=scale,
                                             color=color, updateNormals=False)
+
+    def addMapping(self, type="BarycentricMapping"):
+        if type == "RigidMapping":
+            self.node.createObject("RigidMapping", name="mapping")
+        if type == "IdentityMapping":
+            self.node.createObject("IdentityMapping", name="mapping")
+        if type == "BarycentricMapping":
+            self.node.createObject("BarycentricMapping", name="mapping")
+        else:
+            Sofa.msg_warning("Did not understand mapping type, set default BarycentricMapping")
+            self.node.createObject("BarycentricMapping", name="mapping")
