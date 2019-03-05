@@ -4,7 +4,7 @@ import math
 
 
 class Animation(object):
-    def __init__(self, duration, mode, cb, params):
+    def __init__(self, duration, mode, cb, params, onDone=None):
         if 'startTime' in params :
             self.startTime = params['startTime']
         else: 
@@ -12,10 +12,14 @@ class Animation(object):
 
         self.duration = duration
         self.cb = cb
+        self.onDone = onDone
         self.params = params
         self.factor = 1.0
         self.direction = 1.0
         self.mode = mode 
+      
+    def doOnDone(self, currentTime):
+        self.onDone(factor=self.factor, **self.params)
         
     def update(self, currentTime):
         if self.startTime == None:
@@ -69,12 +73,14 @@ class AnimationManagerController(Sofa.PythonScriptController):
                 animation.direction = animation.direction
                 animation.startTime = None
                 nextanimations.append(animation)
+            elif animation.onDone is not None:
+                animation.doOnDone(self.totalTime)
                         
         self.animations = nextanimations        
         return 0
 
 manager = None
-def animate(cb, params, duration, mode="once"):
+def animate(cb, params, duration, mode="once", onDone=None):
     """Construct and starts an animation
 
     Build a new animation from a callback function that computes the animation value,
@@ -96,7 +102,7 @@ def animate(cb, params, duration, mode="once"):
     if manager == None:
         raise Exception("Missing manager in this scene")
         
-    manager.addAnimation(Animation(duration=duration, mode=mode, cb=cb, params=params)) 
+    manager.addAnimation(Animation(duration=duration, mode=mode, cb=cb, params=params, onDone=onDone)) 
 
 def AnimationManager(node):
     """
@@ -124,9 +130,16 @@ def AnimationManager(node):
     
 ### This function is just an example on how to use the animate function.
 def createScene(rootNode):
-    def myAnimate(target, factor):
+    def myAnimate1(target, factor):
         print("I should do something on: "+target.name+" factor is: "+str(factor))
 
+    def myAnimate2(target, factor):
+        print("Function 2: "+target.name+" factor is: "+str(factor))
+
+    def myOnDone(target, factor):
+        print("onDone: "+target.name+" factor is: "+str(factor))
+
     AnimationManager(rootNode)
-    animate(myAnimate, {"target" : rootNode }, 10)
+    animate(myAnimate1, {"target" : rootNode }, 10)
+    animate(myAnimate2, {"target" : rootNode }, 12, onDone=myOnDone)
     
