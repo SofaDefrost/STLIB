@@ -1,13 +1,36 @@
 # -*- coding: utf-8 -*-
 import Sofa
-import math
 
 
 class Animation(object):
+    """An animation clip that trigger callback at regular intervales for a given duration.
+
+           :param mode: specify who the animation will continue (None, "loop", "pingpong")
+           :param duration: the duration of the animation in seconds.
+           :param cb: callback function called each update.
+           :param onDone: callback function called when the animation is terminated.
+           :param params: a dictionnary with user specified extra parameters that are passed to the callback.
+
+    Example of use:
+
+
+    .. code-block:: python
+
+        def createScene(rootNode):
+            AnimationManager(rootNode)
+
+            def onUpdate(target, factor):
+                print("Callback called on: "+target.name+" factor is: "+str(factor))
+
+            def onDone(target, factor):
+                print("Callback when animation is done: "+target.name+" factor is: "+str(factor))
+
+            animate(onUpdate, {"target" : rootNode }, 12, onDone=onDone)
+    """
     def __init__(self, duration, mode, cb, params, onDone=None):
-        if 'startTime' in params :
+        if 'startTime' in params:
             self.startTime = params['startTime']
-        else: 
+        else:
             self.startTime = None
 
         self.duration = duration
@@ -16,30 +39,31 @@ class Animation(object):
         self.params = params
         self.factor = 1.0
         self.direction = 1.0
-        self.mode = mode 
-      
+        self.mode = mode
+
     def doOnDone(self, currentTime):
         self.onDone(factor=self.factor, **self.params)
-        
+
     def update(self, currentTime):
-        if self.startTime == None:
+        if self.startTime is None:
             self.startTime = currentTime
-      
+
         if self.duration == 0.0:
             self.factor = 1.0
         elif self.direction > 0.0:
             self.factor = (currentTime-self.startTime) / self.duration
         else:
             self.factor = 1.0-(currentTime-self.startTime) / self.duration
-        
+
         if self.factor > 1.0:
             self.factor = 1.0
-            
+
         if self.factor < 0.0:
             self.factor = 0.0
-            
-        self.cb(factor=self.factor , **self.params)    
-        
+
+        self.cb(factor=self.factor, **self.params)
+
+
 class AnimationManagerController(Sofa.PythonScriptController):
     """Implements the AnimationManager as a PythonScriptController
     """
@@ -50,14 +74,13 @@ class AnimationManagerController(Sofa.PythonScriptController):
         self.animations = []
 
     def addAnimation(self, animation):
-        self.animations.append(animation) 
+        self.animations.append(animation)
 
     def bwdInitGraph(self, root):
         self.onBeginAnimationStep(0.0)
 
-    def onBeginAnimationStep(self,dt):
+    def onBeginAnimationStep(self, dt):
         self.totalTime += dt
-        
         nextanimations = []
         for animation in self.animations:
             animation.update(self.totalTime)
@@ -75,11 +98,13 @@ class AnimationManagerController(Sofa.PythonScriptController):
                 nextanimations.append(animation)
             elif animation.onDone is not None:
                 animation.doOnDone(self.totalTime)
-                        
-        self.animations = nextanimations        
+        self.animations = nextanimations
         return 0
 
+
 manager = None
+
+
 def animate(cb, params, duration, mode="once", onDone=None):
     """Construct and starts an animation
 
@@ -122,13 +147,14 @@ def AnimationManager(node):
                 AnimationManager(rootNode)
     """
     global manager
-    if manager != None:
+    if manager is not None:
         Sofa.msg_info(node, "There is already one animation manager in this scene...why do you need a second one ?") 
-        return manager 
+        return manager
     manager = AnimationManagerController(node)
     return manager
-    
-### This function is just an example on how to use the animate function.
+
+
+# This function is just an example on how to use the animate function.
 def createScene(rootNode):
     def myAnimate1(target, factor):
         print("I should do something on: "+target.name+" factor is: "+str(factor))
@@ -140,6 +166,5 @@ def createScene(rootNode):
         print("onDone: "+target.name+" factor is: "+str(factor))
 
     AnimationManager(rootNode)
-    animate(myAnimate1, {"target" : rootNode }, 10)
-    animate(myAnimate2, {"target" : rootNode }, 12, onDone=myOnDone)
-    
+    animate(myAnimate1, {"target": rootNode}, 10)
+    animate(myAnimate2, {"target": rootNode}, 12, onDone=myOnDone)
