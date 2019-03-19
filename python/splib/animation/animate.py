@@ -5,7 +5,7 @@ from splib.utils import deprecated_alias
 class Animation(object):
     """An animation clip that trigger callback at regular intervales for a given duration.
 
-           :param mode: specify who the animation will continue (None, "loop", "pingpong")
+           :param mode: specify how the animation will continue (None, "loop", "pingpong")
            :param duration: the duration of the animation in seconds.
            :param onUpdate: callback function called each update.
            :param onDone: callback function called when the animation is terminated.
