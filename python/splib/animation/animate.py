@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import Sofa
-
+from splib.utils import deprecated_alias
 
 class Animation(object):
     """An animation clip that trigger callback at regular intervales for a given duration.
 
            :param mode: specify who the animation will continue (None, "loop", "pingpong")
            :param duration: the duration of the animation in seconds.
-           :param cb: callback function called each update.
+           :param onUpdate: callback function called each update.
            :param onDone: callback function called when the animation is terminated.
            :param params: a dictionnary with user specified extra parameters that are passed to the callback.
 
@@ -27,14 +27,15 @@ class Animation(object):
 
             animate(onUpdate, {"target" : rootNode }, 12, onDone=onDone)
     """
-    def __init__(self, duration, mode, cb, params, onDone=None):
+    @deprecated_alias(cb='onUpdate')
+    def __init__(self, duration, mode, onUpdate, params, onDone=None):
         if 'startTime' in params:
             self.startTime = params['startTime']
         else:
             self.startTime = None
 
         self.duration = duration
-        self.cb = cb
+        self.onUpdate = onUpdate        
         self.onDone = onDone
         self.params = params
         self.factor = 1.0
@@ -61,7 +62,7 @@ class Animation(object):
         if self.factor < 0.0:
             self.factor = 0.0
 
-        self.cb(factor=self.factor, **self.params)
+        self.onUpdate(factor=self.factor, **self.params)
 
 
 class AnimationManagerController(Sofa.PythonScriptController):
@@ -104,8 +105,7 @@ class AnimationManagerController(Sofa.PythonScriptController):
 
 manager = None
 
-
-def animate(cb, params, duration, mode="once", onDone=None):
+def animate(onUpdate, params, duration, mode="once", onDone=None):
     """Construct and starts an animation
 
     Build a new animation from a callback function that computes the animation value,
@@ -127,7 +127,7 @@ def animate(cb, params, duration, mode="once", onDone=None):
     if manager == None:
         raise Exception("Missing manager in this scene")
         
-    manager.addAnimation(Animation(duration=duration, mode=mode, cb=cb, params=params, onDone=onDone)) 
+    manager.addAnimation(Animation(duration=duration, mode=mode, onUpdate=onUpdate, params=params, onDone=onDone)) 
 
 def AnimationManager(node):
     """

@@ -33,8 +33,6 @@ def deprecated_alias(**aliases):
 
 def __rename_kwargs__(func_name, kwargs, aliases):
     for alias, new in aliases.items():
-        Sofa.msg_error("ZOB "+alias+" " +new+ " kwargs.." )
-
         if alias in kwargs:
             if new in kwargs:
                 raise TypeError("'{}' received both '{}' and '{}' while '{}' is deprecated".format(
