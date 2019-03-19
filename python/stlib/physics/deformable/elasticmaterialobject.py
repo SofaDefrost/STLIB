@@ -59,7 +59,7 @@ class ElasticMaterialObject(SofaObject):
             self.loader = self.node.createObject('MeshVTKLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
 
         if solver is None:
-            self.integration = self.node.createObject('EulerImplicit', name='integration')
+            self.integration = self.node.createObject('EulerImplicitSolver', name='integration')
             self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
         self.container = self.node.createObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
