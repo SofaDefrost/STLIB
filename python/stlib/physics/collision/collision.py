@@ -34,16 +34,16 @@ def CollisionMesh(attachedTo=None,
 
     collisionmodel.createObject(loaderFor(surfaceMeshFileName), name="loader", filename=surfaceMeshFileName,
                                 rotation=rotation, translation=translation)
-    collisionmodel.createObject('Mesh', src="@loader")
+    collisionmodel.createObject('MeshTopology', src="@loader")
     collisionmodel.createObject('MechanicalObject')
     if collisionGroup:
-        collisionmodel.createObject('Point', group=collisionGroup)
-        collisionmodel.createObject('Line', group=collisionGroup)
-        collisionmodel.createObject('Triangle', group=collisionGroup)
+        collisionmodel.createObject('TPointModel', group=collisionGroup)
+        collisionmodel.createObject('TLineModel', group=collisionGroup)
+        collisionmodel.createObject('TTriangleModel', group=collisionGroup)
     else:
-        collisionmodel.createObject('Point')
-        collisionmodel.createObject('Line')
-        collisionmodel.createObject('Triangle')
+        collisionmodel.createObject('TPointModel')
+        collisionmodel.createObject('TLineModel')
+        collisionmodel.createObject('TTriangleModel')
 
     if mappingType is not None:
         collisionmodel.createObject(mappingType)
