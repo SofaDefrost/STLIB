@@ -9,7 +9,8 @@ import time
 # Brief:
 # A simple script to load and run one time step of each scene of the examples repository 
 
-scenespath = os.path.dirname(os.path.abspath(__file__))+'/../stlib/'
+scenespaths = [os.path.dirname(os.path.abspath(__file__))+'/../stlib/',
+               os.path.dirname(os.path.abspath(__file__))+'/../splib/']
 
 sofabin=""
 if len(sys.argv) > 1: sofabin  = sys.argv[1]
@@ -36,6 +37,10 @@ if os.path.isfile(sofabin):
       failedTestPathList = []
       totalTime = 0
 
+      outputFilename = os.path.dirname(os.path.abspath(__file__))+"/TestExampleScenesOutput.txt"	      
+      if os.path.isfile(outputFilename): 
+        os.remove(outputFilename)
+	         
       def dotest(arg, dirname, names):
 
 	      global nbFailedTest
@@ -47,8 +52,6 @@ if os.path.isfile(sofabin):
 	      RED   = "\033[1;31m"
 	      ENDL  = "\033[0m"
 
-	      outputFilename = os.path.dirname(os.path.abspath(__file__))+"/TestExampleScenesOutput.txt"
-	      if os.path.isfile(outputFilename): os.remove(outputFilename)
 	      outputFile = open(outputFilename,"a")
 
 	      for thisfile in names:
@@ -56,8 +59,9 @@ if os.path.isfile(sofabin):
 		      filename = os.path.join(dirname, thisfile)
 		      b,ext = os.path.splitext(filename)
 		      if os.path.isfile( filename ) and ext in supportedExtensions and pattern in filename:
-			      print("[TESTING] "+thisfile, end=""),
+			      print("[TESTING] "+dirname+"/"+thisfile, end=""),
 			      sys.stdout.flush()
+			      outputFile.write("==================== Testing: "+dirname+"/"+thisfile+"=========================== \n")
 			      start_time = time.time()
 			      retcode = subprocess.call([sofabin, filename, "-a" ,"-g","batch", "-l", "SofaPython", "-n", "1"], stdin=None, stdout=outputFile, stderr=outputFile)
 			      testTime = (time.time() - start_time)
@@ -77,7 +81,8 @@ if os.path.isfile(sofabin):
 
 	      outputFile.close()
 	      
-      os.path.walk(scenespath, dotest, None) 
+      for path in scenespaths:	      
+              os.path.walk(path, dotest, None) 
 
       print("====================== [SUMMARY] ========================")
       print("Test: Load and run one time step of each scene of the stlib repository.")
