@@ -14,3 +14,5 @@
 
 """
 __all__=["animation", "constants", "debug", "loaders", "numerics", "objectmodel", "scenegraph", "units"]
+
+import utils
