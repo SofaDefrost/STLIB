@@ -31,3 +31,14 @@ W = 'W'
 X = 'X'
 Y = 'Y'
 Z = 'Z'
+KP_0 = chr(48)
+KP_1 = chr(49)
+KP_2 = chr(50)
+KP_3 = chr(51)
+KP_4 = chr(52)
+KP_5 = chr(53)
+KP_6 = chr(54)
+KP_7 = chr(55)
+KP_8 = chr(56)
+KP_9 = chr(57)
+
