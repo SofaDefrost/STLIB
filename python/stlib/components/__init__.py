@@ -18,7 +18,7 @@ __all__ = ["all"]
 from splib.numerics import getOrientedBoxFromTransform
 
 
-def addOrientedBoxRoi(parentNode, position, name="BoxRoi", translation=[0., 0., 0.], eulerRotation=[0., 0., 0.], scale=[1., 1., 1.], drawBoxes=True):
+def addOrientedBoxRoi(parentNode, position, name="BoxROI", translation=[0., 0., 0.], eulerRotation=[0., 0., 0.], scale=[1., 1., 1.], drawBoxes=True):
     orientedBox = getOrientedBoxFromTransform(translation=translation, eulerRotation=eulerRotation, scale=scale)
     return parentNode.createObject("BoxROI", name=name, position=position, orientedBox=orientedBox, drawBoxes=drawBoxes)
 
