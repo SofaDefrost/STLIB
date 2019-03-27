@@ -6,6 +6,7 @@
     splib.algorithms
     splib.animation
     splib.debug
+    splib.geometric
     splib.loaders
     splib.numerics
     splib.objectmodel
@@ -13,6 +14,6 @@
     splib.units
 
 """
-__all__=["animation", "constants", "debug", "loaders", "numerics", "objectmodel", "scenegraph", "units"]
+__all__=["animation", "constants", "debug", "loaders", "geometric", "numerics", "objectmodel", "scenegraph", "units"]
 
 import utils
