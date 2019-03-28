@@ -1,5 +1,6 @@
-from pygmsh.built_in import Geometry 
+from gmesh import tetmeshFromBrepAndSaveToFile
 
+from pygmsh.built_in import Geometry 
 def meshAndSaveToFile(geom, directory="autogen"):                    
         import meshio
         import md5
