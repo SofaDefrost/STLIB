@@ -43,6 +43,8 @@ class ElasticMaterialObject(SofaObject):
                      youngModulus=18000,
                      totalMass=1.0, solver=None):
 
+        self.createObject("RequiredPlugin", name="SofaSparseSolver")
+
         if self.node is None:
             Sofa.msg_error("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
             return None
