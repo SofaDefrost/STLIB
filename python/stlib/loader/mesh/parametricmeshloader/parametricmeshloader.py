@@ -6,13 +6,13 @@ Created on Fri Mar 29 16:34:41 2019
 @author: stefan
 """
 
-import splib.geometric.gmesh
+from splib.geometric.gmesh import meshFromParametricGeometry
 
-def ParametricMeshLoader(Node, MeshFile, OutputDir='autogen/',Type='Surface', **kwargs):
-    if Type == 'Surface':
-        SurfaceMeshPath = meshFromParametricGeometry(MeshFile, outputdir=OutputDir, meshtype=Type, **kwargs)
+def ParametricMeshLoader(Node, MeshFile, OutputDir='autogen/',MeshType='Surface', **kwargs):
+    if MeshType == 'Surface':
+        SurfaceMeshPath = meshFromParametricGeometry(MeshFile, outputdir=OutputDir, meshtype=MeshType, **kwargs)
         Node.createObject("MeshSTLLoader", name="loader", filename=SurfaceMeshPath)
-    elif Type == 'Tetra':
-        TetraMesh = meshFromParametricGeometry(MeshFile, outputdir=OutputDir, meshtype=Type, **kwargs)
+    elif MeshType == 'Tetra':
+        TetraMesh = meshFromParametricGeometry(MeshFile, outputdir=OutputDir, meshtype=MeshType, **kwargs)
         Node.createObject('MeshVTKLoader', name='loader', filename=TetraMesh)
      

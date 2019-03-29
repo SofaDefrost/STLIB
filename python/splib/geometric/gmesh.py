@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file requires gmshpy to be installed. 
 # Author: stefan.escaida-navarro@inria.fr
-def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='surface', **kwargs):
+def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface', **kwargs):
         """generate a tetrahedron mesh from the provided file and store the 
            result in a vtk file. The filename is returned. 
            
@@ -61,9 +61,10 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='surface'
 
         HashStr = FileAndOptionsHashObj.hexdigest()
         
-        if Type == 'surface':
+        outfilepath = '.'
+        if meshtype == 'Surface':
             outfilepath = os.path.join(outputdir, HashStr + '.stl')
-        elif Type == 'tetra':
+        elif meshtype == 'Tetra':
             outfilepath = os.path.join(outputdir, HashStr + '.vtk')
         
         if os.path.exists(outfilepath):
@@ -98,7 +99,7 @@ def createScene(root):
 
         filename = meshFromParametricGeometry(filepath='data/meshes/CapNoCavities.brep', 
                                       outputdir='data/meshes/autogen/',
-                                      meshtype='surface'
+                                      meshtype='surface',
                                       Mesh_CharacteristicLengthFactor=0.4, 
                                       Mesh_CharacteristicLengthMax=3, 
                                       Mesh_CharacteristicLengthMin=0.1, 

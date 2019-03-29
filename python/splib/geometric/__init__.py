@@ -1,4 +1,4 @@
-from gmesh import tetmeshFromBrepAndSaveToFile
+from gmesh import meshFromParametricGeometry
 
 from pygmsh.built_in import Geometry 
 def meshAndSaveToFile(geom, directory="autogen"):                    
