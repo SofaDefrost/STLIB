@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # This file requires gmshpy to be installed. 
 # Author: stefan.escaida-navarro@inria.fr
-def tetmeshFromBrepAndSaveToFile(filepath, outputdir='autogen', **kwargs):
+def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='surface', **kwargs):
         """generate a tetrahedron mesh from the provided file and store the 
            result in a vtk file. The filename is returned. 
            
@@ -16,7 +16,6 @@ def tetmeshFromBrepAndSaveToFile(filepath, outputdir='autogen', **kwargs):
         import hashlib
         import os
         import numpy as np
-        import time
         import locale
         locale.setlocale(locale.LC_ALL, 'C')
 
@@ -40,10 +39,10 @@ def tetmeshFromBrepAndSaveToFile(filepath, outputdir='autogen', **kwargs):
         if not os.path.isdir(outputdir):
             os.mkdir(outputdir)
 
-        FilePathSplit = filepath.split('/')
-        FileName = FilePathSplit[-1] 
-        FileNameSplit = FileName.split('.')
-        FileNameNoExtension = FileNameSplit[-1]
+        #FilePathSplit = filepath.split('/')
+        #FileName = FilePathSplit[-1] 
+        #FileNameSplit = FileName.split('.')
+        #FileNameNoExtension = FileNameSplit[0]
 
         SortingIdxs = np.argsort(ArgumentsStrings)
 
@@ -62,16 +61,23 @@ def tetmeshFromBrepAndSaveToFile(filepath, outputdir='autogen', **kwargs):
 
         HashStr = FileAndOptionsHashObj.hexdigest()
         
-        outfilepath = os.path.join(outputdir, HashStr + '.vtk')
+        if Type == 'surface':
+            outfilepath = os.path.join(outputdir, HashStr + '.stl')
+        elif Type == 'tetra':
+            outfilepath = os.path.join(outputdir, HashStr + '.vtk')
+        
         if os.path.exists(outfilepath):
-            print('Find a file with an identical hash. Returning from cache.')                
+            print('Found a file with an identical hash. Returning from cache.')                
             return outfilepath
                     
         #generate
         print('Beginning meshing: ')
         GeometricModel = gmshpy.GModel()
         GeometricModel.load(filepath)
-        GeometricModel.mesh(3)
+        if meshtype == 'surface':
+            GeometricModel.mesh(2)
+        elif meshtype == 'tetra':
+            GeometricModel.mesh(3)    
         GeometricModel.save(outfilepath)
         print('Finished meshing.')
 
@@ -90,8 +96,9 @@ def createScene(root):
         Scene(root)
         root.VisualStyle.displayFlags="showForceFields"
 
-        filename = tetmeshFromBrepAndSaveToFile(filepath='data/meshes/CapNoCavities.brep', 
+        filename = meshFromParametricGeometry(filepath='data/meshes/CapNoCavities.brep', 
                                       outputdir='data/meshes/autogen/',
+                                      meshtype='surface'
                                       Mesh_CharacteristicLengthFactor=0.4, 
                                       Mesh_CharacteristicLengthMax=3, 
                                       Mesh_CharacteristicLengthMin=0.1, 
