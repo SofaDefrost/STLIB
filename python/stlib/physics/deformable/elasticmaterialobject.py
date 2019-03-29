@@ -8,6 +8,7 @@ from stlib.visuals import VisualModel
 @SofaPrefab
 class ElasticMaterialObject(SofaObject):
     """Creates an object composed of an elastic material."""
+
     def __init__(self,
                  attachedTo=None,
                  volumeMeshFileName=None,
@@ -43,7 +44,9 @@ class ElasticMaterialObject(SofaObject):
                      youngModulus=18000,
                      totalMass=1.0, solver=None):
 
-        self.createObject("RequiredPlugin", name="SofaSparseSolver")
+        if not self.getRoot().getObject("SofaSparseSolver", warning=False):
+            Sofa.msg_info("Missing RequiredPlugin SofaSparseSolver in the scene, add it from Prefab ElasticMaterialObject.")
+            self.getRoot().createObject("RequiredPlugin", name="SofaSparseSolver")
 
         if self.node is None:
             Sofa.msg_error("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
