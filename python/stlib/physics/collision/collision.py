@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import Sofa
 
+
 def loaderFor(name):
     if name.endswith(".obj"):
         return "MeshObjLoader"
@@ -8,46 +9,47 @@ def loaderFor(name):
         return "MeshSTLLoader"
     elif name.endswith(".vtk"):
         return "MeshVTKLoader"
-   
-def CollisionMesh(attachedTo=None, 
+
+
+def CollisionMesh(attachedTo=None,
                   surfaceMeshFileName=None,
                   name="collision",
-                  rotation=[0.0,0.0,0.0],
-                  translation=[0.0,0.0,0.0],
-                  collisionGroup=None, mappingType='BarycentricMapping'):
+                  rotation=[0.0, 0.0, 0.0],
+                  translation=[0.0, 0.0, 0.0],
+                  collisionGroup=None,
+                  mappingType='BarycentricMapping'):
     '''
 
     '''
 
-    if attachedTo == None:
+    if attachedTo is None:
         Sofa.msg_error("Cannot create a CollisionMesh that is not attached to node.")
         return None
 
     collisionmodel = attachedTo.createChild(name)
 
-    if surfaceMeshFileName == None:
+    if surfaceMeshFileName is None:
         Sofa.msg_error(collisionmodel, "Unable to create a CollisionMesh without a surface mesh")
         return None
 
     collisionmodel.createObject(loaderFor(surfaceMeshFileName), name="loader", filename=surfaceMeshFileName,
                                 rotation=rotation, translation=translation)
-    collisionmodel.createObject('Mesh', src="@loader")
+    collisionmodel.createObject('MeshTopology', src="@loader")
     collisionmodel.createObject('MechanicalObject')
     if collisionGroup:
-        collisionmodel.createObject('Point', group=collisionGroup)
-        collisionmodel.createObject('Line', group=collisionGroup)
-        collisionmodel.createObject('Triangle', group=collisionGroup)
-    else:    
-        collisionmodel.createObject('Point')
-        collisionmodel.createObject('Line')
-        collisionmodel.createObject('Triangle')
-    
-    if mappingType!=None:
+        collisionmodel.createObject('TPointModel', group=collisionGroup)
+        collisionmodel.createObject('TLineModel', group=collisionGroup)
+        collisionmodel.createObject('TTriangleModel', group=collisionGroup)
+    else:
+        collisionmodel.createObject('TPointModel')
+        collisionmodel.createObject('TLineModel')
+        collisionmodel.createObject('TTriangleModel')
+
+    if mappingType is not None:
         collisionmodel.createObject(mappingType)
 
-
     return collisionmodel
-    
+
 
 def createScene(rootNode):
     from stlib.scene import MainHeader

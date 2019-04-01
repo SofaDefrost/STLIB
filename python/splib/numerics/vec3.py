@@ -85,7 +85,7 @@ class Vec3(numpy.ndarray):
         """ Normalize the vector.
         """
         self /= self.getNorm()
-
+        return self
 
     def translate(self, *args):
         """ Function translate of class Vec3 expects one or three arguments. Note that you can also use the '+' and '-' operators.
@@ -115,7 +115,7 @@ class Vec3(numpy.ndarray):
                 self.put(i,self.take(i)+args[i])
         else:
             print(self.translate.__doc__)
-
+        return self
 
     #def rotate(self, *args):
     #   from quat import Quat
@@ -138,7 +138,7 @@ class Vec3(numpy.ndarray):
         """
         from quat import Quat
         self.put(range(3),(Quat.product(q,Quat.product(Quat(numpy.hstack((self, [0.]))), q.getInverse()))).getIm())
-
+        return self
 
     def rotateFromEuler(self, v, axis="sxyz"):
         """Function rotateFromEuler from the Vec3 class rotates the current vector from Euler angles [x,y,z].
@@ -153,7 +153,7 @@ class Vec3(numpy.ndarray):
         from quat import Quat
         q = Quat.createFromEuler(v, axis)
         self.rotateFromQuat(q)
-
+        return self
 
     def rotateFromAxisAngle(self, axis, angle):
         """Function rotateFromAxisAngle from the Vec3 class rotates the current vector from the quaternion
@@ -201,7 +201,7 @@ class Vec3(numpy.ndarray):
                 self.put(i,self.take(i)*args[i])
         else:
             print(self.scale.__doc__)
-
+        return self    
 
     @staticmethod
     def dot(v1, v2):

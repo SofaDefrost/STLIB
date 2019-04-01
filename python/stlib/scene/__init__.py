@@ -46,7 +46,7 @@ stlib.scene.Node
 .. autofunction:: Node
 
 stlib.scene.Wrapper
-****************
+*******************
 
 .. autoclass:: Wrapper
    :members:

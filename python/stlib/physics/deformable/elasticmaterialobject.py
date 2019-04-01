@@ -59,7 +59,7 @@ class ElasticMaterialObject(SofaObject):
             self.loader = self.node.createObject('MeshVTKLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
 
         if solver is None:
-            self.integration = self.node.createObject('EulerImplicit', name='integration')
+            self.integration = self.node.createObject('EulerImplicitSolver', name='integration')
             self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
         self.container = self.node.createObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
@@ -97,7 +97,7 @@ class ElasticMaterialObject(SofaObject):
         self.collisionmodel.createObject('Point')
         self.collisionmodel.createObject('BarycentricMapping')
 
-    def addVisualModel(self, filename, color, rotation, translation):
+    def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
         self.visualmodel = VisualModel(parent=self.node, surfaceMeshFileName=filename, color=color, rotation=rotation, translation=translation)
 
         # Add a BarycentricMapping to deform the rendering model to follow the ones of the
