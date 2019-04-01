@@ -1,3 +1,6 @@
+"""
+Utility to create mesh derictly via python code with pygmsh 
+"""
 from pygmsh.built_in import Geometry 
 
 def meshAndSaveToFile(geom, directory="autogen"):                    

@@ -4,6 +4,7 @@ Scene debuging facilities.
 
 """
 import Sofa
+from Sofa import PythonScriptController
 import SofaPython
 import OpenGL
 OpenGL.ERROR_CHECKING = False
@@ -43,7 +44,7 @@ def worldToScreenPoint(p):
                       currentImmediateRenderer.pm, currentImmediateRenderer.viewport)
 
 
-class BluePrint(Sofa.PythonScriptController):
+class BluePrint(PythonScriptController):
         def __init__(self, node):
             self.name = "BluePrintController"
             self.rules = []
@@ -81,7 +82,7 @@ class BluePrint(Sofa.PythonScriptController):
 
 
 
-class ImmediateRenderer(Sofa.PythonScriptController):
+class ImmediateRenderer(PythonScriptController):
     def __init__(self, rootNode):
         global currentImmediateRenderer
         self.name = "DebugManager"

@@ -190,20 +190,40 @@ import sys
 from unittest import *
 from mock import MagicMock
 
-class Mock(MagicMock):
-    @classmethod
-    def __getattr__(cls, name):
-            return MagicMock()
+# class Mock(MagicMock):
+#     @classmethod
+#     def __getattr__(cls, name):
+#             return MagicMock()
 
 MOCK_MODULES = ['Sofa',
                 'SofaPython','Quaternion','SofaPython.Quaternion',  # Needed for numerics
-                'PythonScriptController', 'Sofa.PythonScriptController'] # for AnimationManagerController but doesn't work...
+                'PythonScriptController', 'Sofa.PythonScriptController',
+                "OpenGL","OpenGL.GL","OpenGL.GLU", # Needed for splib.debug
+                "pygmsh.built_in","pygmsh", # splib geometry
+                "numpy","numpy.linalg"] # for AnimationManagerController but doesn't work...
+                # "splib"]
+
+MOCK_CLASSES = [
+    # classes you are inheriting from
+    "ndarray",
+    "PythonScriptController"
+]
+
+class Mock(MagicMock):
+    @classmethod
+    def __getattr__(cls, name):
+        # if name in MOCK_CLASSES:
+        #     print("---------------------------->  "+name)
+        #     return object #MockingClass
+        return MagicMock()
+
 sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
 
-autodoc_mock_imports= [ "math","numpy","vec3","quat","matrix", # Standard import
-                        "SofaPython.Quaternion", # Needed for numerics
-                        "OpenGL", # Needed for splib.debug
-                        "Sofa"]
+# autodoc_mock_imports= [ "math","numpy","vec3","quat","matrix", # Standard import
+#                         "SofaPython.Quaternion", # Needed for numerics
+#                         "OpenGL", # Needed for splib.debug
+#                         "Sofa",
+#                         "splib"]
 
 autoclass_content = 'both' # When auto doc a class it will automatically add the special method __init__ doc
 
