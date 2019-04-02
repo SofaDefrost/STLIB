@@ -3,6 +3,7 @@ import Sofa
 from splib.objectmodel import SofaPrefab, SofaObject
 from stlib.scene import Node
 from stlib.visuals import VisualModel
+from splib.geometric.gmesh import meshFromParametricGeometry
 
 
 @SofaPrefab
@@ -26,8 +27,8 @@ class ElasticMaterialObject(SofaObject):
         self.node = Node(attachedTo, name)
         ElasticMaterialObject.createPrefab(self,
                                            volumeMeshFileName, name, rotation, translation, scale, surfaceMeshFileName,
-                                           collisionMesh, withConstrain, surfaceColor, poissonRatio, youngModulus, totalMass, solver)
-
+                                           collisionMesh, withConstrain, surfaceColor, poissonRatio, youngModulus, totalMass, solver)              
+        
     @staticmethod
     def createPrefab(self,
                      volumeMeshFileName=None,
@@ -51,6 +52,7 @@ class ElasticMaterialObject(SofaObject):
             Sofa.msg_error(self.node, "Unable to create an elastic object because there is no volume mesh provided.")
             return None
 
+        print(volumeMeshFileName)
         if volumeMeshFileName.endswith(".msh"):
             self.loader = self.node.createObject('MeshGmshLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
         elif volumeMeshFileName.endswith(".gidmsh"):
@@ -84,7 +86,7 @@ class ElasticMaterialObject(SofaObject):
         if collisionMesh:
             self.addCollisionModel(collisionMesh, rotation, translation, scale)
 
-        if surfaceMeshFileName:
+        if surfaceMeshFileName:                
                 self.addVisualModel(surfaceMeshFileName, surfaceColor, rotation, translation, scale)
 
     def addCollisionModel(self, collisionMesh, rotation=[0.0, 0.0, 0.0], translation=[0.0, 0.0, 0.0], scale=[1., 1., 1.]):
@@ -110,4 +112,4 @@ def createScene(rootNode):
 
     MainHeader(rootNode, gravity=" 0 0 0")
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual", translation=[3.0, 0.0, 0.0])
-    ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj", surfaceColor=[1.0, 0.0, 0.0])
+    ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj", surfaceColor=[1.0, 0.0, 0.0])    

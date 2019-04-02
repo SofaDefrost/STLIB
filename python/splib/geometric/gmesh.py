@@ -22,6 +22,7 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
         # Set options from kwargs
         ArgumentsStrings = []
         ValuesStrings = []
+        
         for key, value in kwargs.items():
             OptionString = key
             OptionValue = value
@@ -61,11 +62,13 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
 
         HashStr = FileAndOptionsHashObj.hexdigest()
         
-        outfilepath = '.'
+        outfilepath = ''
         if meshtype == 'Surface':
             outfilepath = os.path.join(outputdir, HashStr + '.stl')
-        elif meshtype == 'Tetra':
+        elif meshtype == 'Volumetric':
             outfilepath = os.path.join(outputdir, HashStr + '.vtk')
+        else:
+            print('Error: no target mesh type provided!')
         
         if os.path.exists(outfilepath):
             print('Found a file with an identical hash. Returning from cache.')                
@@ -75,9 +78,9 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
         print('Beginning meshing: ')
         GeometricModel = gmshpy.GModel()
         GeometricModel.load(filepath)
-        if meshtype == 'surface':
+        if meshtype == 'Surface':
             GeometricModel.mesh(2)
-        elif meshtype == 'tetra':
+        elif meshtype == 'Volumetric':
             GeometricModel.mesh(3)    
         GeometricModel.save(outfilepath)
         print('Finished meshing.')
@@ -97,9 +100,9 @@ def createScene(root):
         Scene(root)
         root.VisualStyle.displayFlags="showForceFields"
 
-        filename = meshFromParametricGeometry(filepath='data/meshes/CapNoCavities.brep', 
+        filename = meshFromParametricGeometry(filepath='data/meshes/parametric_mesh_example.brep', 
                                       outputdir='data/meshes/autogen/',
-                                      meshtype='surface',
+                                      meshtype='Volumetric',
                                       Mesh_CharacteristicLengthFactor=0.4, 
                                       Mesh_CharacteristicLengthMax=3, 
                                       Mesh_CharacteristicLengthMin=0.1, 
