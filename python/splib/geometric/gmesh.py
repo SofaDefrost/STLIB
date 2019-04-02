@@ -100,6 +100,7 @@ def createScene(root):
         Scene(root)
         root.VisualStyle.displayFlags="showForceFields"
 
+        # The list of mesh (e.g. Mesh_CharacteristicLengthFactor), geometry, view, etc. options can be found here: http://gmsh.info/doc/texinfo/gmsh.html, Appendix B
         filename = meshFromParametricGeometry(filepath='data/meshes/parametric_mesh_example.brep', 
                                       outputdir='data/meshes/autogen/',
                                       meshtype='Volumetric',
