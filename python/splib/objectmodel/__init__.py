@@ -1,10 +1,38 @@
-from inspect import currentframe, getframeinfo,getdoc
-import types
+# -*- coding: utf-8 -*-
+from inspect import currentframe, getframeinfo, getdoc
 import Sofa
+import re
+
 
 def setData(d, **kwargs):
         for k in kwargs:
             d.getData(str(k)).value = kwargs[k]
+
+
+def setTreeData(target, pathregex, **params):
+        """Recursively set the data on object which have a link path that match
+           the provided regex
+           The regex format is using the python re module.
+           Example:
+                # Display all object that contains "Rigidified.*/dofs" in their
+                # path
+                setTreeData(simulation, "Rigidified.*/dofs",
+                            showObject = True,
+                            showObjectScale = 5.0)
+        """
+        if isinstance(target, Sofa.Node):
+            for child in target.getChildren():
+                setTreeData(child, pathregex, **params)
+                for obj in target.getObjects():
+                    if re.search(pathregex, obj.getLinkPath()):
+                        for key, value in params.items():
+                            if obj.getData(key) is not None:
+                                obj.getData(key).value = value
+        elif re.search(pathregex, target.getLinkPath()):
+            for key, value in params.items():
+                if target.getData(key) is not None:
+                    target.getData(key).value = value
+
 
 class SofaPrefab(object):
     def __init__(self, cls):
