@@ -25,7 +25,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                 LocalMinDistance
             }
     '''
-    if applyTo.getObject("DefaultPipeline") is None:
+    if applyTo.getObject("DefaultPipeline", warning=False) is None:
             applyTo.createObject('DefaultPipeline')
             
     applyTo.createObject('BruteForceDetection')
@@ -36,10 +36,10 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
 
-    if applyTo.getObject("FreeMotionAnimationLoop") is None:
+    if applyTo.getObject("FreeMotionAnimationLoop", warning=False) is None:
             applyTo.createObject('FreeMotionAnimationLoop')
             
-    if applyTo.getObject("GenericConstraintSolver") is None:        
+    if applyTo.getObject("GenericConstraintSolver", warning=False) is None:        
             applyTo.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
 
     return applyTo
