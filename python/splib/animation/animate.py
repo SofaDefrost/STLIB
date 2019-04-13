@@ -116,6 +116,9 @@ def animate(onUpdate, params, duration, mode="once", onDone=None):
 
     Animation can be added from any code location (createScene, PythonScriptController)
 
+    :param float duration: duration of the animation in seconds.
+    :param str mode: once, loop, pingpong 
+
     Example:
         .. sourcecode:: python
 
