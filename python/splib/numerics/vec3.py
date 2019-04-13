@@ -16,6 +16,7 @@ class Vec3(numpy.ndarray):
 
     v.getNorm()
     v.toString()
+    v.toList()
 
     Static methods:
     v = dot(v1,v2)
@@ -79,6 +80,12 @@ class Vec3(numpy.ndarray):
         """ Returns the vector in string format.
         """
         return str(self.take(0))+" "+str(self.take(1))+" "+str(self.take(2))
+
+
+    def toList(self):
+        """ Returns the vector in list format.
+        """
+        return [self.take(0), self.take(1), self.take(2)]
 
 
     def normalize(self, *args):
@@ -201,7 +208,7 @@ class Vec3(numpy.ndarray):
                 self.put(i,self.take(i)*args[i])
         else:
             print(self.scale.__doc__)
-        return self    
+        return self
 
     @staticmethod
     def dot(v1, v2):
