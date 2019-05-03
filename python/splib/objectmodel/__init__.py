@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
-from inspect import currentframe, getframeinfo, getdoc
+from inspect import currentframe, getframeinfo, getdoc, getfile, getmodule
 import Sofa
 import re
-
+import sys
+import os
 
 def setData(d, **kwargs):
         for k in kwargs:
@@ -44,6 +45,8 @@ class SofaPrefab(object):
             o = self.cls(*args, **kwargs)
             frameinfo = getframeinfo(currentframe().f_back)
             o.node.addNewData("Prefab type", "Infos", "","string", str(o.__class__.__name__))
+            o.node.addNewData("modulepath", "Infos", "","string",
+                              str(os.path.dirname(os.path.abspath(sys.modules[o.__module__].__file__))))
             o.node.addNewData("Defined in", "Infos", "","string", str(self.definedloc))
             o.node.addNewData("Instantiated in", "Infos", "","string", str((frameinfo.filename, frameinfo.lineno)))
             o.node.addNewData("Help", "Infos", "", "string", str(getdoc(o)))
