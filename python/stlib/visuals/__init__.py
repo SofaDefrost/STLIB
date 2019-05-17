@@ -21,6 +21,7 @@ class VisualModel(SofaObject):
        Arguments:
             parent
             surfaceMeshFileName
+            name
             color
             rotation
             translation
@@ -35,8 +36,8 @@ class VisualModel(SofaObject):
            }
     """
 
-    def __init__(self, parent, surfaceMeshFileName, color=[1., 1., 1.], rotation=[0., 0., 0.], translation=[0., 0., 0.], scale=[1., 1., 1.]):
-        self.node = Node(parent, "VisualModel")
+    def __init__(self, parent, surfaceMeshFileName, name="VisualModel", color=[1., 1., 1.], rotation=[0., 0., 0.], translation=[0., 0., 0.], scale=[1., 1., 1.]):
+        self.node = Node(parent, name)
 
         if surfaceMeshFileName.endswith(".stl"):
             self.loader = self.node.createObject('MeshSTLLoader',
