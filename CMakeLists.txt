@@ -23,9 +23,14 @@ target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>"
 
 ## Install rules for the library and headers; CMake package configurations files
 
-sofa_generate_package(NAME STLIB VERSION ${PROJECT_VERSION} TARGETS ${PROJECT_NAME}
+sofa_generate_package(
+    NAME STLIB 
+    VERSION ${PROJECT_VERSION} 
+    TARGETS ${PROJECT_NAME}
     INCLUDE_INSTALL_DIR STLIB
-    INCLUDE_SOURCE_DIR "src")
+    INCLUDE_SOURCE_DIR "src"
+    RELOCATABLE "plugins"
+    )
 
 install(DIRECTORY docs DESTINATION share/sofa/${PROJECT_NAME})
 install(FILES "README.md" "LICENSE" DESTINATION .)
