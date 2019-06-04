@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from inspect import currentframe, getframeinfo, getdoc, getfile, getmodule
+import functools
 import Sofa
 import re
 import sys
@@ -40,6 +41,7 @@ class SofaPrefab(object):
         frameinfo = getframeinfo(currentframe().f_back)
         self.cls = cls
         self.definedloc = (frameinfo.filename, frameinfo.lineno)
+        functools.update_wrapper(self, cls) ## REQUIRED IN CLASS DECORATORS to transfer the docstring back to the decorated type
 
     def __call__(self, *args, **kwargs):
             o = self.cls(*args, **kwargs)
