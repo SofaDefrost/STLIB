@@ -12,7 +12,7 @@ set(SOURCE_FILES src/initPlugin.cpp)
 file(GLOB_RECURSE RESOURCE_FILES  "*.md" "*.psl" "*.py" "*.pyscn" "*.scn" "*.rst")
 
 # Config files and install rules for pythons scripts
-sofa_set_python_directory(${PROJECT_NAME} "python" "python")
+sofa_install_pythonscripts(PLUGIN_NAME ${PROJECT_NAME} PYTHONSCRIPTS_SOURCE_DIR "python" PYTHONSCRIPTS_INSTALL_DIR "python")
 
 add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
 set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_STLIB")
