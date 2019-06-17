@@ -58,7 +58,7 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
             HashFileRead = open(HashFilePath,'r')
             OldHashStr = HashFileRead.readline()
             if OldHashStr == HashStr+'\n':
-                print('Found a file with an identical hash. Returning from cache.')                
+                print(FilePath + ': Found a file with an identical hash. Returning from cache.')                
                 return False, FilePath
         
         # If hash is different or non-existent write hash (+options) info to file                 
@@ -77,7 +77,7 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
         HashedFileName = HashStr + OutputFileExtension
         HashedFilePath = OutputDir + HashedFileName
         if os.path.exists(HashedFilePath):    
-            print('Found a file with an identical hash. Returning from cache.')                
+            print(HashedFilePath + ': Found a file with an identical hash. Returning from cache.')                
             return False, HashedFilePath
         else:
             return True, HashedFilePath
@@ -122,11 +122,9 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
         #Refresh, OutputFilePath = casher(filepath, outputdir, '.stl', kwargs, FileNameNoExt)
         
         print(OutputFilePath)
-        if meshtype == 'Surface':
-            print('wweeeee stl')
+        if meshtype == 'Surface':            
             Refresh, OutputFilePath = casher(filepath, outputdir, '.stl', kwargs, FileNameNoExt)
-        elif meshtype == 'Volumetric':
-            print('wweeeee vtk')
+        elif meshtype == 'Volumetric':            
             Refresh, OutputFilePath = casher(filepath, outputdir, '.vtk', kwargs, FileNameNoExt)
         
         if Refresh:
