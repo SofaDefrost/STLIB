@@ -44,6 +44,8 @@ from vec3 import *
 from quat import *
 from matrix import *
 
+RigidDofZero = [0.0,0.0,0.0,0.0,0.0,0.0,1.0]
+
 def to_radians(v):
     """Converts degree to radians
     
@@ -118,7 +120,7 @@ class RigidDof(object):
             r.rest_orientation = Quat.unit
     """
     def __init__(self, rigidobject):
-        rigidobject.init()
+        #self.rigidobject.init()
         self.rigidobject = rigidobject
 
     def getPosition(self, index=0, field="position"):   

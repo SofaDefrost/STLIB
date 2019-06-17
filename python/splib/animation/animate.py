@@ -77,6 +77,9 @@ class AnimationManagerController(Sofa.PythonScriptController):
     def addAnimation(self, animation):
         self.animations.append(animation)
 
+    def removeAnimation(self, animation):
+        self.animations.remove(animation)
+
     def bwdInitGraph(self, root):
         self.onBeginAnimationStep(0.0)
 
@@ -113,6 +116,9 @@ def animate(onUpdate, params, duration, mode="once", onDone=None):
 
     Animation can be added from any code location (createScene, PythonScriptController)
 
+    :param float duration: duration of the animation in seconds.
+    :param str mode: once, loop, pingpong 
+
     Example:
         .. sourcecode:: python
 
@@ -128,6 +134,13 @@ def animate(onUpdate, params, duration, mode="once", onDone=None):
         raise Exception("Missing manager in this scene")
         
     manager.addAnimation(Animation(duration=duration, mode=mode, onUpdate=onUpdate, params=params, onDone=onDone)) 
+
+
+def removeAnimation(animation):
+    if manager == None:
+        raise Exception("Missing manager in this scene")
+        
+    manager.removeAnimation(animation) 
 
 def AnimationManager(node):
     """

@@ -45,8 +45,9 @@ class ElasticMaterialObject(SofaObject):
                      totalMass=1.0, solver=None):
 
         if not self.getRoot().getObject("SofaSparseSolver", warning=False):
-            Sofa.msg_info("Missing RequiredPlugin SofaSparseSolver in the scene, add it from Prefab ElasticMaterialObject.")
-            self.getRoot().createObject("RequiredPlugin", name="SofaSparseSolver")
+            if not self.getRoot().getObject("/Config/SofaSparseSolver", warning=False):
+                    Sofa.msg_info("Missing RequiredPlugin SofaSparseSolver in the scene, add it from Prefab ElasticMaterialObject.")
+                    self.getRoot().createObject("RequiredPlugin", name="SofaSparseSolver")
 
         if self.node is None:
             Sofa.msg_error("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
