@@ -47,10 +47,10 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
         ArgsForHash = OptionsStrings[i] + '=' + str(Values[i]) + ';'
         FileAndOptionsHashObj.update(ArgsForHash)
     
-    # Finally, add output file extension to the hash, so that different target files can be generated from the same source (e.g. Surface and Volumetric meshes)
+    # Finally, add output file extension to the hash, so that different target files from the same source will be treated differently (e.g. Surface and Volumetric meshes)
     FileAndOptionsHashObj.update(OutputFileExtension)
-    # Get the hash string and verify if it was previously generated
     
+    # Get the hash string and verify if it was previously generated    
     HashStr = FileAndOptionsHashObj.hexdigest()    
     # OneShot
     if OutputFileName != None: 
