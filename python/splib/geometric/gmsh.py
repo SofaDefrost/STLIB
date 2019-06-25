@@ -22,7 +22,7 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
 # - returns a name under which the calling function can store or retrieve the generated data (that it will be managed by the casher in future calls)
 # It has two types of behavior:
 # - OneShot --> When an output filename is provided, the old file is replaced by the new one, the filename is 'human-readable'. This is a cache of size 1
-# - Persistent --> Previous files are not overwritten, the files are named with the hash string. In this way the all the generated files are 'cached'
+# - Persistent --> Previous files are not overwritten, the files are named with the hash string. In this way the all the generated files with different parameters are 'cached'
     import os
     import hashlib
     import numpy as np
@@ -149,7 +149,7 @@ def createScene(root):
         root.VisualStyle.displayFlags="showForceFields"
 
         # The list of mesh (e.g. Mesh_CharacteristicLengthFactor), geometry, view, etc. options can be found here: http://gmsh.info/doc/texinfo/gmsh.html, Appendix B
-        filename = meshFromParametricGeometry(filepath='data/meshes/parametric_mesh_example.brep', 
+        filename = meshFromParametricGeometry(filepath='/home/stefan/Downloads/Cube.stl', 
                                       outputdir='data/meshes/autogen/',
                                       meshtype='Volumetric',
                                       Mesh_CharacteristicLengthFactor=0.4, 
