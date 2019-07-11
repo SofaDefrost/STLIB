@@ -22,7 +22,7 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
 # - returns a name under which the calling function can store or retrieve the generated data (that it will be managed by the casher in future calls)
 # It has two types of behavior:
 # - OneShot --> When an output filename is provided, the old file is replaced by the new one, the filename is 'human-readable'. This is a cache of size 1
-# - Persistent --> Previous files are not overwritten, the files are named with the hash. In this way the all the generated files are 'cached'
+# - Persistent --> Previous files are not overwritten, the files are named with the hash string. In this way the all the generated files with different parameters are 'cached'
     import os
     import hashlib
     import numpy as np
@@ -46,9 +46,11 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
     for i in SortingIdxs:
         ArgsForHash = OptionsStrings[i] + '=' + str(Values[i]) + ';'
         FileAndOptionsHashObj.update(ArgsForHash)
-
-    # Get the hash string and verify if it was previously generated
     
+    # Finally, add output file extension to the hash, so that different target files from the same source will be treated differently (e.g. Surface and Volumetric meshes)
+    FileAndOptionsHashObj.update(OutputFileExtension)
+    
+    # Get the hash string and verify if it was previously generated    
     HashStr = FileAndOptionsHashObj.hexdigest()    
     # OneShot
     if OutputFileName != None: 
@@ -58,7 +60,7 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
             HashFileRead = open(HashFilePath,'r')
             OldHashStr = HashFileRead.readline()
             if OldHashStr == HashStr+'\n':
-                print('Found a file with an identical hash. Returning from cache.')                
+                print(FilePath + ': Found a file with an identical hash. Returning from cache.')                
                 return False, FilePath
         
         # If hash is different or non-existent write hash (+options) info to file                 
@@ -77,7 +79,7 @@ def casher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
         HashedFileName = HashStr + OutputFileExtension
         HashedFilePath = OutputDir + HashedFileName
         if os.path.exists(HashedFilePath):    
-            print('Found a file with an identical hash. Returning from cache.')                
+            print(HashedFilePath + ': Found a file with an identical hash. Returning from cache.')                
             return False, HashedFilePath
         else:
             return True, HashedFilePath
@@ -108,7 +110,7 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
             SplitStr = OptionsStrings[i].split('_')
             Category = SplitStr[0]
             Option = SplitStr[1]
-            if isinstance(Values[i], basestring):  # need to be careful to call the correct function 
+            if isinstance(Values[i], basestring):  # need to be careful to call the correct function according to the type of value (string or numerical)
                 gmshpy.GmshSetStringOption(Category, Option, Values[i])
             else:
                 gmshpy.GmshSetNumberOption(Category, Option, Values[i])
@@ -122,11 +124,9 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
         #Refresh, OutputFilePath = casher(filepath, outputdir, '.stl', kwargs, FileNameNoExt)
         
         print(OutputFilePath)
-        if meshtype == 'Surface':
-            print('wweeeee stl')
+        if meshtype == 'Surface':            
             Refresh, OutputFilePath = casher(filepath, outputdir, '.stl', kwargs, FileNameNoExt)
-        elif meshtype == 'Volumetric':
-            print('wweeeee vtk')
+        elif meshtype == 'Volumetric':            
             Refresh, OutputFilePath = casher(filepath, outputdir, '.vtk', kwargs, FileNameNoExt)
         
         if Refresh:
@@ -149,7 +149,7 @@ def createScene(root):
         root.VisualStyle.displayFlags="showForceFields"
 
         # The list of mesh (e.g. Mesh_CharacteristicLengthFactor), geometry, view, etc. options can be found here: http://gmsh.info/doc/texinfo/gmsh.html, Appendix B
-        filename = meshFromParametricGeometry(filepath='data/meshes/parametric_mesh_example.brep', 
+        filename = meshFromParametricGeometry(filepath='/home/stefan/Downloads/Cube.stl', 
                                       outputdir='data/meshes/autogen/',
                                       meshtype='Volumetric',
                                       Mesh_CharacteristicLengthFactor=0.4, 

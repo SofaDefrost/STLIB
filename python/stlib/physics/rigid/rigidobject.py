@@ -57,45 +57,45 @@ def RigidObject(node, name="RigidObject",
                 }
     """
     #### mechanics
-    cube = node.createChild(name)
+    object = node.createChild(name)
 
     if not isAStaticObject:
-        cube.createObject('EulerImplicit', name='odesolver')
-        cube.createObject('CGLinearSolver', name='Solver')
+        object.createObject('EulerImplicitSolver', name='odesolver')
+        object.createObject('CGLinearSolver', name='Solver')
 
-    cube.createObject('MechanicalObject',
+    object.createObject('MechanicalObject',
                       name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
-    cube.createObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
+    object.createObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
     if not isAStaticObject:
-        cube.createObject('UncoupledConstraintCorrection')
+        object.createObject('UncoupledConstraintCorrection')
 
     #### collision
-    cubeCollis = cube.createChild('collision')
-    cubeCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
+    objectCollis = object.createChild('collision')
+    objectCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
                             scale=uniformScale)
 
-    cubeCollis.createObject('Mesh', src="@loader")
-    cubeCollis.createObject('MechanicalObject')
+    objectCollis.createObject('MeshTopology', src="@loader")
+    objectCollis.createObject('MechanicalObject')
 
     if isAStaticObject:
-        cubeCollis.createObject('Triangle', moving=False, simulated=False)
-        cubeCollis.createObject('Line', moving=False, simulated=False)
-        cubeCollis.createObject('Point', moving=False, simulated=False)
+        objectCollis.createObject('TTriangleModel', moving=False, simulated=False)
+        objectCollis.createObject('TLineModel', moving=False, simulated=False)
+        objectCollis.createObject('TPointModel', moving=False, simulated=False)
     else:
-        cubeCollis.createObject('Triangle')
-        cubeCollis.createObject('Line')
-        cubeCollis.createObject('Point')
+        objectCollis.createObject('TTriangleModel')
+        objectCollis.createObject('TLineModel')
+        objectCollis.createObject('TPointModel')
 
-    cubeCollis.createObject('RigidMapping')
+    objectCollis.createObject('RigidMapping')
 
     #### visualization
-    cubeVisu = VisualModel(parent=cube, surfaceMeshFileName=surfaceMeshFileName, color=color, scale=[uniformScale]*3)
-    cubeVisu.createObject('RigidMapping')
+    objectVisu = VisualModel(parent=object, surfaceMeshFileName=surfaceMeshFileName, color=color, scale=[uniformScale]*3)
+    objectVisu.createObject('RigidMapping')
 
-    return cube
+    return object
 
 def createScene(rootNode):
     from stlib.scene import MainHeader

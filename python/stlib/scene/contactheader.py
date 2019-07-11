@@ -25,7 +25,9 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                 LocalMinDistance
             }
     '''
-    applyTo.createObject('CollisionPipeline')
+    if applyTo.getObject("DefaultPipeline", warning=False) is None:
+            applyTo.createObject('DefaultPipeline')
+            
     applyTo.createObject('BruteForceDetection')
 
     applyTo.createObject('RuleBasedContactManager', rules='0 * FrictionContact?mu='+str(frictionCoef),
@@ -34,12 +36,15 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
 
-    applyTo.createObject('FreeMotionAnimationLoop')
-    applyTo.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+    if applyTo.getObject("FreeMotionAnimationLoop", warning=False) is None:
+            applyTo.createObject('FreeMotionAnimationLoop')
+            
+    if applyTo.getObject("GenericConstraintSolver", warning=False) is None:        
+            applyTo.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
 
     return applyTo
 
-### This function is just an example on how to use the DefaultHeader function. 
+### This function is just an example on how to use the DefaultHeader function.
 def createScene(rootNode):
     import os
     from mainheader import MainHeader
