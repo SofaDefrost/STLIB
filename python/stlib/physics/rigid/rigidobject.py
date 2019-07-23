@@ -11,7 +11,10 @@ def RigidObject(node, name="RigidObject",
                 volume=1.,
                 inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
                 color=[1., 1., 0.],
-                isAStaticObject=False):
+                collisionMeshFileName=None,
+                isAStaticObject=False,
+                noSolver=False,
+                collisionGroup=None):
     """Creates and adds rigid body from a surface mesh.
 
     Args:
@@ -26,6 +29,8 @@ def RigidObject(node, name="RigidObject",
         rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
 
         uniformScale (vec3f):   Apply a uniform scaling to the object.
+
+        collisionMeshFileName (str):  The path or filename pointing to surface mesh file use for collision.
 
         isAStaticObject (bool): The object does not move in the scene (e.g. floor, wall) but react to collision.
 
@@ -59,35 +64,49 @@ def RigidObject(node, name="RigidObject",
     #### mechanics
     object = node.createChild(name)
 
-    if not isAStaticObject:
-        object.createObject('EulerImplicitSolver', name='odesolver')
+    if not isAStaticObject and not noSolver:
+        object.createObject("EulerImplicitSolver", name='odesolver')
         object.createObject('CGLinearSolver', name='Solver')
 
-    object.createObject('MechanicalObject',
-                      name="mstate", template="Rigid3",
+    object.createObject('MechanicalObject', position=[0.,0.,0.,0.,0.,0.,1.],
+                      name="dofs", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
     object.createObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
-    if not isAStaticObject:
+    if not isAStaticObject and not noSolver:
         object.createObject('UncoupledConstraintCorrection')
 
     #### collision
-    objectCollis = object.createChild('collision')
-    objectCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
-                            scale=uniformScale)
+    objectCollis = object.createChild('CollisionModel')
+    if collisionMeshFileName is None:
+        collisionMeshFileName = surfaceMeshFileName
+
+    if collisionMeshFileName.endswith(".stl"):
+        objectCollis.createObject('MeshSTLLoader',
+                                 name="loader",
+                                 filename=collisionMeshFileName, scale3d=[uniformScale]*3)
+    elif collisionMeshFileName.endswith(".obj"):
+        objectCollis.createObject('MeshObjLoader',
+                                 name="loader",
+                                 filename=collisionMeshFileName, scale3d=[uniformScale]*3)
+    else:
+        print("Extension not handled in STLIB/python/stlib/visuals for file: "+str(collisionMeshFileName))
+
 
     objectCollis.createObject('MeshTopology', src="@loader")
-    objectCollis.createObject('MechanicalObject')
+    objectCollis.createObject('MechanicalObject', name="dofs")
 
+    objectCollis.createObject('TriangleCollisionModel', name="Triangle", group=collisionGroup if collisionGroup is not None else " ")
+    objectCollis.createObject('LineCollisionModel', name="Line", group=collisionGroup if collisionGroup is not None else " ")
+    objectCollis.createObject('PointCollisionModel', name="Point", group=collisionGroup if collisionGroup is not None else " ")
     if isAStaticObject:
-        objectCollis.createObject('TTriangleModel', moving=False, simulated=False)
-        objectCollis.createObject('TLineModel', moving=False, simulated=False)
-        objectCollis.createObject('TPointModel', moving=False, simulated=False)
-    else:
-        objectCollis.createObject('TTriangleModel')
-        objectCollis.createObject('TLineModel')
-        objectCollis.createObject('TPointModel')
+        objectCollis.Triangle.moving=False
+        objectCollis.Line.moving=False
+        objectCollis.Point.moving=False
+        objectCollis.Triangle.simulated=False
+        objectCollis.Line.simulated=False
+        objectCollis.Point.simulated=False
 
     objectCollis.createObject('RigidMapping')
 
@@ -105,4 +124,4 @@ def createScene(rootNode):
     DefaultSolver(rootNode)
     RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Left", translation=[-20., 0., 0.])
     RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[0., 0., 0.])
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[ 20., 0., 0.])
+    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[20., 0., 0.])
