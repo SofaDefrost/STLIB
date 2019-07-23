@@ -16,7 +16,7 @@ def RigidObject(node, name="RigidObject",
                 noSolver=False,
                 collisionGroup=None):
     """Creates and adds rigid body from a surface mesh.
-    
+
     Args:
         surfaceMeshFileName (str):  The path or filename pointing to surface mesh file.
 
