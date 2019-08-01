@@ -95,7 +95,7 @@ class ElasticMaterialObject(SofaObject):
 
     def addCollisionModel(self, collisionMesh, rotation=[0.0, 0.0, 0.0], translation=[0.0, 0.0, 0.0], scale=[1., 1., 1.]):
         self.collisionmodel = self.node.createChild('CollisionModel')
-        self.collisionmodel.createObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation, scale=scale)
+        self.collisionmodel.createObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation, scale3d=scale)
         self.collisionmodel.createObject('TriangleSetTopologyContainer', src='@loader', name='container')
         self.collisionmodel.createObject('MechanicalObject', template='Vec3d', name='dofs')
         self.collisionmodel.createObject('Triangle')
