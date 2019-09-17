@@ -28,18 +28,22 @@ class LocaleManager:
         locale.setlocale(locale.LC_ALL, self.orig)
  
 def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface', **kwargs):
-        """generate a tetrahedron and or a surface mesh from the provided file and store the 
-           result in a volumetric (vtk) or surfacic file (stl, etc.). The path to the file is returned. 
+        """
+        generate a tetrahedron and/or a surface mesh from the provided file and store the 
+        result in a volumetric (vtk) or surfacic file (stl, etc.). The path to the file is returned. 
            
-           :param str filepath:
-           :param str outputdir:
+        :param str filepath: 
+            The path to the file (including extension) to the parametric mesh.
+        :param str outputdir:
+            The path to the directory where the meshed file will be stored.
+        :param str meshtype:
+            This accepts the values 'Surface' or 'Volumetric', i.e. the type of mesh to generate from the source
+        
+        :param dict **kwargs:
           
-          Further parameters:
-          
-          This function accepts through the kwargs all options that can be set in Gmsh as found in the documentation:
-          http://gmsh.info/doc/texinfo/gmsh.html
-          The options in the referenced documentation are sorted into categories and separated by a point, e.g. "Mesh.CharacteristicLengthFactor". 
-          The same option passed as kwarg is separated by an underscore, e.g. "Mesh_CharacteristicLengthFactor=0.8". See example below.
+            This function accepts through the kwargs all options that can be set in Gmsh as found in the documentation:
+            http://gmsh.info/doc/texinfo/gmsh.html. The options in the referenced documentation are sorted into categories and separated by a point, e.g. "Mesh.CharacteristicLengthFactor". 
+            The same option passed as kwarg is separated by an underscore, e.g. "Mesh_CharacteristicLengthFactor=0.8". See example below.
         """ 
         
         import splib.caching.cacher as cch
@@ -47,8 +51,8 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
         import os
         import numpy as np
         
-        LM = LocaleManager('C')
-        with LM:       
+        
+        with LocaleManager('C'):       
             # Set options from kwargs           
             OptionsStrings, Values = cch.extractOptions(kwargs)        
             
@@ -89,7 +93,8 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
             return OutputFilePath
 
 def createScene(root):
-        """Example scene in SOFA, where the parametric mesh generator is used generate a volumetric mesh from a STEP-file while passing some options to Gmsh.          
+        """
+        Example scene in SOFA, where the parametric mesh generator is used generate a volumetric mesh from a STEP-file while passing some options to Gmsh.          
         """ 
         from stlib.scene import Scene
 
