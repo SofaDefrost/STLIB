@@ -60,7 +60,7 @@ def cacher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
             HashFileRead = open(HashFilePath,'r')
             OldHashStr = HashFileRead.readline()
             if OldHashStr == HashStr+'\n':
-                print(FilePath + ': Found a file with an identical hash. Returning from cache.')                
+                print('Cacher: ' + FilePath + ': Found a file with an identical hash. Returning from cache.')                
                 return False, FilePath
         
         # If hash is different or non-existent write hash (+options) info to file                 
@@ -79,7 +79,7 @@ def cacher(InputFilePath, OutputDir, OutputFileExtension, kwargsdict, OutputFile
         HashedFileName = HashStr + OutputFileExtension
         HashedFilePath = OutputDir + HashedFileName
         if os.path.exists(HashedFilePath):    
-            print(HashedFilePath + ': Found a file with an identical hash. Returning from cache.')                
+            print('Cacher: ' + HashedFilePath + ': Found a file with an identical hash. Returning from cache.')                
             return False, HashedFilePath
         else:
             return True, HashedFilePath
