@@ -2,6 +2,21 @@
 # This file requires gmshpy to be installed. 
 # Author: stefan.escaida-navarro@inria.fr
 
+"""
+.. autosummary::
+
+    meshFromParametricGeometry    
+
+splib.geometric.gmsh.meshFromParametricGeometry
+*********************
+.. autofunction:: meshFromParametricGeometry
+
+splib.geometric.gmsh.createScene
+********************
+.. autofunction:: createScene
+
+"""
+
 class LocaleManager:
     import locale
     def __init__(self, localename):
@@ -13,16 +28,20 @@ class LocaleManager:
         locale.setlocale(locale.LC_ALL, self.orig)
  
 def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface', **kwargs):
-        """generate a tetrahedron mesh from the provided file and store the 
-           result in a vtk file. The filename is returned. 
+        """generate a tetrahedron and or a surface mesh from the provided file and store the 
+           result in a volumetric (vtk) or surfacic file (stl, etc.). The path to the file is returned. 
            
            :param str filepath:
            :param str outputdir:
-           :param float Mesh_CharacteristicLengthFactor:
-           :param float Mesh_CharacteristicLengthMax:
-           :param float Mesh_CharacteristicLengthMin: 
-           :param float View_GeneralizedRaiseZ
+          
+          Further parameters:
+          
+          This function accepts through the kwargs all options that can be set in Gmsh as found in the documentation:
+          http://gmsh.info/doc/texinfo/gmsh.html
+          The options in the referenced documentation are sorted into categories and separated by a point, e.g. "Mesh.CharacteristicLengthFactor". 
+          The same option passed as kwarg is separated by an underscore, e.g. "Mesh_CharacteristicLengthFactor=0.8". See example below.
         """ 
+        
         import splib.caching.cacher as cch
         import gmshpy        
         import os
@@ -70,6 +89,8 @@ def meshFromParametricGeometry(filepath, outputdir='autogen', meshtype='Surface'
             return OutputFilePath
 
 def createScene(root):
+        """Example scene in SOFA, where the parametric mesh generator is used generate a volumetric mesh from a STEP-file while passing some options to Gmsh.          
+        """ 
         from stlib.scene import Scene
 
         Scene(root)
