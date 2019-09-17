@@ -69,7 +69,7 @@ class ElasticMaterialObject(SofaObject):
             self.solver = self.node.createObject('SparseLDLSolver', name="solver")
 
         self.container = self.node.createObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
-        self.dofs = self.node.createObject('MechanicalObject', template='Vec3d', name='tetras')
+        self.dofs = self.node.createObject('MechanicalObject', template='Vec3d', name='dofs')
 
         # To be properly simulated and to interact with gravity or inertia forces, an elasticobject
         # also needs a mass. You can add a given mass with a uniform distribution for an elasticobject
