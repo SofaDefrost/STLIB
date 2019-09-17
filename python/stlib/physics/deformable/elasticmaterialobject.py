@@ -29,7 +29,7 @@ class ElasticMaterialObject(SofaObject):
                                            volumeMeshFileName, name, rotation, translation, scale, surfaceMeshFileName,
                                            collisionMesh, withConstrain, surfaceColor, poissonRatio, youngModulus, totalMass, solver)
 
-    #@staticmethod
+    @staticmethod
     def createPrefab(self,
                      volumeMeshFileName=None,
                      name="ElasticMaterialObject",
