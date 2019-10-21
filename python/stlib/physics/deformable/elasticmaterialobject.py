@@ -25,11 +25,9 @@ class ElasticMaterialObject(SofaObject):
                  totalMass=1.0, solver=None):
 
         self.node = Node(attachedTo, name)
-        ElasticMaterialObject.createPrefab(self,
-                                           volumeMeshFileName, name, rotation, translation, scale, surfaceMeshFileName,
-                                           collisionMesh, withConstrain, surfaceColor, poissonRatio, youngModulus, totalMass, solver)
+        self.createPrefab(volumeMeshFileName, name, rotation, translation, scale, surfaceMeshFileName,
+                          collisionMesh, withConstrain, surfaceColor, poissonRatio, youngModulus, totalMass, solver)
 
-    @staticmethod
     def createPrefab(self,
                      volumeMeshFileName=None,
                      name="ElasticMaterialObject",
