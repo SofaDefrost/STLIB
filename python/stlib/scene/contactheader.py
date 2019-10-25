@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
+def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0, angleCone=0.01):
     '''
     Args:
         applyTo (Sofa.Node): the node to attach the object to
@@ -34,7 +34,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                                                     name='Response', response='FrictionContact')
     applyTo.createObject('LocalMinDistance',
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
-                        angleCone=0.01)
+                        angleCone=angleCone)
 
     if applyTo.getObject("FreeMotionAnimationLoop", warning=False) is None:
             applyTo.createObject('FreeMotionAnimationLoop')
