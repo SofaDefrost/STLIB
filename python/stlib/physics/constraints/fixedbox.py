@@ -4,6 +4,7 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
              name="FixedBox",
              doVisualization=False,
              position=None,
+             orientedBox=None,
              constraintStrength='1e12', doRecomputeDuringSimulation=False):
     """
     Constraint a set of degree of freedom to be at a fixed position.
@@ -30,10 +31,17 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
     """
 
     c = applyTo.createChild(name)
-    if position == None:
-        c.createObject('BoxROI', name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
+
+    if orientedBox == None:
+        if position == None:
+            c.createObject('BoxROI', name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
+        else:
+            c.createObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
     else:
-        c.createObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
+        if position == None: 
+            c.createObject('BoxROI', name='BoxROI', orientedBox=orientedBox, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)        
+        else:
+            c.createObject('BoxROI', name='BoxROI', position=position , orientedBox=orientedBox, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)        
 
     c.createObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness='1e12')
     return c

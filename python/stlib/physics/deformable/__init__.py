@@ -17,5 +17,5 @@ stlib.physics.deformable.ElasticMaterialObject
 """
 
 from elasticmaterialobject import ElasticMaterialObject
-
+from highOrderShape import HighOrderShape
 # .. automethod::  createPrefab(self, volumeMeshFileName=None,name="ElasticMaterialObject",rotation=[0.0, 0.0, 0.0],translation=[0.0, 0.0, 0.0],surfaceMeshFileName=None,collisionMesh=None,withConstrain=True,surfaceColor=[1.0, 1.0, 1.0],poissonRatio=0.3,youngModulus=18000,totalMass=1.0, solver=None)
