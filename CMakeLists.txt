@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.5)
 project(STLIB VERSION 1.0)
 
+include(cmake/environment.cmake)
+
 find_package(SofaFramework REQUIRED)
 find_package(SofaPython REQUIRED)
-
-include(cmake/environment.cmake)
 
 set(HEADER_FILES src/initPlugin.h)
 set(SOURCE_FILES src/initPlugin.cpp)
