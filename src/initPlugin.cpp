@@ -72,7 +72,7 @@ void initExternalModule()
     }
     first = false;
 
-    PythonEnvironment::addPythonModulePathsForPluginsByName(getModuleName());
+    PythonEnvironment::addPythonModulePathsForPluginsByName("STLIB");
 }
 
 const char* getModuleName()
