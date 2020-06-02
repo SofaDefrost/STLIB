@@ -16,9 +16,9 @@ stlib.physics.collision.CollisionMesh
 
 """
 
-from collision import CollisionMesh
+from . collision import CollisionMesh
 
 
 def FrictionalContact(applyTo=None):
-    applyTo.createObject('CollisionResponse', response="FrictionContact", responseParams="mu=0")
-    applyTo.createObject('LocalMinDistance', name="Proximity", alarmDistance="3", contactDistance="1")
+    applyTo.addObject('CollisionResponse', response="FrictionContact", responseParams="mu=0")
+    applyTo.addObject('LocalMinDistance', name="Proximity", alarmDistance="3", contactDistance="1")

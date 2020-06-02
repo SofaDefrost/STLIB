@@ -57,43 +57,43 @@ def RigidObject(node, name="RigidObject",
                 }
     """
     #### mechanics
-    object = node.createChild(name)
+    object = node.addChild(name)
 
     if not isAStaticObject:
-        object.createObject('EulerImplicitSolver', name='odesolver')
-        object.createObject('CGLinearSolver', name='Solver')
+        object.addObject('EulerImplicitSolver', name='odesolver')
+        object.addObject('CGLinearSolver', name='Solver')
 
-    object.createObject('MechanicalObject',
+    object.addObject('MechanicalObject',
                       name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
-    object.createObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
+    object.addObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
     if not isAStaticObject:
-        object.createObject('UncoupledConstraintCorrection')
+        object.addObject('UncoupledConstraintCorrection')
 
     #### collision
-    objectCollis = object.createChild('collision')
-    objectCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
+    objectCollis = object.addChild('collision')
+    objectCollis.addObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
                             scale=uniformScale)
 
-    objectCollis.createObject('MeshTopology', src="@loader")
-    objectCollis.createObject('MechanicalObject')
+    objectCollis.addObject('MeshTopology', src="@loader")
+    objectCollis.addObject('MechanicalObject')
 
     if isAStaticObject:
-        objectCollis.createObject('TTriangleModel', moving=False, simulated=False)
-        objectCollis.createObject('TLineModel', moving=False, simulated=False)
-        objectCollis.createObject('TPointModel', moving=False, simulated=False)
+        objectCollis.addObject('TTriangleModel', moving=False, simulated=False)
+        objectCollis.addObject('TLineModel', moving=False, simulated=False)
+        objectCollis.addObject('TPointModel', moving=False, simulated=False)
     else:
-        objectCollis.createObject('TTriangleModel')
-        objectCollis.createObject('TLineModel')
-        objectCollis.createObject('TPointModel')
+        objectCollis.addObject('TTriangleModel')
+        objectCollis.addObject('TLineModel')
+        objectCollis.addObject('TPointModel')
 
-    objectCollis.createObject('RigidMapping')
+    objectCollis.addObject('RigidMapping')
 
     #### visualization
     objectVisu = VisualModel(parent=object, surfaceMeshFileName=surfaceMeshFileName, color=color, scale=[uniformScale]*3)
-    objectVisu.createObject('RigidMapping')
+    objectVisu.addObject('RigidMapping')
 
     return object
 

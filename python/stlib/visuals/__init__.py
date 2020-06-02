@@ -9,7 +9,7 @@ __all__ = []
 
 
 def ShowGrid(node):
-    node.createObject("OglGrid", nbSubdiv=10, size=1000)
+    node.addObject("OglGrid", nbSubdiv=10, size=1000)
 
 
 @SofaPrefab
@@ -40,20 +40,29 @@ class VisualModel(SofaObject):
         self.node = Node(parent, name)
 
         if surfaceMeshFileName.endswith(".stl"):
-            self.loader = self.node.createObject('MeshSTLLoader',
+            self.loader = self.node.addObject('MeshSTLLoader',
                                                  name="loader",
                                                  filename=surfaceMeshFileName)
         elif surfaceMeshFileName.endswith(".obj"):
-            self.loader = self.node.createObject('MeshObjLoader',
+            self.loader = self.node.addObject('MeshObjLoader',
                                                  name="loader",
                                                  filename=surfaceMeshFileName)
         else:
             print("Extension not handled in STLIB/python/stlib/visuals for file: "+str(surfaceMeshFileName))
 
-        self.model = self.node.createObject('OglModel',
+        self.model = self.node.addObject('OglModel',
                                             name="model",
                                             src="@loader",
                                             rotation=rotation,
                                             translation=translation,
                                             scale3d=scale,
                                             color=color, updateNormals=False)
+        # test = self.model.material
+        # place = test.find("Diffuse")
+        # # print(test)
+        # test = list(test)
+        # # print(test)
+        # test[place+8] = str(0)
+        # test = ''.join(test)
+        # # print(test)
+        # self.model.material = test

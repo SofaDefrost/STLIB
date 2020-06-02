@@ -24,18 +24,18 @@ class Wrapper(object):
         self.attachedFunction = attachedFunction
         self.datacache = datacache
 
-    def createObject(self, type, **kwargs):
+    def addObject(self, type, **kwargs):
 
         objectArg = self.attachedFunction(self.node,type,self.datacache,kwargs) 
         # objectArg as to contain (newType, **newKwargs)
 
         if objectArg == None :
-            return self.node.createObject(type, **kwargs)
+            return self.node.addObject(type, **kwargs)
         else : 
-            return self.node.createObject(objectArg[0], **objectArg[1])
+            return self.node.addObject(objectArg[0], **objectArg[1])
 
-    def createChild(self, name):
-        return Wrapper(self.node.createChild(name), self.attachedFunction ,self.datacache)
+    def addChild(self, name):
+        return Wrapper(self.node.addChild(name), self.attachedFunction ,self.datacache)
     
     def __getattr__(self, value):
         return self.node.__getattribute__(value)
@@ -64,5 +64,5 @@ class Wrapper(object):
 
 # # My new scene
 # def createScene(rootNode):
-#     ## Call the old scene creation. 
+#     ## Call the old scene creation. 
 #     mainheader.createScene(Wrapper(rootNode, myAttachedFunction, myNewParam))

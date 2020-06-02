@@ -13,8 +13,8 @@ class Interaction(object):
     """
 
     def __init__(self, parent, targets):
-        self.node = parent.createChild("Interaction")
-        self.node.createObject("EulerImplicitSolver")
-        self.node.createObject("CGLinearSolver")
+        self.node = parent.addChild("Interaction")
+        self.node.addObject("EulerImplicitSolver")
+        self.node.addObject("CGLinearSolver")
         for target in targets:
             self.node.addChild(target)

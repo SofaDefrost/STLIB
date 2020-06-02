@@ -10,7 +10,7 @@ for (name,desc) in Sofa.getAvailableComponents():
         \"\"\"%s\"\"\"
         if kwargs == None:
                 kwargs = {}
-        owner.createObject(\"%s\", **kwargs)
+        owner.addObject(\"%s\", **kwargs)
 """ % (name,desc,name)
     exec(code)
 

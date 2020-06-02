@@ -58,14 +58,14 @@ def SubTopology(attachedTo=None,
     strTmp = strTmp[start:end]
     argument = strTmp[::-1]
 
-    modelSubTopo = attachedTo.createChild(name)
-    modelSubTopo.createObject(linkTypeUp+'SetTopologyContainer',
+    modelSubTopo = attachedTo.addChild(name)
+    modelSubTopo.addObject(linkTypeUp+'SetTopologyContainer',
                               name='container',
                               position=containerLink)
 
     modelSubTopo.getObject('container').findData(argument).value = boxRoiLink
 
-    modelSubTopo.createObject(linkTypeUp+'FEMForceField',
+    modelSubTopo.addObject(linkTypeUp+'FEMForceField',
                               name='FEM',
                               method='large',
                               poissonRatio=poissonRatio,
@@ -87,7 +87,7 @@ def createScene(rootNode):
                                    totalMass=0.5,
                                    attachedTo=rootNode)
 
-    target.createObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
+    target.addObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
 
     SubTopology(attachedTo=target,
                 containerLink='@../container.position',
@@ -106,10 +106,10 @@ def createScene(rootNode):
     #                                attachedTo=rootNode)
     # target.removeObject(target.container)
     # target.removeObject(target.forcefield)
-    # target.createObject("HexahedronSetTopologyContainer", name="container", position=target.loader.position, hexahedra=target.loader.hexahedra)
-    # target.createObject("HexahedronFEMForceField", name="forcefield")
+    # target.addObject("HexahedronSetTopologyContainer", name="container", position=target.loader.position, hexahedra=target.loader.hexahedra)
+    # target.addObject("HexahedronFEMForceField", name="forcefield")
 
-    # target.createObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
+    # target.addObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
 
     # SubTopology(attachedTo=target,
     #             containerLink='@../container.position',

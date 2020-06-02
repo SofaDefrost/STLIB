@@ -65,7 +65,7 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
                 name = sourceObject.name
 
         sourceObject.init()
-        ero = targetObject.createChild(name)
+        ero = targetObject.addChild(name)
 
 
         rigids = []
@@ -115,17 +115,17 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
         Kd.update({v: [1, k] for k, v in enumerate(selectedIndices)})
         indexPairs = [v for kv in Kd.values() for v in kv]
 
-        freeParticules = ero.createChild("DeformableParts")
-        freeParticules.createObject("MechanicalObject", template="Vec3", name="dofs",
+        freeParticules = ero.addChild("DeformableParts")
+        freeParticules.addObject("MechanicalObject", template="Vec3", name="dofs",
                                     position=[allPositions[i] for i in otherIndices])
 
-        rigidParts = ero.createChild("RigidParts")
-        rigidParts.createObject("MechanicalObject", template="Rigid3", name="dofs", reserve=len(rigids), position=rigids)
+        rigidParts = ero.addChild("RigidParts")
+        rigidParts.addObject("MechanicalObject", template="Rigid3", name="dofs", reserve=len(rigids), position=rigids)
 
-        rigidifiedParticules = rigidParts.createChild("RigidifiedParticules")
-        rigidifiedParticules.createObject("MechanicalObject", template="Vec3", name="dofs",
+        rigidifiedParticules = rigidParts.addChild("RigidifiedParticules")
+        rigidifiedParticules.addObject("MechanicalObject", template="Vec3", name="dofs",
                                           position=[allPositions[i] for i in selectedIndices])
-        rigidifiedParticules.createObject("RigidMapping", name="mapping", globalToLocalCoords='true', rigidIndexPerPoint=indicesMap)
+        rigidifiedParticules.addObject("RigidMapping", name="mapping", globalToLocalCoords='true', rigidIndexPerPoint=indicesMap)
 
         if not noInit:
             sourceObject.removeObject(sourceObject.solver)
@@ -139,7 +139,7 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
         if hasattr(sourceObject, "node"):
             coupling = sourceObject.node
 
-        coupling.createObject("SubsetMultiMapping", name="mapping", template="Vec3,Vec3",
+        coupling.addObject("SubsetMultiMapping", name="mapping", template="Vec3,Vec3",
                               input=freeParticules.dofs.getLinkPath()+" "+rigidifiedParticules.dofs.getLinkPath(),
                               output=sourceObject.dofs.getLinkPath(),
                               indexPairs=indexPairs)
@@ -160,7 +160,7 @@ def createScene(rootNode):
         MainHeader(rootNode, plugins=["SofaSparseSolver"])
         rootNode.VisualStyle.displayFlags = "showBehavior"
 
-        modelNode = rootNode.createChild("Modeling")
+        modelNode = rootNode.addChild("Modeling")
         elasticobject = ElasticMaterialObject(modelNode, "mesh/liver.msh", "ElasticMaterialObject")
 
         # Rigidification of the elasticobject for given indices with given frameOrientations.
@@ -175,10 +175,10 @@ def createScene(rootNode):
         setData(o.RigidParts.RigidifiedParticules.dofs, showObject=True, showObjectScale=0.1,
                 drawMode=1, showColor=[1., 1., 0., 1.])
         setData(o.DeformableParts.dofs, showObject=True, showObjectScale=0.1, drawMode=2)
-        o.RigidParts.createObject("FixedConstraint", indices=0)
+        o.RigidParts.addObject("FixedConstraint", indices=0)
 
-        simulationNode = rootNode.createChild("Simulation")
-        simulationNode.createObject("EulerImplicitSolver")
-        simulationNode.createObject("CGLinearSolver")
+        simulationNode = rootNode.addChild("Simulation")
+        simulationNode.addObject("EulerImplicitSolver")
+        simulationNode.addObject("CGLinearSolver")
         simulationNode.addChild(o)
         return rootNode

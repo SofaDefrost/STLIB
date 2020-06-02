@@ -30,20 +30,20 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
 
     """
 
-    c = applyTo.createChild(name)
+    c = applyTo.addChild(name)
 
     if orientedBox == None:
         if position == None:
-            c.createObject('BoxROI', name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
+            c.addObject('BoxROI', name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
         else:
-            c.createObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
+            c.addObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
     else:
         if position == None: 
-            c.createObject('BoxROI', name='BoxROI', orientedBox=orientedBox, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)        
+            c.addObject('BoxROI', name='BoxROI', orientedBox=orientedBox, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)        
         else:
-            c.createObject('BoxROI', name='BoxROI', position=position , orientedBox=orientedBox, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)        
+            c.addObject('BoxROI', name='BoxROI', position=position , orientedBox=orientedBox, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)        
 
-    c.createObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness='1e12')
+    c.addObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness='1e12')
     return c
 
 def createScene(rootNode):
