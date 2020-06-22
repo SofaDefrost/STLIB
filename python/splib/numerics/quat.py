@@ -2,7 +2,7 @@ import numpy
 import math
 from math import pi
 
-class Quat(numpy.ndarray):
+class  Quat(numpy.ndarray):
     """ The Quat class implements the following:
 
     Public methods:
@@ -12,6 +12,7 @@ class Quat(numpy.ndarray):
     q.rotateFromEuler(v)
     q.normalize()
     q.flip()
+    q.rotate(v)
 
     q.getIm()
     q.getRe()
@@ -114,6 +115,24 @@ class Quat(numpy.ndarray):
             self.put(range(4),-1*self)
 
 
+    def rotate(self,v):
+        """Function rotate of class Quat rotate a vector using a quaternion.
+            Examples:
+
+            >>> q = [0.707, 0.0, -0.707, 0.0]
+            >>> v = q.rotate([1., 0., 0.])
+            >>> print(v)
+            [ 0.0, 0.0, -1.0]
+        """
+        q = Quat(self)
+        q.normalize()
+
+        v0 = (1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2]))*v[0] + (2.0 * (q[0] * q[1] - q[2] * q[3])) * v[1] + (2.0 * (q[2] * q[0] + q[1] * q[3])) * v[2]
+        v1 = (2.0 * (q[0] * q[1] + q[2] * q[3]))*v[0] + (1.0 - 2.0 * (q[2] * q[2] + q[0] * q[0]))*v[1] + (2.0 * (q[1] * q[2] - q[0] * q[3]))*v[2]
+        v2 = (2.0 * (q[2] * q[0] - q[1] * q[3]))*v[0] + (2.0 * (q[1] * q[2] + q[0] * q[3]))*v[1] + (1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]))*v[2]
+
+        return numpy.array([v0,v1,v2])
+       
 
     def getNorm(self):
         """ Returns the norm of the quaternion.
