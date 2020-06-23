@@ -1,36 +1,61 @@
 cmake_minimum_required(VERSION 3.5)
-project(STLIB VERSION 1.0)
+project(stlib VERSION 1.0)
 
 include(cmake/environment.cmake)
 
-find_package(SofaFramework REQUIRED)
-find_package(SofaPython REQUIRED)
-
-set(HEADER_FILES src/initPlugin.h)
-set(SOURCE_FILES src/initPlugin.cpp)
-
-file(GLOB_RECURSE RESOURCE_FILES  "*.md" "*.psl" "*.py" "*.pyscn" "*.scn" "*.rst")
+find_package(SofaPython3 REQUIRED)
 
 # Config files and install rules for pythons scripts
-sofa_install_pythonscripts(PLUGIN_NAME ${PROJECT_NAME} PYTHONSCRIPTS_SOURCE_DIR "python" PYTHONSCRIPTS_INSTALL_DIR "python")
+SP3_add_python_package(
+  SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/stlib
+  TARGET_DIRECTORY stlib
+  )
 
-add_library(${PROJECT_NAME} SHARED ${HEADER_FILES} ${SOURCE_FILES} ${RESOURCE_FILES})
-set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_STLIB")
-set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
-target_link_libraries(${PROJECT_NAME} SofaCore SofaPython)
-target_include_directories(${PROJECT_NAME} PUBLIC "$<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/include>")
-target_include_directories(${PROJECT_NAME} PUBLIC "$<INSTALL_INTERFACE:include>")
+set (PYTHON_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/communication/UDP_controller.py
 
-## Install rules for the library and headers; CMake package configurations files
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/components/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/components/all.py
 
-sofa_generate_package(
-    NAME STLIB 
-    VERSION ${PROJECT_VERSION} 
-    TARGETS ${PROJECT_NAME}
-    INCLUDE_INSTALL_DIR STLIB
-    INCLUDE_SOURCE_DIR "src"
-    RELOCATABLE "plugins"
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/debug/__init__.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/loader/__init__.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/numerics/__init__.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/rigid/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/rigid/rigidobject.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/deformable/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/deformable/elasticmaterialobject.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/constraints/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/constraints/fixedbox.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/constraints/partiallyfixedbox.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/constraints/subTopology.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/collision/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/collision/collision.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/mixedmaterial/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/physics/mixedmaterial/rigidification.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/scene/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/scene/mainheader.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/scene/contactheader.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/scene/wrapper.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/scene/interaction.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/solver/__init__.py
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/solver/defaultsolver.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/tools/__init__.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/units/__init__.py
+
+    ${CMAKE_CURRENT_SOURCE_DIR}/stlib/visuals/__init__.py
     )
+
+
+add_library(STLIB_SCRIPTS INTERFACE)
+target_sources(STLIB_SCRIPTS INTERFACE "${PYTHON_FILES}")
 
 install(DIRECTORY docs DESTINATION share/sofa/${PROJECT_NAME})
 install(FILES "README.md" "LICENSE" DESTINATION .)
