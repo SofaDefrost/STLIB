@@ -29,6 +29,8 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
             }
 
     '''
+    print('Here MainHeader')
+
     node.addObject('VisualStyle')
     node.findData('gravity').value=gravity;
     node.findData('dt').value=dt
