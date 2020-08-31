@@ -1,14 +1,12 @@
 # -*- coding: utf-8 -*-
 import Sofa
-from splib import SofaPrefab
-from splib.objectmodel import SofaPrefab, SofaObject
-from stlib.scene import Node
-from stlib.visuals import VisualModel
+import SofaRuntime
+# from stlib.visuals import VisualModel
 
 class ElasticMaterialObject(Sofa.Prefab):
     def __init__(self, *args, **kwargs):
         Sofa.Prefab.__init__(self, *args, **kwargs)
-
+        self.createParams(self, *args, **kwargs)
         
     def createParams(self, *args, **kwargs):
         self.addPrefabParameter(name="volumeMeshFileName", type="string", help="The volume topology of this elastic material object", default=kwargs.get("volumeMeshFileName", ''))
@@ -26,11 +24,12 @@ class ElasticMaterialObject(Sofa.Prefab):
 
 
     def doReInit(self):
-        if "SofaSparseSolver" not in SofaRuntime.PluginManager.loadedPlugins:
-            Sofa.msg_info("Missing plugin SofaSparseSolver, adding it to the root node.")
-            self.getRoot().createObject("RequiredPlugin", pluginName="SofaSparseSolver")
+        print("666666666666666666666")
+        # if "SofaSparseSolver" not in SofaRuntime.PluginManager.loadedPlugins:
+        #     Sofa.msg_info("Missing plugin SofaSparseSolver, adding it to the root node.")
+        #     self.getRoot().createObject("RequiredPlugin", pluginName="SofaSparseSolver")
 
-        if volumeMeshFileName.value == '':
+        if self.volumeMeshFileName.value == '':
             Sofa.msg_error(self, "Unable to create an elastic object: no volume mesh was provided.")
             return
 
@@ -83,16 +82,19 @@ class ElasticMaterialObject(Sofa.Prefab):
         self.Collisionmodel.createObject('BarycentricMapping')
 
     def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
-        VisualModel(self, name="visualmodel", surfaceMeshFileName=filename, color=color, rotation=rotation, translation=translation)
+        # VisualModel(self, name="visualmodel", surfaceMeshFileName=filename, color=color, rotation=rotation, translation=translation)
 
         # Add a BarycentricMapping to deform the rendering model to follow the ones of the
         # mechanical model.
         self.visualmodel.createObject('BarycentricMapping', name='mapping')
         
 
-# def createScene(rootNode):
-#     from stlib.scene import MainHeader
+def createScene(rootNode):
+    # from stlib.scene import MainHeader
 
-#     MainHeader(rootNode, gravity=" 0 0 0")
-#     ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual", translation=[3.0, 0.0, 0.0])
-#     ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj", surfaceColor=[1.0, 0.0, 0.0])
+    # MainHeader(rootNode, gravity=" 0 0 0")
+    # ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual", translation=[3.0, 0.0, 0.0])
+    elstic = ElasticMaterialObject(volumeMeshFileName="mesh/liver.msh")
+    elstic.createParams()
+    rootNode.addChild(elstic)
+    elstic.doReInit()
