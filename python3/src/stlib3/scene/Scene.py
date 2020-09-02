@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 import Sofa.Core
-
 class SofaRuntime(object):
         class PluginManager(object):
                 loadedPlugins = ["SofaPython3"]
@@ -32,7 +31,7 @@ def Settings(plugins=[], repositoryPaths=[]):
         return self
 
 def Scene(root, gravity=[0.0,-9.81,0.0],
-          dt=0.01, plugins=[], repository=[]):
+          dt=0.01, plugins=[], repositoryPaths=[]):
         def addDefaultSolver():
                 root.addObject("EulerImplicitSolver")
                 return root
@@ -51,7 +50,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
                 self.addObject("CGLinearSolver")
                 return root
 
-        def addSettings(plugins=[], repositoryPaths=[]):
+        def addSettings(plugins=plugins, repositoryPaths=repositoryPaths):
                 root.addChild(Settings(plugins=plugins, repositoryPaths=repositoryPaths))
                 return root
 

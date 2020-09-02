@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-__all__=["scene"]
+__all__=["Scene"]
