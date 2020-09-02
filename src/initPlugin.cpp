@@ -43,9 +43,6 @@ using sofa::helper::system::FileSystem;
 #include <sofa/helper/Utils.h>
 using sofa::helper::Utils;
 
-#include <SofaPython/PythonEnvironment.h>
-using sofa::simulation::PythonEnvironment;
-
 #include <fstream>
 
 namespace sofa
@@ -71,8 +68,6 @@ void initExternalModule()
         return;
     }
     first = false;
-
-    PythonEnvironment::addPythonModulePathsForPluginsByName("STLIB");
 }
 
 const char* getModuleName()
@@ -82,7 +77,7 @@ const char* getModuleName()
 
 const char* getModuleVersion()
 {
-    return "1.0";
+    return "3.0";
 }
 
 const char* getModuleLicense()
