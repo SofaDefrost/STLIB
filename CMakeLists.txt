@@ -7,17 +7,25 @@ find_package(SofaFramework REQUIRED)
 find_package(SofaPython QUIET)
 find_package(SofaPython3 QUIET)
 
+set(SofaPythonAny_FOUND FALSE)
 if(SofaPython3_FOUND)
     message("-- Found SofaPython3")
     SP3_add_python_package(
         SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/python3/src/stlib3
         TARGET_DIRECTORY stlib3
     )
+    set(SofaPythonAny_FOUND TRUE)
 endif()
 
 if(SofaPython_FOUND)
     message("-- Found SofaPython")
     sofa_install_pythonscripts(PLUGIN_NAME ${PROJECT_NAME} PYTHONSCRIPTS_SOURCE_DIR "python" PYTHONSCRIPTS_INSTALL_DIR "python")
+    set(SofaPythonAny_FOUND TRUE)
+endif()
+
+if(!SofaPythonAny_FOUND)
+    message("-- Missing a python implementation (SofaPython or SofaPython3). Disabling the plugin")
+    return()
 endif()
 
 set(HEADER_FILES src/initPlugin.h)

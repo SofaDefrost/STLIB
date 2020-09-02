@@ -1,20 +1,5 @@
 import Sofa
-
-def add_TriangleLoader(node, name, surfaceMeshFileName=""):
-    node.addObject("MeshObjLoader", name="loader", filename=surfaceMeshFileName)
-    return node
-
-def VisualModel(name="VisualModel", 
-                color = [1.0,1.0,1.0,1.0], 
-                inputMesh=None, scale=1.0):
-    self = Sofa.Core.Node(name)
-    
-    if isinstance(inputMesh, str):
-        add_TriangleLoader(self, name="loader", surfaceMeshFileName=inputMesh)
-    
-    self.addObject("OglModel", src=self.loader.getLinkPath(), color=color) 
-    
-    return self
+from stlib3.visuals import VisualModel
 
 def RigidObject(name="RigidObject",
                 surfaceMeshFileName=None,
@@ -25,7 +10,7 @@ def RigidObject(name="RigidObject",
                 volume=1.,
                 inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
                 color=[1., 1., 0.],
-                isAStaticObject=False):
+                isAStaticObject=False, parent=None):
     """Creates and adds rigid body from a surface mesh.
     Args:
         surfaceMeshFileName (str):  The path or filename pointing to surface mesh file.
@@ -62,6 +47,8 @@ def RigidObject(name="RigidObject",
     """
     #### mechanics
     object = Sofa.Core.Node(name)
+    if(parent != None):
+        parent.addChild(object)
 
     object.addObject('MechanicalObject',
                       name="mstate", template="Rigid3",
@@ -95,10 +82,8 @@ def RigidObject(name="RigidObject",
 
     #### visualization
     def addVisualModel(inputMesh=surfaceMeshFileName):
-        visual = VisualModel(name="visual", inputMesh=inputMesh, color=color, scale=[uniformScale]*3)        
-        
+        visual = VisualModel(name="visual", inputMesh=inputMesh, color=color, scale=[uniformScale]*3)                
         object.addChild(visual)
-
         visual.addObject('RigidMapping')
         
     object.addVisualModel = addVisualModel
@@ -110,17 +95,16 @@ def RigidObject(name="RigidObject",
     return object
 
 def createScene(root):
-    from scene import Scene
+    from stlib3.scene.Scene import Scene
 
+    ## Create a basic scene graph layout with settings, modelling and simulation
     scene = Scene(root)
     scene.addSettings()
-    scene.addModel()
+    scene.addModelling()
     scene.addSimulation()
     
-    rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj") 
+    ## Create a RigidObject with a cube mesh.
+    rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj", parent=scene.Modelling)
     rigid.addCollisionModel()
     rigid.addVisualModel()
-    scene.Model.addChild(rigid)
-    #RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Left", translation=[-20., 0., 0.])
-    #RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[0., 0., 0.])
-    #RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[ 20., 0., 0.])
+
