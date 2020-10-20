@@ -81,13 +81,13 @@ def RigidObject(node, name="RigidObject",
     objectCollis.createObject('MechanicalObject')
 
     if isAStaticObject:
-        objectCollis.createObject('TTriangleModel', moving=False, simulated=False)
-        objectCollis.createObject('TLineModel', moving=False, simulated=False)
-        objectCollis.createObject('TPointModel', moving=False, simulated=False)
+        objectCollis.createObject('TriangleCollisionModel', moving=False, simulated=False)
+        objectCollis.createObject('LineCollisionModel', moving=False, simulated=False)
+        objectCollis.createObject('PointCollisionModel', moving=False, simulated=False)
     else:
-        objectCollis.createObject('TTriangleModel')
-        objectCollis.createObject('TLineModel')
-        objectCollis.createObject('TPointModel')
+        objectCollis.createObject('TriangleCollisionModel')
+        objectCollis.createObject('LineCollisionModel')
+        objectCollis.createObject('PointCollisionModel')
 
     objectCollis.createObject('RigidMapping')
 

@@ -96,9 +96,9 @@ class ElasticMaterialObject(SofaObject):
         self.collisionmodel.createObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation, scale3d=scale)
         self.collisionmodel.createObject('TriangleSetTopologyContainer', src='@loader', name='container')
         self.collisionmodel.createObject('MechanicalObject', template='Vec3d', name='dofs')
-        self.collisionmodel.createObject('Triangle')
-        self.collisionmodel.createObject('Line')
-        self.collisionmodel.createObject('Point')
+        self.collisionmodel.createObject('TriangleCollisionModel')
+        self.collisionmodel.createObject('LineCollisionModel')
+        self.collisionmodel.createObject('PointCollisionModel')
         self.collisionmodel.createObject('BarycentricMapping')
 
     def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
