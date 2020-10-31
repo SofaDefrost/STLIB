@@ -8,7 +8,7 @@ def DefaultSolver(node, iterative=True):
         EulerImplicit
         CGLinearSolver
     '''
-    node.createObject('EulerImplicit', name='TimeIntegrationSchema')
+    node.createObject('EulerImplicitSolver', name='TimeIntegrationSchema')
     if iterative:
         return node.createObject('CGLinearSolver', name='LinearSolver')
 

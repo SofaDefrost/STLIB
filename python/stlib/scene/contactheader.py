@@ -19,7 +19,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
         .. sourcecode:: qml
 
             rootNode : {
-                CollisionPipeline,
+                DefaultPipeline,
                 BruteForceDetection,
                 RuleBasedContactManager,
                 LocalMinDistance

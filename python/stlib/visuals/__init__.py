@@ -2,6 +2,7 @@
 """
 Templates for rendering.
 """
+import Sofa
 from splib.objectmodel import SofaPrefab, SofaObject
 from stlib.scene import Node
 
@@ -38,6 +39,11 @@ class VisualModel(SofaObject):
 
     def __init__(self, parent, surfaceMeshFileName, name="VisualModel", color=[1., 1., 1.], rotation=[0., 0., 0.], translation=[0., 0., 0.], scale=[1., 1., 1.]):
         self.node = Node(parent, name)
+
+        if not self.getRoot().getObject("SofaOpenglVisual", warning=False):
+            if not self.getRoot().getObject("/Config/SofaOpenglVisual", warning=False):
+                    Sofa.msg_info("Missing RequiredPlugin SofaOpenglVisual in the scene, add it from Prefab VisualModel.")
+                    self.getRoot().createObject("RequiredPlugin", name="SofaOpenglVisual")
 
         if surfaceMeshFileName.endswith(".stl"):
             self.loader = self.node.createObject('MeshSTLLoader',
