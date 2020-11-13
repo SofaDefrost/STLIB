@@ -4,12 +4,16 @@ Enables to read from and send data to Simulink.
 
 import socket
 import Sofa
+import Sofa.Core
 import numpy
 import struct
 import sys
 from signal import signal, SIGINT
 
-class UDP(Sofa.PythonScriptController):
+class UDP(Sofa.Core.Controller):
+
+	def __init__(self, *args, **kwargs):
+        Sofa.Core.Controller.__init__(self, *args, **kwargs)
 
 	def exit_gracefully(self, sig, frame):
 		Sofa.msg_info("Closing UDP communication...")
@@ -28,7 +32,7 @@ class UDP(Sofa.PythonScriptController):
 		self.UDP_port_out = 5006 	# simulink's UDP receive local IP port
 		self.sock.bind((self.UDP_IP, self.UDP_port_in))
 
-	def onBeginAnimationStep(self,dt):
+	def onAnimateBeginEvent(self, event):
 		# receive
 		data, addr = self.sock.recvfrom(8192) # simulink's UDP buffer size is fixed at 8192 bytes and is not configurable.
 		# msg_in = struct.unpack('d', data)	# works with simulink
@@ -46,20 +50,20 @@ class UDP(Sofa.PythonScriptController):
 # Simple scene for example :
 
 def createScene(rootNode):
-                rootNode.findData('gravity').value="0 0 -9810"
+                rootNode.findData('gravity').value=[0., 0., -9810]
                 rootNode.findData('dt').value=0.01
-                rootNode.addObject('RequiredPlugin', name='SoftRobots', pluginName='SoftRobots')
-                rootNode.addObject('RequiredPlugin', name='SofaPython', pluginName='SofaPython')
+                rootNode.addObject('RequiredPlugin', name='SoftRobots')
+                rootNode.addObject('RequiredPlugin', name='SofaPython3')
 
                 rootNode.addObject('FreeMotionMasterSolver')
                 rootNode.addObject('GenericConstraintSolver',maxIterations=1000 ,tolerance=0.001)
-                rootNode.addObject('PythonScriptController', filename='UDP_controller.py', classname='UDP')
+                rootNode.addObject(UDP)
 
                 Beam = rootNode.addChild('Beam')
                 Beam.addObject('EulerImplicitSolver', name="odesolver", rayleighStiffness=0.1, rayleighMass=0.1)
-                Beam.addObject('ShewchukPCGLinearSolver', iterations=1, name="linearsolver", tolerance=1e-5, preconditioners="preconditioner", use_precond="true")
+                Beam.addObject('ShewchukPCGLinearSolver', iterations=1, name="linearsolver", tolerance=1e-5, preconditioners="preconditioner", use_precond=True)
                 Beam.addObject('RegularGridTopology', name="SoftBeam", nx=5, ny=2, nz=2, min=[-0.050, -0.010, -0.002], max=[0.050, 0.010, 0.0025])
-                Beam.addObject('MechanicalObject', name="meca", template="Vec3d")
+                Beam.addObject('MechanicalObject', name="meca", template="Vec3")
                 Beam.addObject('UniformMass', totalmass=0.01)
                 Beam.addObject('SparseLDLSolver', name="preconditioner")
                 Beam.addObject('LinearSolverConstraintCorrection', solverName="preconditioner")

@@ -7,9 +7,9 @@ class VisualModel(Sofa.Prefab):
     """  """
     properties = [
         {'name':'visualMeshPath', 'type':'string', 'help':'Path to visual mesh file',  'default':''},
-        {'name':'translation',    'type':'Vec3d',  'help':'translate visual model',    'default':[0.,0.,0.]},
-        {'name':'rotation',       'type':'Vec3d',  'help':'rotate visual model',       'default':[0.,0.,0.]},
-        {'name':'scale',          'type':'Vec3d',  'help':'scale visual model',        'default':[0.,0.,0.]},
+        {'name':'translation',    'type':'Vec3',  'help':'translate visual model',    'default':[0.,0.,0.]},
+        {'name':'rotation',       'type':'Vec3',  'help':'rotate visual model',       'default':[0.,0.,0.]},
+        {'name':'scale',          'type':'Vec3',  'help':'scale visual model',        'default':[0.,0.,0.]},
         {'name':'color',          'type':'string',  'help':'color put to visual model', 'default':"1. 0. 1. 1."}]
 
     def __init__(self, *args, **kwargs):

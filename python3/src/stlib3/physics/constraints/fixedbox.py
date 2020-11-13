@@ -4,7 +4,7 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
              name="FixedBox",
              doVisualization=False,
              position=None,
-             constraintStrength='1e12', doRecomputeDuringSimulation=False):
+             constraintStrength=1e12, doRecomputeDuringSimulation=False):
     """
     Constraint a set of degree of freedom to be at a fixed position.
 
@@ -35,7 +35,7 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
     else:
         c.addObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
 
-    c.addObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness='1e12')
+    c.addObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness=1e12)
     return c
 
 def createScene(rootNode):

@@ -121,7 +121,7 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
         rigidifiedParticules = rigidParts.addChild("RigidifiedParticules")
         rigidifiedParticules.addObject("MechanicalObject", template="Vec3", name="dofs",
                                           position=[allPositions[i] for i in selectedIndices])
-        rigidifiedParticules.addObject("RigidMapping", name="mapping", globalToLocalCoords='true', rigidIndexPerPoint=indicesMap)
+        rigidifiedParticules.addObject("RigidMapping", name="mapping", globalToLocalCoords=True, rigidIndexPerPoint=indicesMap)
 
         sourceObject.removeObject(sourceObject.solver)
         sourceObject.removeObject(sourceObject.integration)

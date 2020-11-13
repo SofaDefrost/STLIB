@@ -67,7 +67,7 @@ class ElasticMaterialObject(SofaObject):
             self.solver = self.node.addObject('SparseLDLSolver', name="solver")
 
         self.container = self.node.addObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
-        self.dofs = self.node.addObject('MechanicalObject', template='Vec3d', name='dofs')
+        self.dofs = self.node.addObject('MechanicalObject', template='Vec3', name='dofs')
 
         # To be properly simulated and to interact with gravity or inertia forces, an elasticobject
         # also needs a mass. You can add a given mass with a uniform distribution for an elasticobject
@@ -78,7 +78,7 @@ class ElasticMaterialObject(SofaObject):
         # to a loading (i.e. which deformations are created from forces applied onto it).
         # Here, because the elasticobject is made of silicone, its mechanical behavior is assumed elastic.
         # This behavior is available via the TetrahedronFEMForceField component.
-        self.forcefield = self.node.addObject('TetrahedronFEMForceField', template='Vec3d',
+        self.forcefield = self.node.addObject('TetrahedronFEMForceField', template='Vec3',
                                                  method='large', name='forcefield',
                                                  poissonRatio=poissonRatio,  youngModulus=youngModulus)
 
@@ -95,7 +95,7 @@ class ElasticMaterialObject(SofaObject):
         self.collisionmodel = self.node.addChild('CollisionModel')
         self.collisionmodel.addObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation, scale3d=scale)
         self.collisionmodel.addObject('TriangleSetTopologyContainer', src='@loader', name='container')
-        self.collisionmodel.addObject('MechanicalObject', template='Vec3d', name='dofs')
+        self.collisionmodel.addObject('MechanicalObject', template='Vec3', name='dofs')
         self.collisionmodel.addObject('TriangleCollisionModel')
         self.collisionmodel.addObject('LineCollisionModel')
         self.collisionmodel.addObject('PointCollisionModel')
