@@ -3,11 +3,11 @@ import Sofa
 
 class BoxFilter(object):
         def __init__(self, node, sourceObject, orientedBoxes):      
-                node = node.createChild("Select")          
+                node = node.addChild("Select")          
                 self.sourceObject = sourceObject
                 self.boxes = []
                 for orientedBox in orientedBoxes:
-                        box = node.createObject("BoxROI", name="filters",
+                        box = node.addObject("BoxROI", name="filters",
                                orientedBox=orientedBox,
                                position=sourceObject.dofs.findData("position").getLinkPath(), 
                                drawBoxes=True, drawPoints=True, drawSize=2.0)

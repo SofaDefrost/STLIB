@@ -48,23 +48,23 @@ class UDP(Sofa.PythonScriptController):
 def createScene(rootNode):
                 rootNode.findData('gravity').value="0 0 -9810"
                 rootNode.findData('dt').value=0.01
-                rootNode.createObject('RequiredPlugin', name='SoftRobots', pluginName='SoftRobots')
-                rootNode.createObject('RequiredPlugin', name='SofaPython', pluginName='SofaPython')
+                rootNode.addObject('RequiredPlugin', name='SoftRobots', pluginName='SoftRobots')
+                rootNode.addObject('RequiredPlugin', name='SofaPython', pluginName='SofaPython')
 
-                rootNode.createObject('FreeMotionMasterSolver')
-                rootNode.createObject('GenericConstraintSolver',maxIterations=1000 ,tolerance=0.001)
-                rootNode.createObject('PythonScriptController', filename='UDP_controller.py', classname='UDP')
+                rootNode.addObject('FreeMotionMasterSolver')
+                rootNode.addObject('GenericConstraintSolver',maxIterations=1000 ,tolerance=0.001)
+                rootNode.addObject('PythonScriptController', filename='UDP_controller.py', classname='UDP')
                
-                Beam = rootNode.createChild('Beam')
-                Beam.createObject('EulerImplicitSolver', name="odesolver", rayleighStiffness=0.1, rayleighMass=0.1)
-                Beam.createObject('ShewchukPCGLinearSolver', iterations=1, name="linearsolver", tolerance=1e-5, preconditioners="preconditioner", use_precond="true")
-                Beam.createObject('RegularGridTopology', name="SoftBeam", nx=5, ny=2, nz=2, min="-0.050 -0.010 -0.0025", max="0.050 0.010 0.0025")     
-                Beam.createObject('MechanicalObject', name="meca", template="Vec3d")
-                Beam.createObject('UniformMass', totalmass=0.01)
-                Beam.createObject('SparseLDLSolver', name="preconditioner")
-                Beam.createObject('LinearSolverConstraintCorrection', solverName="preconditioner")
-                Beam.createObject('HexahedronFEMForceField', youngModulus=3000, poissonRatio=0.2)
-                Beam.createObject('BoxROI', name="boxFixed", box="0.0250 -0.015 -0.005 0.05 0.015 0.005", drawBoxes="true")
-                Beam.createObject('FixedConstraint', indices="@boxFixed.indices")
+                Beam = rootNode.addChild('Beam')
+                Beam.addObject('EulerImplicitSolver', name="odesolver", rayleighStiffness=0.1, rayleighMass=0.1)
+                Beam.addObject('ShewchukPCGLinearSolver', iterations=1, name="linearsolver", tolerance=1e-5, preconditioners="preconditioner", use_precond="true")
+                Beam.addObject('RegularGridTopology', name="SoftBeam", nx=5, ny=2, nz=2, min="-0.050 -0.010 -0.0025", max="0.050 0.010 0.0025")     
+                Beam.addObject('MechanicalObject', name="meca", template="Vec3d")
+                Beam.addObject('UniformMass', totalmass=0.01)
+                Beam.addObject('SparseLDLSolver', name="preconditioner")
+                Beam.addObject('LinearSolverConstraintCorrection', solverName="preconditioner")
+                Beam.addObject('HexahedronFEMForceField', youngModulus=3000, poissonRatio=0.2)
+                Beam.addObject('BoxROI', name="boxFixed", box="0.0250 -0.015 -0.005 0.05 0.015 0.005", drawBoxes="true")
+                Beam.addObject('FixedConstraint', indices="@boxFixed.indices")
 
                 return rootNode

@@ -29,13 +29,13 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
 
     """
 
-    c = applyTo.createChild(name)
+    c = applyTo.addChild(name)
     if position == None:
-        c.createObject('BoxROI', name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
+        c.addObject('BoxROI', name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
     else:
-        c.createObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
+        c.addObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
 
-    c.createObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness='1e12')
+    c.addObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness='1e12')
     return c
 
 def createScene(rootNode):

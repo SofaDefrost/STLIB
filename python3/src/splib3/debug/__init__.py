@@ -216,16 +216,16 @@ class Tracer(object):
         self.depth = depth
         self.context = context
 
-    def createObject(self, type, **kwargs):
-        self.backlog.writeln(self.depth+self.node.name+".createObject('"+type+"' "+kwargs2str(kwargs)+")")
-        n = self.node.createObject(type, **kwargs)
+    def addObject(self, type, **kwargs):
+        self.backlog.writeln(self.depth+self.node.name+".addObject('"+type+"' "+kwargs2str(kwargs)+")")
+        n = self.node.addObject(type, **kwargs)
         return n
 
-    def createChild(self, name, **kwargs):
+    def addChild(self, name, **kwargs):
         self.backlog.writeln("")
         self.backlog.writeln(self.depth+"#========================= "+name+" ====================== ")
-        self.backlog.writeln(self.depth+name+" = "+self.node.name+".createChild('"+name+"' "+kwargs2str(kwargs)+")")
-        n = Tracer(self.node.createChild(name, **kwargs), self.backlog, self.depth, name)
+        self.backlog.writeln(self.depth+name+" = "+self.node.name+".addChild('"+name+"' "+kwargs2str(kwargs)+")")
+        n = Tracer(self.node.addChild(name, **kwargs), self.backlog, self.depth, name)
         return n
 
     def getObject(self, name):

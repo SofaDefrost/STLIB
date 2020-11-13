@@ -66,7 +66,7 @@ class SofaPrefab(object):
 
 class SofaObject(object):
     def __init__(self, node, name):
-        self.node = node.createChild(name)
+        self.node = node.addChild(name)
 
     def __getattr__(self, name):
         return getattr(self.node, name)
@@ -83,22 +83,22 @@ class SofaObject(object):
 
         #return tmp
 
-    #def createChild(self, name):
-    #    return self.node.createChild(name)
+    #def addChild(self, name):
+    #    return self.node.addChild(name)
 
-    #def createObject(self, *args, **kwargs):
-    #    return self.node.createObject(*args, **kwargs)
+    #def addObject(self, *args, **kwargs):
+    #    return self.node.addObject(*args, **kwargs)
 
 class SofaObjectWrapper(object):
     def __init__(self, node):
         print("DEPRECATED.... SOFAOBJECTWRAPPER")
         self.node = node
 
-    def createChild(self, name):
-        return self.node.createChild(name)
+    def addChild(self, name):
+        return self.node.addChild(name)
 
-    def createObject(self, *args, **kwargs):
-        return self.node.createObject(*args, **kwargs)
+    def addObject(self, *args, **kwargs):
+        return self.node.addObject(*args, **kwargs)
 
     def __getattr__(self, name):
 

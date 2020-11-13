@@ -26,21 +26,21 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
             }
     '''
     if applyTo.getObject("DefaultPipeline", warning=False) is None:
-            applyTo.createObject('DefaultPipeline')
+            applyTo.addObject('DefaultPipeline')
 
-    applyTo.createObject('BruteForceDetection')
+    applyTo.addObject('BruteForceDetection')
 
-    applyTo.createObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
+    applyTo.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
                                                     name='Response', response='FrictionContact')
-    applyTo.createObject('LocalMinDistance',
+    applyTo.addObject('LocalMinDistance',
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
 
     if applyTo.getObject("FreeMotionAnimationLoop", warning=False) is None:
-            applyTo.createObject('FreeMotionAnimationLoop')
+            applyTo.addObject('FreeMotionAnimationLoop')
             
     if applyTo.getObject("GenericConstraintSolver", warning=False) is None:        
-            applyTo.createObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+            applyTo.addObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
 
     return applyTo
 

@@ -238,7 +238,7 @@ def axisToQuat(axis, angle):
     
 def createScene(rootNode):
         import Sofa
-        d = rootNode.createObject("MechanicalObject", template="Rigid3", name="dofs", position=[0,0,0,0,0,0,1])
+        d = rootNode.addObject("MechanicalObject", template="Rigid3", name="dofs", position=[0,0,0,0,0,0,1])
         r = RigidDof(d)
         print(str(r.position))
         print(str(r.translate([1,2,3])))

@@ -8,11 +8,11 @@ def DefaultSolver(node, iterative=True):
         EulerImplicit
         CGLinearSolver
     '''
-    node.createObject('EulerImplicitSolver', name='TimeIntegrationSchema')
+    node.addObject('EulerImplicitSolver', name='TimeIntegrationSchema')
     if iterative:
-        return node.createObject('CGLinearSolver', name='LinearSolver')
+        return node.addObject('CGLinearSolver', name='LinearSolver')
 
-    return node.createObject('SparseLDLSolver', name='LinearSolver')
+    return node.addObject('SparseLDLSolver', name='LinearSolver')
 
 ### This function is just an example on how to use the DefaultHeader function. 
 def createScene(rootNode):

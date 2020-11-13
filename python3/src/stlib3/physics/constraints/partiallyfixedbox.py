@@ -37,9 +37,9 @@ def PartiallyFixedBox(attachedTo=None,
 
     """
 
-    c = attachedTo.createChild(name)
-    c.createObject('BoxROI', name='BoxROI', box=box, drawBoxes=drawBoxes, doUpdate=doUpdate)
-    c.createObject('PartialFixedConstraint', indices='@BoxROI.indices', fixedDirections=fixedAxis, fixAll=fixAll)
+    c = attachedTo.addChild(name)
+    c.addObject('BoxROI', name='BoxROI', box=box, drawBoxes=drawBoxes, doUpdate=doUpdate)
+    c.addObject('PartialFixedConstraint', indices='@BoxROI.indices', fixedDirections=fixedAxis, fixAll=fixAll)
     return c
 
 def createScene(rootNode):

@@ -26,27 +26,27 @@ def CollisionMesh(attachedTo=None,
         Sofa.msg_error("Cannot create a CollisionMesh that is not attached to node.")
         return None
 
-    collisionmodel = attachedTo.createChild(name)
+    collisionmodel = attachedTo.addChild(name)
 
     if surfaceMeshFileName is None:
         Sofa.msg_error(collisionmodel, "Unable to create a CollisionMesh without a surface mesh")
         return None
 
-    collisionmodel.createObject(loaderFor(surfaceMeshFileName), name="loader", filename=surfaceMeshFileName,
+    collisionmodel.addObject(loaderFor(surfaceMeshFileName), name="loader", filename=surfaceMeshFileName,
                                 rotation=rotation, translation=translation)
-    collisionmodel.createObject('MeshTopology', src="@loader")
-    collisionmodel.createObject('MechanicalObject')
+    collisionmodel.addObject('MeshTopology', src="@loader")
+    collisionmodel.addObject('MechanicalObject')
     if collisionGroup:
-        collisionmodel.createObject('PointCollisionModel', group=collisionGroup)
-        collisionmodel.createObject('LineCollisionModel', group=collisionGroup)
-        collisionmodel.createObject('TriangleCollisionModel', group=collisionGroup)
+        collisionmodel.addObject('PointCollisionModel', group=collisionGroup)
+        collisionmodel.addObject('LineCollisionModel', group=collisionGroup)
+        collisionmodel.addObject('TriangleCollisionModel', group=collisionGroup)
     else:
-        collisionmodel.createObject('PointCollisionModel')
-        collisionmodel.createObject('LineCollisionModel')
-        collisionmodel.createObject('TriangleCollisionModel')
+        collisionmodel.addObject('PointCollisionModel')
+        collisionmodel.addObject('LineCollisionModel')
+        collisionmodel.addObject('TriangleCollisionModel')
 
     if mappingType is not None:
-        collisionmodel.createObject(mappingType)
+        collisionmodel.addObject(mappingType)
 
     return collisionmodel
 

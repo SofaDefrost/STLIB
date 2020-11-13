@@ -29,7 +29,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
             }
 
     '''
-    node.createObject('VisualStyle')
+    node.addObject('VisualStyle')
     node.findData('gravity').value=gravity;
     node.findData('dt').value=dt
 
@@ -43,16 +43,16 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
     if "SofaPython" not in plugins:
         plugins.append("SofaPython")
 
-    confignode = node.createChild("Config")
+    confignode = node.addChild("Config")
     for name in plugins:
-        confignode.createObject('RequiredPlugin', name=name, printLog=False)
+        confignode.addObject('RequiredPlugin', name=name, printLog=False)
 
     i=0
     for repository in repositoryPaths:
-        confignode.createObject('AddResourceRepository', name="AddResourceRepository"+str(i), path=repository)
+        confignode.addObject('AddResourceRepository', name="AddResourceRepository"+str(i), path=repository)
         i+=1
 
-    confignode.createObject('OglSceneFrame', style="Arrows", alignment="TopRight")
+    confignode.addObject('OglSceneFrame', style="Arrows", alignment="TopRight")
 
     if doDebug:
         from splib.debug import DebugManager

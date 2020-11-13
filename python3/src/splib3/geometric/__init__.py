@@ -46,8 +46,8 @@ def createScene(root):
             )
 
         filename = meshAndSaveToFile(geom, directory="data/meshes/autogen/")
-        root.createObject("MeshVTKLoader", name="loader", filename=filename)
-        root.createObject("TetrahedronSetTopologyContainer", name="container", src="@loader")
+        root.addObject("MeshVTKLoader", name="loader", filename=filename)
+        root.addObject("TetrahedronSetTopologyContainer", name="container", src="@loader")
 
-        root.createObject("MechanicalObject", name="dofs", position="@loader.position")
-        root.createObject("TetrahedronFEMForceField", name="forcefield")
+        root.addObject("MechanicalObject", name="dofs", position="@loader.position")
+        root.addObject("TetrahedronFEMForceField", name="forcefield")
