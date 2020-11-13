@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from splib.objectmodel import SofaPrefab
+from splib3.objectmodel import SofaPrefab
 
 @SofaPrefab
 class Interaction(object):

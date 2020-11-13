@@ -8,7 +8,7 @@ Created on Thu Aug 27 15:09:31 2020
 
 """type: SofaContent"""
 import Sofa.Core
-from stlib import types
+from stlib3 import types
 
 class FixedBox(Sofa.Prefab):
     """  """

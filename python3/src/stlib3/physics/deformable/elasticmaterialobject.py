@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import Sofa
-from splib.objectmodel import SofaPrefab, SofaObject
-from stlib.scene import Node
-from stlib.visuals import VisualModel
+from splib3.objectmodel import SofaPrefab, SofaObject
+from stlib3.scene import Node
+from stlib3.visuals import VisualModel
 
 
 @SofaPrefab
@@ -110,7 +110,7 @@ class ElasticMaterialObject(SofaObject):
 
 
 def createScene(rootNode):
-    from stlib.scene import MainHeader
+    from stlib3.scene import MainHeader
 
     MainHeader(rootNode, gravity=" 0 0 0")
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual", translation=[3.0, 0.0, 0.0])

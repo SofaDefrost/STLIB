@@ -11,7 +11,7 @@ The rigid and deformable parts are interacting together.
 
     Rigidify
 
-stlib.physics.mixedmaterial.Rigidify
+stlib3.physics.mixedmaterial.Rigidify
 *******************************
 .. autofunction:: Rigidify
 
@@ -22,7 +22,7 @@ Contributors:
 """
 
 import Sofa
-from splib.numerics import Vec3, Quat, sdiv
+from splib3.numerics import Vec3, Quat, sdiv
 
 
 def getBarycenter(selectedPoints):
@@ -129,7 +129,7 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
 
         # The coupling is made with the sourceObject. If the source object is from an ElasticMaterialObject
         # We need to get the owning node form the current python object (this is a hack because of the not yet
-        # Finalized design of stlib.
+        # Finalized design of stlib3.
         coupling = sourceObject
         if hasattr(sourceObject, "node"):
             coupling = sourceObject.node
@@ -147,10 +147,10 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
 def createScene(rootNode):
         """
         """
-        from stlib.scene import MainHeader
-        from stlib.physics.deformable import ElasticMaterialObject
-        from stlib.physics.mixedmaterial import Rigidify
-        from splib.objectmodel import setData
+        from stlib3.scene import MainHeader
+        from stlib3.physics.deformable import ElasticMaterialObject
+        from stlib3.physics.mixedmaterial import Rigidify
+        from splib3.objectmodel import setData
 
         MainHeader(rootNode, plugins=["SofaSparseSolver"])
         rootNode.VisualStyle.displayFlags = "showBehavior"

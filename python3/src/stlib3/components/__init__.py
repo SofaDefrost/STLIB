@@ -8,14 +8,14 @@ Content:
 .. autosummary::
     :toctree: _autosummary
 
-.. automodule:: stlib.components.all
+.. automodule:: stlib3.components.all
     :members:
 
 
 """
 __all__ = ["all"]
 
-from splib.numerics import getOrientedBoxFromTransform
+from splib3.numerics import getOrientedBoxFromTransform
 
 
 def addOrientedBoxRoi(parentNode, position, name="BoxROI", translation=[0., 0., 0.], eulerRotation=[0., 0., 0.], scale=[1., 1., 1.], drawBoxes=True):
@@ -24,12 +24,12 @@ def addOrientedBoxRoi(parentNode, position, name="BoxROI", translation=[0., 0., 
 
 
 def OrientedBoxFromTransform(translation=[0., 0., 0.], eulerRotation=[0., 0., 0.], scale=[1., 1., 1.]):
-    raise Exception("This function is now deprecated and replaced with splib.numerics.getOrientedBoxFromTransform. Please update your code.")
+    raise Exception("This function is now deprecated and replaced with splib3.numerics.getOrientedBoxFromTransform. Please update your code.")
 
 
 def createScene(rootNode):
-    from stlib.scene import MainHeader
-    from stlib.physics.rigid import Floor
+    from stlib3.scene import MainHeader
+    from stlib3.physics.rigid import Floor
 
     MainHeader(rootNode, plugins=["SofaPython"],
                dt=1.,

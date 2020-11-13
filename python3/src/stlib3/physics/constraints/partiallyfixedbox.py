@@ -43,9 +43,9 @@ def PartiallyFixedBox(attachedTo=None,
     return c
 
 def createScene(rootNode):
-    from stlib.scene import MainHeader
-    from stlib.physics.deformable import ElasticMaterialObject
-    from stlib.physics.constraints import PartiallyFixedBox
+    from stlib3.scene import MainHeader
+    from stlib3.physics.deformable import ElasticMaterialObject
+    from stlib3.physics.constraints import PartiallyFixedBox
 
     MainHeader(rootNode)
     target = ElasticMaterialObject(fromVolumeMesh="mesh/liver.msh",

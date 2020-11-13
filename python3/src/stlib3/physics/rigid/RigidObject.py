@@ -61,7 +61,7 @@ def RigidObject(name="RigidObject",
 
     def addCollisionModel(inputMesh=surfaceMeshFileName):
         objectCollis = object.addChild('collision')
-        objectCollis.addObject('MeshObjLoader', name="loader", 
+        objectCollis.addObject('MeshObjLoader', name="loader",
                             filename=inputMesh, triangulate=True,
                             scale=uniformScale)
 
@@ -82,10 +82,10 @@ def RigidObject(name="RigidObject",
 
     #### visualization
     def addVisualModel(inputMesh=surfaceMeshFileName):
-        visual = VisualModel(name="visual", inputMesh=inputMesh, color=color, scale=[uniformScale]*3)                
+        visual = VisualModel(name="visual", inputMesh=inputMesh, color=color, scale=[uniformScale]*3)
         object.addChild(visual)
         visual.addObject('RigidMapping')
-        
+
     object.addVisualModel = addVisualModel
 
     if surfaceMeshFileName != None:
@@ -95,16 +95,15 @@ def RigidObject(name="RigidObject",
     return object
 
 def createScene(root):
-    from stlib3.scene.Scene import Scene
+    from stlib33.scene.Scene import Scene
 
     ## Create a basic scene graph layout with settings, modelling and simulation
     scene = Scene(root)
     scene.addSettings()
     scene.addModelling()
     scene.addSimulation()
-    
+
     ## Create a RigidObject with a cube mesh.
     rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj", parent=scene.Modelling)
     rigid.addCollisionModel()
     rigid.addVisualModel()
-

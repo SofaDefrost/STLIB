@@ -52,9 +52,9 @@ def CollisionMesh(attachedTo=None,
 
 
 def createScene(rootNode):
-    from stlib.scene import MainHeader
-    from stlib.physics.deformable import ElasticMaterialObject
-    from stlib.physics.constraints import FixedBox
+    from stlib3.scene import MainHeader
+    from stlib3.physics.deformable import ElasticMaterialObject
+    from stlib3.physics.constraints import FixedBox
 
     MainHeader(rootNode)
     target = ElasticMaterialObject(volumeMeshFileName="mesh/liver.msh",

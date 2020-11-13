@@ -22,7 +22,7 @@ class VisualModel(Sofa.Prefab):
         elif path.endswith('.obj'):
             self.addObject('MeshObjLoader', name='loader',filename=path)
         else:
-            print("Extension not handled in STLIB/python/stlib/visuals for file: "+str(path))
+            print("Extension not handled in STLIB/python3/stlib3/visuals for file: "+str(path))
 
         self.addObject('MeshTopology', src='@loader', name='topo')
         self.addObject('OglModel', name="OglModel", src="@loader",

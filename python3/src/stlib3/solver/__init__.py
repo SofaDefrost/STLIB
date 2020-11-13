@@ -11,7 +11,7 @@ Templates for most of the common time integration setups.
     DefaultSolver
 
 
-stlib.solver.DefaultSolver
+stlib3.solver.DefaultSolver
 **************************
 
 .. autofunction:: DefaultSolver

@@ -77,8 +77,8 @@ def SubTopology(attachedTo=None,
 # Exemple scene of the 3 differents subTopology working
 # tetrahedron/triangle/hexahedron
 def createScene(rootNode):
-    from stlib.scene import MainHeader
-    from stlib.physics.deformable import ElasticMaterialObject
+    from stlib3.scene import MainHeader
+    from stlib3.physics.deformable import ElasticMaterialObject
 
     MainHeader(rootNode)
 

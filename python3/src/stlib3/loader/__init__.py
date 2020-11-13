@@ -1,5 +1,5 @@
 import Sofa
-from splib.objectmodel import SofaPrefab, SofaObject
+from splib3.objectmodel import SofaPrefab, SofaObject
 
 def addLoader(parent, filename,name="loader", translation=[0.0,0.0,0.0], eulerRotation=[0.0,0.0,0.0]):
         """Mesh Loader Prefab
