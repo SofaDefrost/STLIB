@@ -112,6 +112,6 @@ class ElasticMaterialObject(SofaObject):
 def createScene(rootNode):
     from stlib3.scene import MainHeader
 
-    MainHeader(rootNode, gravity=" 0 0 0")
+    MainHeader(rootNode, gravity=[0, 0, 0])
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual", translation=[3.0, 0.0, 0.0])
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj", surfaceColor=[1.0, 0.0, 0.0])

@@ -134,7 +134,7 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None, f
         if hasattr(sourceObject, "node"):
             coupling = sourceObject.node
 
-        coupling.addObject("SubsetMultiMapping", name="mapping", template="Vec3,Vec3",
+        coupling.addObject("SubsetMultiMapping", name="mapping", template=["Vec3","Vec3"],
                               input=freeParticules.dofs.getLinkPath()+" "+rigidifiedParticules.dofs.getLinkPath(),
                               output=sourceObject.dofs.getLinkPath(),
                               indexPairs=indexPairs)

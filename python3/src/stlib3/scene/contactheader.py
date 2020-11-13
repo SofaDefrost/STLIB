@@ -38,9 +38,9 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
 
     if applyTo.getObject("FreeMotionAnimationLoop", warning=False) is None:
             applyTo.addObject('FreeMotionAnimationLoop')
-            
-    if applyTo.getObject("GenericConstraintSolver", warning=False) is None:        
-            applyTo.addObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+
+    if applyTo.getObject("GenericConstraintSolver", warning=False) is None:
+            applyTo.addObject('GenericConstraintSolver', tolerance=1e-6, maxIterations=1000)
 
     return applyTo
 
