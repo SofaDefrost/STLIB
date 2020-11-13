@@ -18,8 +18,8 @@ class UDP(Sofa.PythonScriptController):
 
 	def bwdInitGraph(self, node):
 		self.node = node
-		self.meca = self.node.Beam.meca 	# first simple test, TODO : adapt to different cases 
-		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM) 
+		self.meca = self.node.Beam.meca 	# first simple test, TODO : adapt to different cases
+		self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
 		signal(SIGINT, self.exit_gracefully)
 
@@ -54,17 +54,17 @@ def createScene(rootNode):
                 rootNode.addObject('FreeMotionMasterSolver')
                 rootNode.addObject('GenericConstraintSolver',maxIterations=1000 ,tolerance=0.001)
                 rootNode.addObject('PythonScriptController', filename='UDP_controller.py', classname='UDP')
-               
+
                 Beam = rootNode.addChild('Beam')
                 Beam.addObject('EulerImplicitSolver', name="odesolver", rayleighStiffness=0.1, rayleighMass=0.1)
                 Beam.addObject('ShewchukPCGLinearSolver', iterations=1, name="linearsolver", tolerance=1e-5, preconditioners="preconditioner", use_precond="true")
-                Beam.addObject('RegularGridTopology', name="SoftBeam", nx=5, ny=2, nz=2, min="-0.050 -0.010 -0.0025", max="0.050 0.010 0.0025")     
+                Beam.addObject('RegularGridTopology', name="SoftBeam", nx=5, ny=2, nz=2, min=[-0.050, -0.010, -0.002], max=[0.050, 0.010, 0.0025])
                 Beam.addObject('MechanicalObject', name="meca", template="Vec3d")
                 Beam.addObject('UniformMass', totalmass=0.01)
                 Beam.addObject('SparseLDLSolver', name="preconditioner")
                 Beam.addObject('LinearSolverConstraintCorrection', solverName="preconditioner")
                 Beam.addObject('HexahedronFEMForceField', youngModulus=3000, poissonRatio=0.2)
-                Beam.addObject('BoxROI', name="boxFixed", box="0.0250 -0.015 -0.005 0.05 0.015 0.005", drawBoxes="true")
+                Beam.addObject('BoxROI', name="boxFixed", box=[0.0250, -0.015, -0.005, 0.05, 0.015, 0.005], drawBoxes=True)
                 Beam.addObject('FixedConstraint', indices="@boxFixed.indices")
 
                 return rootNode

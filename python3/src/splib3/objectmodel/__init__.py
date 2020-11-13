@@ -71,24 +71,6 @@ class SofaObject(object):
     def __getattr__(self, name):
         return getattr(self.node, name)
 
-        #tmp = self.node.getData(name)
-        #if tmp == None:
-        #    t = self.node.getChild(name, warning=False)
-        #    if t != None:
-        #        tmp = SofaObjectWrapper(t)
-        #if tmp == None:
-        #    tmp = self.node.getObject(name, warning=False)
-        #if tmp == None:
-        #    raise Exception("Missing attribute '"+name+"' in "+str(self) )
-
-        #return tmp
-
-    #def addChild(self, name):
-    #    return self.node.addChild(name)
-
-    #def addObject(self, *args, **kwargs):
-    #    return self.node.addObject(*args, **kwargs)
-
 class SofaObjectWrapper(object):
     def __init__(self, node):
         print("DEPRECATED.... SOFAOBJECTWRAPPER")
