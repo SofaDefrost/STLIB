@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-__all__=["collision","constraints", "mixedmaterial", "rigid"]
+__all__=["collision","constraints", "deformable", "mixedmaterial", "rigid"]

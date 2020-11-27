@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import Sofa.Core
+
 class SofaRuntime(object):
         class PluginManager(object):
                 loadedPlugins = ["SofaPython3"]

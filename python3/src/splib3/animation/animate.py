@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-import Sofa
-from splib.utils import deprecated_alias
+import Sofa.Core
+from splib3.utils import deprecated_alias
 
 class Animation(object):
     """An animation clip that trigger callback at regular intervales for a given duration.
@@ -35,7 +35,7 @@ class Animation(object):
             self.startTime = None
 
         self.duration = duration
-        self.onUpdate = onUpdate        
+        self.onUpdate = onUpdate
         self.onDone = onDone
         self.params = params
         self.factor = 1.0
@@ -65,10 +65,13 @@ class Animation(object):
         self.onUpdate(factor=self.factor, **self.params)
 
 
-class AnimationManagerController(Sofa.PythonScriptController):
+class AnimationManagerController(Sofa.Core.Controller):
     """Implements the AnimationManager as a PythonScriptController
     """
-    def __init__(self, node):
+
+    def __init__(self, *args, **kwargs):
+        Sofa.Core.Controller.__init__(self, *args, **kwargs)
+    
         self.listening = True
         self.name = "AnimationManager"
         self.totalTime = 0
@@ -117,7 +120,7 @@ def animate(onUpdate, params, duration, mode="once", onDone=None):
     Animation can be added from any code location (createScene, PythonScriptController)
 
     :param float duration: duration of the animation in seconds.
-    :param str mode: once, loop, pingpong 
+    :param str mode: once, loop, pingpong
 
     Example:
         .. sourcecode:: python
@@ -132,15 +135,15 @@ def animate(onUpdate, params, duration, mode="once", onDone=None):
     """
     if manager == None:
         raise Exception("Missing manager in this scene")
-        
-    manager.addAnimation(Animation(duration=duration, mode=mode, onUpdate=onUpdate, params=params, onDone=onDone)) 
+
+    manager.addAnimation(Animation(duration=duration, mode=mode, onUpdate=onUpdate, params=params, onDone=onDone))
 
 
 def removeAnimation(animation):
     if manager == None:
         raise Exception("Missing manager in this scene")
-        
-    manager.removeAnimation(animation) 
+
+    manager.removeAnimation(animation)
 
 def AnimationManager(node):
     """
@@ -161,7 +164,7 @@ def AnimationManager(node):
     """
     global manager
     if manager is not None:
-        Sofa.msg_info(node, "There is already one animation manager in this scene...why do you need a second one ?") 
+        Sofa.msg_info(node, "There is already one animation manager in this scene...why do you need a second one ?")
         return manager
     manager = AnimationManagerController(node)
     return manager

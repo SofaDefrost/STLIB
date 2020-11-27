@@ -13,15 +13,15 @@ Functions:
     AnimationManagerController
 
 
-splib.animation.animate
+splib3.animation.animate
 ***********************
 .. autofunction:: animate
 
-splib.animation.AnimationManager
+splib3.animation.AnimationManager
 ********************************
 .. autofunction:: AnimationManager
 
-splib.animation.AnimationManagerController
+splib3.animation.AnimationManagerController
 ******************************************
 .. autoclass:: AnimationManagerController(Sofa.PythonScriptController)
    :members: addAnimation
@@ -33,8 +33,9 @@ Modules:
 .. autosummary::
     :toctree: _autosummary
 
-    splib.animation.easing
+    splib3.animation.easing
 
 """
 __all__=["animate", "easing"]
-from animate import AnimationManager, AnimationManagerController, animate 
+
+from splib3.animation.animate import AnimationManager, AnimationManagerController, animate

@@ -40,8 +40,8 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
     if "SofaMiscCollision" not in plugins:
         plugins.append("SofaMiscCollision")
 
-    if "SofaPython" not in plugins:
-        plugins.append("SofaPython")
+    if "SofaPython3" not in plugins:
+        plugins.append("SofaPython3")
 
     confignode = node.addChild("Config")
     for name in plugins:
@@ -62,7 +62,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
     return node
 
 
-### This function is just an example on how to use the DefaultHeader function. 
+### This function is just an example on how to use the DefaultHeader function.
 def createScene(rootNode):
     import os
-    MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython","SoftRobots"], repositoryPaths=[os.getcwd()])
+    MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython3"], repositoryPaths=[os.getcwd()])
