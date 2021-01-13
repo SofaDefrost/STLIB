@@ -15,7 +15,8 @@ class VisualModel(Sofa.Prefab):
     def __init__(self, *args, **kwargs):
         Sofa.Prefab.__init__(self, *args, **kwargs)
 
-    def doReInit(self):
+    def init(self):
+        self.addObject('RequiredPlugin', pluginName=['SofaOpenglVisual','SofaLoader'])
         path = self.visualMeshPath.value
         if path.endswith('.stl'):
             self.addObject('MeshSTLLoader', name='loader',filename=path)
@@ -24,20 +25,18 @@ class VisualModel(Sofa.Prefab):
         else:
             print("Extension not handled in STLIB/python3/stlib3/visuals for file: "+str(path))
 
-        self.addObject('MeshTopology', src='@loader', name='topo')
         self.addObject('OglModel', name="OglModel", src="@loader",
-                                                    rotation=self.rotation.value,
-                                                    translation=self.translation.value,
-                                                    scale3d=self.scale.value,
+                                                    rotation=list(self.rotation.value),
+                                                    translation=list(self.translation.value),
+                                                    scale3d=list(self.scale.value),
                                                     color=self.color.value, updateNormals=False)
-        self.init()
 
     def showGrid(self,nbSubdiv=10,size=1000):
         self.addObject("OglGrid", nbSubdiv=nbSubdiv, size=size)
 
 def createScene(root):
-    from stlib3.scene.Scene import Scene
-    scene = Scene(root, plugins=["SofaOpenglVisual"])
+    from stlib3.scene import Scene
+    scene = Scene(root)
     scene.addSettings()
     scene.addModelling()
     scene.addSimulation()

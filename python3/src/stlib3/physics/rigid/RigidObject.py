@@ -45,11 +45,13 @@ def RigidObject(name="RigidObject",
                     }
                 }
     """
+
     #### mechanics
     object = Sofa.Core.Node(name)
     if(parent != None):
         parent.addChild(object)
 
+    plugins = ['SofaRigid']
     object.addObject('MechanicalObject',
                       name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
@@ -57,10 +59,12 @@ def RigidObject(name="RigidObject",
     object.addObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
     if not isAStaticObject:
+        plugins.append('SofaConstraint')
         object.addObject('UncoupledConstraintCorrection')
 
     def addCollisionModel(inputMesh=surfaceMeshFileName):
         objectCollis = object.addChild('collision')
+        objectCollis.addObject('RequiredPlugin', name='SofaMeshCollision')
         objectCollis.addObject('MeshObjLoader', name="loader",
                             filename=inputMesh, triangulate=True,
                             scale=uniformScale)
@@ -78,11 +82,12 @@ def RigidObject(name="RigidObject",
             objectCollis.addObject('PointCollisionModel')
 
         objectCollis.addObject('RigidMapping')
+
     object.addCollisionModel = addCollisionModel
 
     #### visualization
     def addVisualModel(inputMesh=surfaceMeshFileName):
-        visual = VisualModel(name="visual", inputMesh=inputMesh, color=color, scale=[uniformScale]*3)
+        visual = VisualModel(name="visual", visualMeshPath=inputMesh, color=color, scale=[uniformScale]*3)
         object.addChild(visual)
         visual.addObject('RigidMapping')
 
@@ -92,10 +97,12 @@ def RigidObject(name="RigidObject",
         object.addCollisionModel()
         object.addVisualModel()
 
+    object.addObject('RequiredPlugin', pluginName=plugins)
+
     return object
 
 def createScene(root):
-    from stlib33.scene.Scene import Scene
+    from stlib3.scene.scene import Scene
 
     ## Create a basic scene graph layout with settings, modelling and simulation
     scene = Scene(root)
@@ -105,5 +112,4 @@ def createScene(root):
 
     ## Create a RigidObject with a cube mesh.
     rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj", parent=scene.Modelling)
-    rigid.addCollisionModel()
-    rigid.addVisualModel()
+    scene.Simulation.addChild(rigid)

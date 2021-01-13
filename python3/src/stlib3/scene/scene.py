@@ -47,6 +47,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
 
         def addSimulation():
                 self = root.addChild("Simulation")
+                self.addObject('RequiredPlugin', pluginName='SofaImplicitOdeSolver')
                 self.addObject("EulerImplicitSolver")
                 self.addObject("CGLinearSolver")
                 return root
