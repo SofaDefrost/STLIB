@@ -26,6 +26,7 @@ class  Quat(numpy.ndarray):
 
     Static methods:
     q = Quat.product(q1,q2)
+    q = Quat.createFromVectors(v1,v2)
     q = Quat.createFromEuler([x,y,z])
     q = Quat.createFromAxisAngle([axis],angle)
     """
@@ -132,7 +133,7 @@ class  Quat(numpy.ndarray):
         v2 = (2.0 * (q[2] * q[0] - q[1] * q[3]))*v[0] + (2.0 * (q[1] * q[2] + q[0] * q[3]))*v[1] + (1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]))*v[2]
 
         return numpy.array([v0,v1,v2])
-       
+
 
     def getNorm(self):
         """ Returns the norm of the quaternion.
@@ -289,8 +290,29 @@ class  Quat(numpy.ndarray):
 
 
     @staticmethod
+    def createFromVectors(v1,v2):
+        """ Function createFromVectors expects two 3d vectors. Quat has the Sofa format i.e (x,y,z,w).
+
+        Examples:
+
+        >>> q = Quat.createFromVectors([1,0,0],[0,1,0])
+        >>> print(q)
+        [0.,0.,0.707,0.707]
+        """
+        from quat import Quat
+        from vec3 import Vec3
+        from math import sqrt
+        q = Quat()
+        v = Vec3.cross(v1, v2);
+        q[0:3] = v;
+        q[3] = sqrt((Vec3(v1).getNorm()**2) * (Vec3(v2).getNorm()**2)) + Vec3.dot(v1, v2);
+        q.normalize()
+        return q
+
+
+    @staticmethod
     def createFromAxisAngle(axis, angle):
-        """ Function createQuatFromAxis from quat expects two arguments. Quat has the Sofa format i.e (x,y,z,w).
+        """ Function createQuatFromAxis expects two arguments. Quat has the Sofa format i.e (x,y,z,w).
 
         Examples:
 
