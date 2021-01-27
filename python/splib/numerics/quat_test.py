@@ -98,6 +98,13 @@ class Quat_test(unittest.TestCase):
 ## STATIC METHODS
 
 
+    def test_createFromVectors(self):
+        q = Quat.createFromVectors([1.,0.,0.],[0.,1.,0.])
+        self.assertAlmostEqual(q[0], 0.)
+        self.assertAlmostEqual(q[1], 0.)
+        self.assertAlmostEqual(q[2], 0.707, 3)
+        self.assertAlmostEqual(q[3], 0.707, 3)
+
     def test_createFromAxisAngle(self):
         q = Quat.createFromAxisAngle([1.,0.,0.],pi/2.)
         self.assertEqual(q, [sin(pi/4.),0.,0.,cos(pi/4.)])
