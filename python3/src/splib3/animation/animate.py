@@ -71,9 +71,10 @@ class AnimationManagerController(Sofa.Core.Controller):
 
     def __init__(self, *args, **kwargs):
         Sofa.Core.Controller.__init__(self, *args, **kwargs)
-    
+
         self.listening = True
         self.name = "AnimationManager"
+        self.node = args[0]
         self.totalTime = 0
         self.animations = []
 
@@ -84,10 +85,10 @@ class AnimationManagerController(Sofa.Core.Controller):
         self.animations.remove(animation)
 
     def bwdInitGraph(self, root):
-        self.onBeginAnimationStep(0.0)
+        self.onAnimateBeginEvent(None)
 
-    def onBeginAnimationStep(self, dt):
-        self.totalTime += dt
+    def onAnimateBeginEvent(self, event):
+        self.totalTime += self.node.getRoot().dt.value
         nextanimations = []
         for animation in self.animations:
             animation.update(self.totalTime)
@@ -181,6 +182,6 @@ def createScene(rootNode):
     def myOnDone(target, factor):
         print("onDone: "+target.name+" factor is: "+str(factor))
 
-    AnimationManager(rootNode)
+    rootNode.addObject(AnimationManager(rootNode))
     animate(myAnimate1, {"target": rootNode}, 10)
     animate(myAnimate2, {"target": rootNode}, 12, onDone=myOnDone)

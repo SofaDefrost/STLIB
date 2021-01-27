@@ -63,7 +63,7 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
         ero = targetObject.addChild(name)
 
         allPositions = sourceObject.container.position
-        allIndices = list(range(len(allPositions)))
+        allIndices = [id[0] for id in sourceObject.container.points]
 
         rigids = []
         indicesMap = []
