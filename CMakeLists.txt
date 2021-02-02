@@ -11,6 +11,10 @@ set(SofaPythonAny_FOUND FALSE)
 if(SofaPython3_FOUND)
     message("-- Found SofaPython3")
     SP3_add_python_package(
+        SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/python3/src/splib3
+        TARGET_DIRECTORY splib3
+    )
+    SP3_add_python_package(
         SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/python3/src/stlib3
         TARGET_DIRECTORY stlib3
     )
