@@ -5,7 +5,9 @@ include(cmake/environment.cmake)
 
 find_package(SofaFramework REQUIRED)
 find_package(SofaPython QUIET)
-find_package(SofaPython3 QUIET)
+if (NOT TARGET SofaPython3::Plugin)
+    find_package(SofaPython3 QUIET)
+endif()
 
 set(SofaPythonAny_FOUND FALSE)
 if(SofaPython3_FOUND)
