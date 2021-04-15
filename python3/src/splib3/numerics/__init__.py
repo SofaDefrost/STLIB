@@ -46,65 +46,54 @@ from splib3.numerics.matrix import *
 
 RigidDofZero = [0.0,0.0,0.0,0.0,0.0,0.0,1.0]
 
-def to_radians(v):
-    """Converts degree to radians
 
-       :param v: the angle to convert
-    """
-    if isinstance(v, list):
-        p = []
-        for tp in v:
-            p.append( tp * pi * 2.0 / 360.0 )
-        return p
-    return v * pi * 2.0 / 360.0
+def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
+    t = numpy.identity(4)
+    s = numpy.identity(4)
+    if eulerRotation != None:
+      q = Quat.createFromEuler(eulerRotation,inDegree=True)
 
-# def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
-#     t = numpy.identity(4)
-#     s = numpy.identity(4)
-#     if eulerRotation != None:
-#         rotation = from_euler( to_radians( eulerRotation ) )
-#
-#     if scale == None:
-#         scale = [1.0,1.0,1.0]
-#
-#     r = to_matrix( rotation )
-#
-#     rr = numpy.identity(4)
-#     rr[0:3, 0:3] = r
-#
-#     t[0,3]=translation[0]
-#     t[1,3]=translation[1]
-#     t[2,3]=translation[2]
-#
-#     s[0,0]=scale[0]
-#     s[1,1]=scale[1]
-#     s[2,2]=scale[2]
-#
-#     return numpy.matmul( numpy.matmul(t,rr), s )
-#
-# def transformPositions(position, translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
-#
-#     trs = TRS_to_matrix(translation=translation, rotation=rotation, eulerRotation=eulerRotation, scale=scale)
-#     tp = []
-#     for point in position:
-#         tp.append(transformPosition(point, trs).tolist())
-#
-#     return tp
-#
-# def transformPosition(point, matrixTRS):
-#
-#     if len(point) != 3:
-#         raise Exception('A Point is defined by 3 coordinates [X,Y,Z] , point given : '+str(point))
-#
-#     elif all(isinstance(n, int) or isinstance(n, float) for n in point):
-#         np = numpy.matmul( matrixTRS, numpy.append(point,1.0) )
-#         tp = np[0:3]
-#
-#     else :
-#         raise Exception('A Point is a list/array of int/float, point given : '+str(point))
-#
-#
-#     return tp
+    if scale == None:
+        scale = [1.0,1.0,1.0]
+
+
+    r = q.getMatrix()
+    rr = numpy.identity(4)
+    rr[0:3, 0:3] = r
+
+    t[0,3]=translation[0]
+    t[1,3]=translation[1]
+    t[2,3]=translation[2]
+
+    s[0,0]=scale[0]
+    s[1,1]=scale[1]
+    s[2,2]=scale[2]
+
+    return numpy.matmul( numpy.matmul(t,rr), s )
+
+def transformPositions(position, translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
+
+    trs = TRS_to_matrix(translation=translation, rotation=rotation, eulerRotation=eulerRotation, scale=scale)
+    tp = []
+    for point in position:
+        tp.append(transformPosition(point, trs).tolist())
+
+    return tp
+
+def transformPosition(point, matrixTRS):
+
+    if len(point) != 3:
+        raise Exception('A Point is defined by 3 coordinates [X,Y,Z] , point given : '+str(point))
+
+    elif all(isinstance(n, int) or isinstance(n, float) for n in point):
+        np = numpy.matmul( matrixTRS, numpy.append(point,1.0) )
+        tp = np[0:3]
+
+    else :
+        raise Exception('A Point is a list/array of int/float, point given : '+str(point))
+
+
+    return tp
 #
 # class RigidDof(object):
 #     """Wrapper toward a sofa mechanicalobject template<rigid> as a rigid transform composed of
@@ -215,18 +204,18 @@ def to_radians(v):
 #
 #     forward = property(getForward, None)
 #
-# def getOrientedBoxFromTransform(translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
-#         # BoxROI unitaire
-#         pos = [[-0.5, 0.0,-0.5],
-#                [-0.5, 0.0, 0.5],
-#                [ 0.5, 0.0, 0.5]]
-#
-#         if eulerRotation is not None:
-#             rotation=eulerRotation
-#
-#         depth = [scale[1]]
-#         return transformPositions(position=pos, translation=translation, rotation=rotation, eulerRotation=eulerRotation, scale=scale) + depth
-#
+def getOrientedBoxFromTransform(translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
+        # BoxROI unitaire
+        pos = [[-0.5, 0.0,-0.5],
+               [-0.5, 0.0, 0.5],
+               [ 0.5, 0.0, 0.5]]
+
+        if eulerRotation is not None:
+            rotation=eulerRotation
+
+        depth = [scale[1]]
+        return transformPositions(position=pos, translation=translation, rotation=rotation, eulerRotation=eulerRotation, scale=scale) + depth
+
 #
 #
 # def axisToQuat(axis, angle):
