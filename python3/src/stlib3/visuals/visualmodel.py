@@ -15,7 +15,7 @@ class VisualModel(Sofa.Prefab):
     def __init__(self, *args, **kwargs):
         Sofa.Prefab.__init__(self, *args, **kwargs)
 
-    def doReInit(self):
+    def init(self):
         self.addObject('RequiredPlugin', pluginName=['SofaOpenglVisual','SofaLoader'])
         path = self.visualMeshPath.value
         if path.endswith('.stl'):
@@ -29,7 +29,7 @@ class VisualModel(Sofa.Prefab):
                                                     rotation=list(self.rotation.value),
                                                     translation=list(self.translation.value),
                                                     scale3d=list(self.scale.value),
-                                                    color=self.color.value, updateNormals=False)
+                                                    color=list(self.color.value), updateNormals=False)
 
     def showGrid(self,nbSubdiv=10,size=1000):
         self.addObject("OglGrid", nbSubdiv=nbSubdiv, size=size)

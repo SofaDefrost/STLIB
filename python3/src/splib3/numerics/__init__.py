@@ -51,7 +51,9 @@ def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
     t = numpy.identity(4)
     s = numpy.identity(4)
     if eulerRotation != None:
-      q = Quat.createFromEuler(eulerRotation,inDegree=True)
+        q = Quat.createFromEuler(eulerRotation,inDegree=True)
+    else:
+        q = Quat(rotation)
 
     if scale == None:
         scale = [1.0,1.0,1.0]
@@ -94,94 +96,103 @@ def transformPosition(point, matrixTRS):
 
 
     return tp
-#
-# class RigidDof(object):
-#     """Wrapper toward a sofa mechanicalobject template<rigid> as a rigid transform composed of
-#        a position and an orientation.
-#
-#        Examples::
-#
-#             r = RigidDof( aMechanicalObject )
-#             r.translate( ( r.forward * 0.2 ) )
-#             r.position = Vec3.zero
-#             r.orientation = Quat.unit
-#             r.rest_position = Vec3.zero
-#             r.rest_orientation = Quat.unit
-#     """
-#     def __init__(self, rigidobject):
-#         #self.rigidobject.init()
-#         self.rigidobject = rigidobject
-#
-#     def getPosition(self, index=0, field="position"):
-#         return self.rigidobject.getData(field).value[index][:3]
-#
-#     def setPosition(self, v, field="position"):
-#         p = self.rigidobject.getData(field)
-#         if(not isinstance(v,list)):
-#             v = list(v)
-#         p.value = v + p.value[0][3:]
-#
-#     position = property(getPosition, setPosition)
-#
-#     def setOrientation(self, q, field="position"):
-#         p = self.rigidobject.getData(field)
-#         if(not isinstance(v,list)):
-#            v = list(v)
-#         p.value = p.value[0][:3] + v
-#
-#     def getOrientation(self, field="position"):
-#         return self.rigidobject.getData(field).value[0][3:]
-#     orientation = property(getOrientation, setOrientation)
-#
-#     def getForward(self, field="position"):
-#         o = self.rigidobject.getData(field).value[0][3:]
-#         return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,0.0,1.0,1.0]))[:3]
-#     forward = property(getForward, None)
-#
-#     def getLeft(self, field="position"):
-#         o = self.rigidobject.getData(field).value[0][3:]
-#         return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([1.0,0.0,0.0,1.0]))[:3]
-#     left = property(getLeft, None)
-#
-#     def getUp(self, field="position"):
-#         o = self.rigidobject.getData(field).value[0][3:]
-#         return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,1.0,0.0,1.0]))[:3]
-#     up = property(getUp, None)
-#
-#     def copyFrom(self, t, field="position"):
-#         self.rigidobject.getData(field).value = t.rigidobject.getData(field).value
-#
-#     def translate(self, v, field="position"):
-#         p = self.rigidobject.getData(field)
-#         to = p.value[0]
-#         t = Transform(to[:3], orientation=to[3:])
-#         t.translate(v)
-#         p.value = t.toSofaRepr()
-#
-#     def rotateAround(self, axis, angle, field="position"):
-#         p = self.rigidobject.getData(field)
-#         pq = p.value[0]
-#         p.value =  pq[:3] + list(Quaternion.prod(axisToQuat(axis, angle), pq[3:]))
-#
-#     def __getattr__(self, key):
-#         if key in self.__dict__:
-#                 return self.__dict__[key]
-#         if key in ["rest_position", "position"]:
-#                 return self.getPosition(field=key)
-#         elif key in ["orientation", "rest_orientation"]:
-#                 return self.getOrientation(field=key)
-#         return self.rigidobject.getData(key).value
-#
-#     def __setattr__(self, key,value):
-#         if key in ["rest_position", "position"]:
-#                 return self.setPosition(value, field=key)
-#         elif key in ["orientation", "rest_orientation"]:
-#                 return self.setOrientation(value, field=key)
-#         elif key == "rigidobject":
-#                 self.__dict__[key] = value
-#         else:
-#                 self.rigidobject.getData(key).value = list(value)
-#
+
+class RigidDof(object):
+    """Wrapper toward a sofa mechanicalobject template<rigid> as a rigid transform composed of
+       a position and an orientation.
+
+       Examples::
+
+            r = RigidDof( aMechanicalObject )
+            r.translate( ( r.forward * 0.2 ) )
+            r.position = Vec3.zero
+            r.orientation = Quat.unit
+            r.rest_position = Vec3.zero
+            r.rest_orientation = Quat.unit
+    """
+    def __init__(self, rigidobject):
+        #self.rigidobject.init()
+        self.rigidobject = rigidobject
+
+    def getPosition(self, index=0, field="position"):
+        return self.rigidobject.getData(field).value[index][:3]
+
+    def setPosition(self, v,index=0, field="position"):
+        p = self.rigidobject.getData(field)
+        # print("=====")
+        # print(p.value)
+        if(not isinstance(v,list)):
+            v = list(v)
+        value = [list(float(y) for y in i) for i in p.value]
+        v = [float(i) for i in v]
+        # print("----  "+str(v)+"  ----")
+        value[index] = v + value[index][3:]
+        # print(value)
+        self.rigidobject.position = value
+        # print(self.rigidobject.getData(field).value)
+        # print("=====")
+
+    position = property(getPosition, setPosition)
+
+    def setOrientation(self, q, field="position"):
+        p = self.rigidobject.getData(field)
+        if(not isinstance(v,list)):
+           v = list(v)
+        p.value = p.value[0][:3] + v
+
+    def getOrientation(self, field="position"):
+        return self.rigidobject.getData(field).value[0][3:]
+    orientation = property(getOrientation, setOrientation)
+
+    def getForward(self, field="position"):
+        o = self.rigidobject.getData(field).value[0][3:]
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,0.0,1.0,1.0]))[:3]
+    forward = property(getForward, None)
+
+    def getLeft(self, field="position"):
+        o = self.rigidobject.getData(field).value[0][3:]
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([1.0,0.0,0.0,1.0]))[:3]
+    left = property(getLeft, None)
+
+    def getUp(self, field="position"):
+        o = self.rigidobject.getData(field).value[0][3:]
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], o), numpy.array([0.0,1.0,0.0,1.0]))[:3]
+    up = property(getUp, None)
+
+    def copyFrom(self, t, field="position"):
+        self.rigidobject.getData(field).value = t.rigidobject.getData(field).value
+
+    def translate(self, v, field="position"):
+        p = self.rigidobject.getData(field)
+        to = p.value[0]
+        t = Transform(to[:3], orientation=to[3:])
+        t.translate(v)
+        p.value = t.toSofaRepr()
+
+    def rotateAround(self, axis, angle, field="position"):
+        p = self.rigidobject.getData(field)
+        pq = p.value[0]
+        p.value =  pq[:3] + list(Quaternion.prod(axisToQuat(axis, angle), pq[3:]))
+
+    def __getattr__(self, key):
+        if key in self.__dict__:
+                return self.__dict__[key]
+        if key in ["rest_position", "position"]:
+                return self.getPosition(field=key)
+        elif key in ["orientation", "rest_orientation"]:
+                return self.getOrientation(field=key)
+        return self.rigidobject.getData(key).value
+
+    def __setattr__(self, key,value):
+        if key in ["rest_position", "position"]:
+                return self.setPosition(value, field=key)
+        elif key in ["orientation", "rest_orientation"]:
+                return self.setOrientation(value, field=key)
+        elif key == "rigidobject":
+                self.__dict__[key] = value
+        else:
+                self.rigidobject.getData(key).value = list(value)
+
 # class Transform(object):
 #     def __init__(self, translation, orientation=None, eulerRotation=None):
 #         self.translation = translation
