@@ -31,7 +31,7 @@
 #define INITSTLIB_H
 
 
-#include <sofa/helper/system/config.h>
+#include <sofa/helper/config.h>
 
 #ifdef SOFA_BUILD_STLIB
 #define SOFA_TARGET Stlib
