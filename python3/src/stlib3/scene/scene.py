@@ -33,11 +33,13 @@ def Settings(plugins=[], repositoryPaths=[]):
         return self
 
 def Scene(root, gravity=[0.0,-9.81,0.0],
-          dt=0.01, plugins=[], repositoryPaths=[]):
-        def addMainHeader(plugins=plugins, repositoryPaths=repositoryPaths,doDebug=False):
+          dt=0.01, plugins=[], repositoryPaths=[], iterative=True):
+        from stlib3.scene import contactheader
+
+        def addMainHeader(plugins=plugins, repositoryPaths=repositoryPaths,doDebug=False,CGSolver=False):
             if not isinstance(plugins, list):
                 Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
-                return 
+                return
 
             if "SofaMiscCollision" not in plugins:
                 plugins.append("SofaMiscCollision")
@@ -59,13 +61,19 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
             addModelling()
             addSimulation()
 
-        def addDefaultSolver():
-                root.addObject("EulerImplicitSolver")
-                root.addObject("CGLinearSolver")
-                return root
+        def addDefaultSolver(node):
+            node.addObject('EulerImplicitSolver', name='TimeIntegrationSchema')
+            if iterative:
+                return node.addObject('CGLinearSolver', name='LinearSolver')
+            else:
+                node.addObject('SparseLDLSolver', name='LinearSolver')
+                node.addObject('MechanicalMatrixMapper', template='Vec3d,Rigid3d',
+                object1='@./RigidifiedStructure/DeformableParts/dofs', object2='@./RigidifiedStructure/RigidParts/dofs',
+                nodeToParse='@./RigidifiedStructure/DeformableParts/ElasticMaterialObject')
+            return node
 
         def addContactHeader():
-                root.addObject("EulerImplicitSolver")
+                ContactHeader(root, alarmDistance = 1.0, contactDistance = 0.1, frictionCoef=1.0)
                 return root
 
         def addModelling():
@@ -73,15 +81,15 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
                 return root
 
         def addSimulation():
-                root.addChild("Simulation")
-                addDefaultSolver()
+                Simulation= root.addChild("Simulation")
+                addDefaultSolver(Simulation)
                 return root
 
         def addSettings(plugins=plugins, repositoryPaths=repositoryPaths):
                 root.addChild(Settings(plugins=plugins, repositoryPaths=repositoryPaths))
                 return root
 
-        
+
         root.gravity.value = gravity
         root.dt.value = dt
         root.addObject('VisualStyle')

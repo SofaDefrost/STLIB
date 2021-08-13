@@ -25,22 +25,28 @@ def ContactHeader(rootNode, alarmDistance, contactDistance, frictionCoef=0.0):
                 LocalMinDistance
             }
     '''
-    if rootNode.hasObject("DefaultPipeline", warning=False) is None:
-            rootNode.addObject('DefaultPipeline')
+    if rootNode.hasObject("DefaultPipeline") is None:
+        rootNode.addObject('DefaultPipeline')
 
-    rootNode.addObject('BruteForceDetection')
+    rootNode.addObject('BruteForceBroadPhase')
+
+    rootNode.addObject('BVHNarrowPhase')
+
 
     rootNode.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
                                                     name='Response', response='FrictionContact')
     rootNode.addObject('LocalMinDistance',
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
-                        angleCone=0.01)
+                        angleCone=0.1)
 
-    if rootNode.hasObject("FreeMotionAnimationLoop", warning=False) is None:
-            rootNode.addObject('FreeMotionAnimationLoop')
+    if rootNode.hasObject('FreeMotionAnimationLoop') is None:
+        rootNode.addObject('FreeMotionAnimationLoop')
 
-    if rootNode.hasObject("GenericConstraintSolver", warning=False) is None:
-            rootNode.addObject('GenericConstraintSolver', tolerance=1e-6, maxIterations=1000)
+    if rootNode.hasObject('GenericConstraintSolver') is None:
+        rootNode.addObject('GenericConstraintSolver', tolerance=1e-6, maxIterations=1000)
+
+    if rootNode.hasObject('SparseLDLSolver') is None:
+            rootNode.addObject('SparseLDLSolver')
 
     return rootNode
 
