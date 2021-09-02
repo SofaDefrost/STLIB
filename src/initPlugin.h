@@ -34,7 +34,7 @@
 #include <sofa/helper/config.h>
 
 #ifdef SOFA_BUILD_STLIB
-#define SOFA_TARGET Stlib
+#define SOFA_TARGET STLIB
 #define SOFA_STLIB_API SOFA_EXPORT_DYNAMIC_LIBRARY
 #else
 #define SOFA_STLIB_API SOFA_IMPORT_DYNAMIC_LIBRARY
