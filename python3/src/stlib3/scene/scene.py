@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import Sofa.Core
+
 class SofaRuntime(object):
         class PluginManager(object):
                 loadedPlugins = ["SofaPython3"]
@@ -46,6 +47,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
 
         def addSimulation():
                 self = root.addChild("Simulation")
+                self.addObject('RequiredPlugin', pluginName='SofaImplicitOdeSolver')
                 self.addObject("EulerImplicitSolver")
                 self.addObject("CGLinearSolver")
                 return root
