@@ -18,17 +18,20 @@ def Settings(plugins=[], repositoryPaths=[]):
         if "SofaPython3" not in plugins:
                 plugins.append("SofaPython3")
 
+        if "SofaImplicitOdeSolver" not in plugins:
+                plugins.append("SofaImplicitOdeSolver")
+
         plugin = self.addChild("Plugins")
         for name in plugins:
                 plugin.addObject('RequiredPlugin', name=name, printLog=False)
 
         i=0
         for repository in repositoryPaths:
-                self.addObject('AddResourceRepository', name="AddResourceRepository"+str(i), path=repository)
+                self.addObject('AddDataRepository', name="repository"+str(i), path=repository)
                 i+=1
 
-        self.addObject('OglSceneFrame', style="Arrows", alignment="TopRight")
-
+        self.addObject('OglSceneFrame', name="frame", style="Arrows", alignment="TopRight")
+        
         return self
 
 def Scene(root, gravity=[0.0,-9.81,0.0],
@@ -47,14 +50,17 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
 
         def addSimulation():
                 self = root.addChild("Simulation")
-                self.addObject('RequiredPlugin', pluginName='SofaImplicitOdeSolver')
                 self.addObject("EulerImplicitSolver")
                 self.addObject("CGLinearSolver")
                 return root
 
         def addSettings(plugins=plugins, repositoryPaths=repositoryPaths):
                 root.addChild(Settings(plugins=plugins, repositoryPaths=repositoryPaths))
-                return root
+                return root      
+
+        root.addObject("DefaultAnimationLoop")
+        root.addObject("DefaultVisualManagerLoop")
+
 
         root.gravity.value = gravity
         root.dt.value = dt
@@ -68,7 +74,6 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
 def createScene(root):
         import os
         scene = Scene(root)
-
         scene.addSettings(repositoryPaths=[os.getcwd()])
         scene.addModelling()
         scene.addSimulation()

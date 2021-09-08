@@ -17,6 +17,7 @@ class VisualModel(Sofa.Prefab):
 
     def doReInit(self):
         self.addObject('RequiredPlugin', pluginName=['SofaOpenglVisual','SofaLoader'])
+        
         path = self.visualMeshPath.value
         if path.endswith('.stl'):
             self.addObject('MeshSTLLoader', name='loader',filename=path)
@@ -31,15 +32,12 @@ class VisualModel(Sofa.Prefab):
                                                     scale3d=list(self.scale.value),
                                                     color=self.color.value, updateNormals=False)
 
-    def showGrid(self,nbSubdiv=10,size=1000):
-        self.addObject("OglGrid", nbSubdiv=nbSubdiv, size=size)
-
 def createScene(root):
     from stlib3.scene import Scene
     scene = Scene(root)
+    scene.Settings.showGrid()
     scene.addSettings()
     scene.addModelling()
-    scene.addSimulation()
 
     visu = VisualModel(visualMeshPath="mesh/smCube27.obj")
     visu.showGrid()

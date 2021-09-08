@@ -1,7 +1,7 @@
-from stlib.scene import MainHeader
-from stlib.solver import DefaultSolver
-from stlib.physics.rigid import Cube, Sphere, Floor
-from stlib.physics.deformable import ElasticMaterialObject
+from stlib3.scene import MainHeader
+from stlib3.solver import DefaultSolver
+from stlib3.physics.rigid import Cube, Sphere, Floor
+from stlib3.physics.deformable import ElasticMaterialObject
 
 def createScene(rootNode):
     MainHeader(rootNode)
