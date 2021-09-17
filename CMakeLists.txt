@@ -11,11 +11,11 @@ set(SofaPythonAny_FOUND FALSE)
 if(SofaPython3_FOUND)
     message("-- Found SofaPython3")
     SP3_add_python_package(
-        SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/python3/src/splib3
-        TARGET_DIRECTORY splib3
+        SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/python3/stlib
+        TARGET_DIRECTORY stlib
     )
     SP3_add_python_package(
-        SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/python3/src/stlib3
+        SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/python3/stlib3
         TARGET_DIRECTORY stlib3
     )
     set(SofaPythonAny_FOUND TRUE)
@@ -32,8 +32,8 @@ if(!SofaPythonAny_FOUND)
     return()
 endif()
 
-set(HEADER_FILES src/initPlugin.h)
-set(SOURCE_FILES src/initPlugin.cpp)
+set(HEADER_FILES src/cpp/stlib/initPlugin.h)
+set(SOURCE_FILES src/cpp/stlib/initPlugin.cpp)
 
 file(GLOB_RECURSE RESOURCE_FILES  "*.md" "*.psl" "*.py" "*.pyscn" "*.scn" "*.rst")
 
@@ -48,7 +48,7 @@ sofa_create_package_with_targets(
     PACKAGE_VERSION ${PROJECT_VERSION}
     TARGETS ${PROJECT_NAME} AUTO_SET_TARGET_PROPERTIES
     INCLUDE_INSTALL_DIR STLIB
-    INCLUDE_SOURCE_DIR "src"
+    INCLUDE_SOURCE_DIR "src/cpp/stlib/"
     RELOCATABLE "plugins"
     )
 

@@ -9,7 +9,10 @@ import time
 # Brief:
 # A simple script to load and run one time step of each scene of the examples repository 
 
-scenespaths = [os.path.dirname(os.path.abspath(__file__))+'/../src/stlib3/']
+scenespaths = [os.path.dirname(os.path.abspath(__file__))+'/../src/stlib/', 
+               os.path.dirname(os.path.abspath(__file__))+'/../src/splib/',
+               os.path.dirname(os.path.abspath(__file__))+'/../src/stlib3/',
+               os.path.dirname(os.path.abspath(__file__))+'/../src/splib/3']
 
 sofabin=""
 if len(sys.argv) > 1: sofabin  = sys.argv[1]
@@ -58,6 +61,7 @@ if os.path.isfile(sofabin):
 		      if os.path.isfile( filename ) and ext in supportedExtensions and pattern in filename:
 			      inputFile = open(filename,"r")
 			      if "createScene" not in inputFile.read():
+			        print("[TESTING] "+dirname+"/"+thisfile+"' -> "+RED+" [FAILED] no createScene"+ENDL+"" )
 			        continue
 		      
 			      shortfilename = "results/" + filename[filename.find("../src/")+7:] + ".txt"
@@ -89,8 +93,7 @@ if os.path.isfile(sofabin):
       for path in scenespaths:
               print("TESTING: ", os.path.abspath(path))	      
               for dirpath, dirnames, filenames in os.walk(path, dotest, None):
-                dotest(None, dirpath, filenames)
-              
+                dotest(None, dirpath, filenames)         
 
       print("====================== [SUMMARY] ========================")
       print("Test: Load and run one time step of each scene of the stlib repository.")

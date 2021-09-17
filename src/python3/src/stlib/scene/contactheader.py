@@ -1,0 +1,54 @@
+# -*- coding: utf-8 -*-
+
+def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
+    '''
+    Args:
+        applyTo (Sofa.Node): the node to attach the object to
+
+        alarmDistance (float): define the distance at which the contact are integrated into
+                               the detection computation.
+
+        contactDistance (float): define the distance at which the contact response is
+                                 integrated into the computation.
+
+
+        frictionCoef (float, default=0.0): optional value, set to non-zero to enable
+                                               a global friction in your scene.
+
+    Structure:
+        .. sourcecode:: qml
+
+            rootNode : {
+                DefaultPipeline,
+                BruteForceBroadPhase,
+                BVHNarrowPhase,
+                RuleBasedContactManager,
+                LocalMinDistance
+            }
+    '''
+    if "DefaultPipeline" in applyTo.objects:
+            applyTo.addObject('DefaultPipeline')
+
+    applyTo.addObject('BruteForceBroadPhase', name="N2")
+    applyTo.addObject('BVHNarrowPhase')
+
+    applyTo.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
+                                                    name='Response', response='FrictionContact')
+    applyTo.addObject('LocalMinDistance',
+                        alarmDistance=alarmDistance, contactDistance=contactDistance,
+                        angleCone=0.01)
+
+    if "FreeMotionAnimationLoop" in applyTo.objects:
+            applyTo.addObject('FreeMotionAnimationLoop')
+            
+    if "GenericConstraintSolver" in applyTo.objects:
+            applyTo.addObject('GenericConstraintSolver', tolerance="1e-6", maxIterations="1000")
+
+    return applyTo
+
+### This function is just an example on how to use the DefaultHeader function.
+def createScene(rootNode):
+    import os
+    from mainheader import MainHeader
+    MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython3", "SofaConstraint"], repositoryPaths=[os.getcwd()])
+    ContactHeader(rootNode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)
