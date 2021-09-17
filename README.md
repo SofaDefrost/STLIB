@@ -32,9 +32,16 @@ def createScene(rootNode):
 
 The API documentation is available at [readthedocs](http://stlib.readthedocs.io/en/latest/index.html)
 
-# To build STLIB
+## Versions
+- Sofa/master SofaPython3/master SPLIB/master STLIB/master 
+- deprecated: Sofa/21.01  SofaPython/21.01  [STLIB/SofaPython2-latest](https://github.com/SofaDefrost/STLIB/releases/tag/SofaPython2-latest)
+
+## To build STLIB
 There are two ways to compile plugins for SOFA. The most commonly used is the __In-tree build__, i.e. building the plugin while building SOFA from its sources on github. The second option, which is less commonly used but provides more flexibility, is the __Out-of-tree build__, where SOFA is pre-built and installed (from sources or by downloading its binaries) and the plugin is compiled as a standalone module, against the SOFA libraries
- 
+
+## Dependencies
+STLIB depends on [SPLIB](https://github.com/SofaDefrost/SPLIB), please install and configure it before. 
+
 ## In-tree build
 First you need to have [SOFA](https://github.com/Sofa-framework/sofa) on your machine, since to build STLIB you will need to build it through SOFA.
 
