@@ -11,6 +11,10 @@ set(SofaPythonAny_FOUND FALSE)
 if(SofaPython3_FOUND)
     message("-- Found SofaPython3")
     SP3_add_python_package(
+        SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/python3/src/splib3
+        TARGET_DIRECTORY splib3
+    )
+    SP3_add_python_package(
         SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/python3/src/stlib3
         TARGET_DIRECTORY stlib3
     )
@@ -42,7 +46,7 @@ target_link_libraries(${PROJECT_NAME} SofaCore)
 sofa_create_package_with_targets(
     PACKAGE_NAME STLIB
     PACKAGE_VERSION ${PROJECT_VERSION}
-    TARGETS ${PROJECT_NAME}
+    TARGETS ${PROJECT_NAME} AUTO_SET_TARGET_PROPERTIES
     INCLUDE_INSTALL_DIR STLIB
     INCLUDE_SOURCE_DIR "src"
     RELOCATABLE "plugins"

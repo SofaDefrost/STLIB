@@ -25,7 +25,8 @@ stlib.physics.rigid.Floor
 .. autofunction:: Floor
 """
 
-from stlib3.physics.rigid.rigidobject import RigidObject
+from stlib3.physics.rigid.RigidObject import RigidObject
+
 
 def Cube(node, **kwargs):
     """Create a rigid cube of unit dimension"""
@@ -46,8 +47,8 @@ def Floor(node, **kwargs):
     return RigidObject(parent = node, surfaceMeshFileName="mesh/floor.obj", **kwargs)
 
 def createScene(rootNode):
-    from stlib.scene import MainHeader
-    from stlib.solver import DefaultSolver
+    from stlib3.scene import MainHeader
+    from stlib3.solver import DefaultSolver
 
     MainHeader(rootNode)
     DefaultSolver(rootNode)

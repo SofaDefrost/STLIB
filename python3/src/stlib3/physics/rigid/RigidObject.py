@@ -10,6 +10,7 @@ def RigidObject(name="RigidObject",
                 volume=1.,
                 inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
                 color=[1., 1., 0.],
+                collisionGroup='0',
                 isAStaticObject=False, parent=None):
     """Creates and adds rigid body from a surface mesh.
     Args:
@@ -76,13 +77,13 @@ def RigidObject(name="RigidObject",
         objectCollis.addObject('MechanicalObject')
 
         if isAStaticObject:
-            objectCollis.addObject('TriangleCollisionModel', moving=False, simulated=False)
-            objectCollis.addObject('LineCollisionModel', moving=False, simulated=False)
-            objectCollis.addObject('PointCollisionModel', moving=False, simulated=False)
+            objectCollis.addObject('TriangleCollisionModel', moving=False, simulated=False, group=collisionGroup)
+            objectCollis.addObject('LineCollisionModel', moving=False, simulated=False, group=collisionGroup)
+            objectCollis.addObject('PointCollisionModel', moving=False, simulated=False, group=collisionGroup)
         else:
-            objectCollis.addObject('TriangleCollisionModel')
-            objectCollis.addObject('LineCollisionModel')
-            objectCollis.addObject('PointCollisionModel')
+            objectCollis.addObject('TriangleCollisionModel', group=collisionGroup)
+            objectCollis.addObject('LineCollisionModel', group=collisionGroup)
+            objectCollis.addObject('PointCollisionModel', group=collisionGroup)
             #object.addObject('SphereCollisionModel', radius=10)
         objectCollis.addObject('RigidMapping')
 
