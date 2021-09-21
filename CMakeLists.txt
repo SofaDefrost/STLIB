@@ -32,6 +32,10 @@ set_target_properties(${PROJECT_NAME} PROPERTIES COMPILE_FLAGS "-DSOFA_BUILD_STL
 set_target_properties(${PROJECT_NAME} PROPERTIES DEBUG_POSTFIX "_d")
 target_link_libraries(${PROJECT_NAME} SofaCore)
 
+#if(SOFA_BUILD_TEST)
+    add_subdirectory(tests)
+#endif()
+
 ## Install rules for the library and headers; CMake package configurations files
 sofa_create_package_with_targets(
     PACKAGE_NAME STLIB
@@ -46,3 +50,6 @@ install(DIRECTORY docs DESTINATION share/sofa/${PROJECT_NAME})
 install(FILES "README.md" "LICENSE" DESTINATION .)
 
 include(cmake/packaging.cmake)
+
+file(COPY src/python3/stlib DESTINATION ${CMAKE_BINARY_DIR}/bin/stlib-tests/scene-examples/)
+file(COPY src/python3/stlib3 DESTINATION ${CMAKE_BINARY_DIR}/bin/stlib-tests/scene-examples/)
