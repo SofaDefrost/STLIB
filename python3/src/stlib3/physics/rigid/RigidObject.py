@@ -10,6 +10,7 @@ def RigidObject(name="RigidObject",
                 volume=1.,
                 inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
                 color=[1., 1., 0.],
+                collisionGroup='0',
                 isAStaticObject=False, parent=None):
     """Creates and adds rigid body from a surface mesh.
     Args:
@@ -48,19 +49,22 @@ def RigidObject(name="RigidObject",
 
     #### mechanics
     object = Sofa.Core.Node(name)
+
     if(parent != None):
         parent.addChild(object)
 
-    plugins = ['SofaRigid']
+    #plugins = ['SofaRigid']
     object.addObject('MechanicalObject',
                       name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
     object.addObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
-    if not isAStaticObject:
-        plugins.append('SofaConstraint')
-        object.addObject('UncoupledConstraintCorrection')
+
+    #if not isAStaticObject:
+        #plugins.append('SofaConstraint')
+        #object.addObject('EulerImplicitSolver')
+        #object.addObject('CGLinearSolver')
 
     def addCollisionModel(inputMesh=surfaceMeshFileName):
         objectCollis = object.addChild('collision')
@@ -73,14 +77,14 @@ def RigidObject(name="RigidObject",
         objectCollis.addObject('MechanicalObject')
 
         if isAStaticObject:
-            objectCollis.addObject('TriangleCollisionModel', moving=False, simulated=False)
-            objectCollis.addObject('LineCollisionModel', moving=False, simulated=False)
-            objectCollis.addObject('PointCollisionModel', moving=False, simulated=False)
+            objectCollis.addObject('TriangleCollisionModel', moving=False, simulated=False, group=collisionGroup)
+            objectCollis.addObject('LineCollisionModel', moving=False, simulated=False, group=collisionGroup)
+            objectCollis.addObject('PointCollisionModel', moving=False, simulated=False, group=collisionGroup)
         else:
-            objectCollis.addObject('TriangleCollisionModel')
-            objectCollis.addObject('LineCollisionModel')
-            objectCollis.addObject('PointCollisionModel')
-
+            objectCollis.addObject('TriangleCollisionModel', group=collisionGroup)
+            objectCollis.addObject('LineCollisionModel', group=collisionGroup)
+            objectCollis.addObject('PointCollisionModel', group=collisionGroup)
+            #object.addObject('SphereCollisionModel', radius=10)
         objectCollis.addObject('RigidMapping')
 
     object.addCollisionModel = addCollisionModel
@@ -91,13 +95,15 @@ def RigidObject(name="RigidObject",
         object.addChild(visual)
         visual.addObject('RigidMapping')
 
+
+
     object.addVisualModel = addVisualModel
 
     if surfaceMeshFileName != None:
         object.addCollisionModel()
         object.addVisualModel()
 
-    object.addObject('RequiredPlugin', pluginName=plugins)
+    #object.addObject('RequiredPlugin', pluginName=plugins)
 
     return object
 
@@ -111,5 +117,7 @@ def createScene(root):
     scene.addSimulation()
 
     ## Create a RigidObject with a cube mesh.
-    rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj", parent=scene.Modelling)
-    scene.Simulation.addChild(rigid)
+    rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj")
+    scene.Modelling.addChild(rigid)
+    print("HELLO")
+    #scene.Simulation.addChild(rigid)
