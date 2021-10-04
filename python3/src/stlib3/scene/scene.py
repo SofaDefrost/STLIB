@@ -36,7 +36,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
           dt=0.01, plugins=[], repositoryPaths=[], iterative=True):
         from stlib3.scene import contactheader
 
-        def addMainHeader(plugins=plugins, repositoryPaths=repositoryPaths,doDebug=False,CGSolver=False):
+        def addMainHeader(plugins=plugins, repositoryPaths=repositoryPaths, doDebug=False):
             if not isinstance(plugins, list):
                 Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
                 return
@@ -64,12 +64,9 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
         def addDefaultSolver(node):
             node.addObject('EulerImplicitSolver', name='TimeIntegrationSchema')
             if iterative:
-                return node.addObject('CGLinearSolver', name='LinearSolver')
+                node.addObject('CGLinearSolver', name='LinearSolver')
             else:
                 node.addObject('SparseLDLSolver', name='LinearSolver')
-                node.addObject('MechanicalMatrixMapper', template='Vec3d,Rigid3d',
-                object1='@./RigidifiedStructure/DeformableParts/dofs', object2='@./RigidifiedStructure/RigidParts/dofs',
-                nodeToParse='@./RigidifiedStructure/DeformableParts/ElasticMaterialObject')
             return node
 
         def addContactHeader():
@@ -81,8 +78,8 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
                 return root
 
         def addSimulation():
-                Simulation= root.addChild("Simulation")
-                addDefaultSolver(Simulation)
+                simulation = root.addChild("Simulation")
+                addDefaultSolver(simulation)
                 return root
 
         def addSettings(plugins=plugins, repositoryPaths=repositoryPaths):
