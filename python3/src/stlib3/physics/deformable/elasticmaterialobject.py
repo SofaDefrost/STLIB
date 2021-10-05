@@ -69,7 +69,7 @@ class ElasticMaterialObject(Sofa.Prefab):
                                                  method='large', name='forcefield',
                                                  poissonRatio=self.poissonRatio.value,  youngModulus=self.youngModulus.value)
 
-        if self.withConstrain:
+        if self.withConstrain.value:
             plugins.append('SofaConstraint')
             self.correction = self.addObject('LinearSolverConstraintCorrection',name='correction')
 

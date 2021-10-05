@@ -46,6 +46,17 @@ from splib3.numerics.matrix import *
 
 RigidDofZero = [0.0,0.0,0.0,0.0,0.0,0.0,1.0]
 
+def to_radians(v):
+    """Converts degree to radians
+
+       :param v: the angle to convert
+    """
+    if isinstance(v, list):
+        p = []
+        for tp in v:
+            p.append( tp * pi * 2.0 / 360.0 )
+        return p
+    return v * pi * 2.0 / 360.0
 
 def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
     t = numpy.identity(4)
@@ -193,28 +204,29 @@ class RigidDof(object):
         else:
                 self.rigidobject.getData(key).value = list(value)
 
-# class Transform(object):
-#     def __init__(self, translation, orientation=None, eulerRotation=None):
-#         self.translation = translation
-#         if eulerRotation != None:
-#             self.orientation = from_euler( to_radians( eulerRotation ) )
-#         elif orientation != None:
-#             self.orientation = orientation
-#         else:
-#             self.orientation = [0,0,0,1]
-#
-#     def translate(self, v):
-#         self.translation = vadd(self.translation, v)
-#         return self
-#
-#     def toSofaRepr(self):
-#             return self.translation + list(self.orientation)
-#
-#     def getForward(self):
-#         return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], self.orientation), numpy.array([0.0,0.0,1.0,1.0]))
-#
-#     forward = property(getForward, None)
-#
+class Transform(object):
+    def __init__(self, translation, orientation=None, eulerRotation=None):
+        self.translation = translation
+        if eulerRotation != None:
+            print("=================================> ", eulerRotation)
+            self.orientation = Quat.createFromEuler( to_radians( eulerRotation ) )
+        elif orientation != None:
+            self.orientation = orientation
+        else:
+            self.orientation = [0,0,0,1]
+
+    def translate(self, v):
+        self.translation = vadd(self.translation, v)
+        return self
+
+    def toSofaRepr(self):
+            return self.translation + list(self.orientation)
+
+    def getForward(self):
+        return numpy.matmul(TRS_to_matrix([0.0,0.0,0.0], self.orientation), numpy.array([0.0,0.0,1.0,1.0]))
+
+    forward = property(getForward, None)
+
 def getOrientedBoxFromTransform(translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
         # BoxROI unitaire
         pos = [[-0.5, 0.0,-0.5],
