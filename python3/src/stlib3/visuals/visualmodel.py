@@ -44,5 +44,3 @@ def createScene(root):
     visu = VisualModel(visualMeshPath="mesh/smCube27.obj")
     visu.showGrid()
     scene.Modelling.addChild(visu)
-
-    #scene.Modelling.init()

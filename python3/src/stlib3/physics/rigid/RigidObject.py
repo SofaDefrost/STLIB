@@ -10,7 +10,7 @@ def RigidObject(name="RigidObject",
                 volume=1.,
                 inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
                 color=[1., 1., 0.],
-                collisionGroup='0',
+                collisionGroup='',
                 isAStaticObject=False, parent=None):
     """Creates and adds rigid body from a surface mesh.
     Args:
@@ -53,7 +53,7 @@ def RigidObject(name="RigidObject",
     if(parent != None):
         parent.addChild(object)
 
-    #plugins = ['SofaRigid']
+    plugins = ['SofaRigid']
     object.addObject('MechanicalObject',
                       name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
@@ -61,10 +61,11 @@ def RigidObject(name="RigidObject",
     object.addObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
 
-    #if not isAStaticObject:
-        #plugins.append('SofaConstraint')
-        #object.addObject('EulerImplicitSolver')
-        #object.addObject('CGLinearSolver')
+    if not isAStaticObject:
+        plugins.append('SofaConstraint')
+        plugins.append('SofaImplicitOdeSolver')
+        object.addObject('EulerImplicitSolver')
+        object.addObject('CGLinearSolver')
 
     def addCollisionModel(inputMesh=surfaceMeshFileName):
         objectCollis = object.addChild('collision')
@@ -84,7 +85,6 @@ def RigidObject(name="RigidObject",
             objectCollis.addObject('TriangleCollisionModel', group=collisionGroup)
             objectCollis.addObject('LineCollisionModel', group=collisionGroup)
             objectCollis.addObject('PointCollisionModel', group=collisionGroup)
-            #object.addObject('SphereCollisionModel', radius=10)
         objectCollis.addObject('RigidMapping')
 
     object.addCollisionModel = addCollisionModel
@@ -95,15 +95,13 @@ def RigidObject(name="RigidObject",
         object.addChild(visual)
         visual.addObject('RigidMapping')
 
-
-
     object.addVisualModel = addVisualModel
 
     if surfaceMeshFileName != None:
         object.addCollisionModel()
         object.addVisualModel()
 
-    #object.addObject('RequiredPlugin', pluginName=plugins)
+    object.addObject('RequiredPlugin', pluginName=plugins)
 
     return object
 
@@ -115,9 +113,8 @@ def createScene(root):
     scene.addSettings()
     scene.addModelling()
     scene.addSimulation()
+    scene.VisualStyle.displayFlags = 'showVisualModels showCollisionModels'
 
     ## Create a RigidObject with a cube mesh.
-    rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj")
-    scene.Modelling.addChild(rigid)
-    print("HELLO")
-    #scene.Simulation.addChild(rigid)
+    rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj", isAStaticObject=True)
+    scene.Simulation.addChild(rigid)

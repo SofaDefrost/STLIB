@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 
-def ContactHeader(rootNode, alarmDistance, contactDistance, frictionCoef=0.0):
+def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
     '''
     Args:
-        rootNode (Sofa.Node): the node to attach the object to
+        applyTo (Sofa.Node): the node to attach the object to
 
         alarmDistance (float): define the distance at which the contact are integrated into
                                the detection computation.
@@ -18,33 +18,37 @@ def ContactHeader(rootNode, alarmDistance, contactDistance, frictionCoef=0.0):
     Structure:
         .. sourcecode:: qml
 
-            rootNode : {
+            applyTo : {
                 DefaultPipeline,
                 BruteForceDetection,
                 RuleBasedContactManager,
                 LocalMinDistance
             }
     '''
-    rootNode.addObject('FreeMotionAnimationLoop')
-    rootNode.addObject('DefaultPipeline', verbose="0")
-    rootNode.addObject('BruteForceBroadPhase')
-    rootNode.addObject('BVHNarrowPhase')
 
-    rootNode.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
+    if applyTo.hasObject("DefaultPipeline") is False:
+            applyTo.addObject('DefaultPipeline')
+
+    applyTo.addObject('BruteForceBroadPhase')
+    applyTo.addObject('BVHNarrowPhase')
+
+    applyTo.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
                                                     name='Response', response='FrictionContact')
-    rootNode.addObject('LocalMinDistance',
+    applyTo.addObject('LocalMinDistance',
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
-                        angleCone=0.1)
-    rootNode.addObject('GenericConstraintSolver', tolerance=1e-5, maxIterations=5e2)
+                        angleCone=0.01)
 
-    if rootNode.hasObject('SparseLDLSolver') is None:
-            rootNode.addObject('SparseLDLSolver')
+    if applyTo.hasObject("FreeMotionAnimationLoop") is False:
+            applyTo.addObject('FreeMotionAnimationLoop')
 
-    return rootNode
+    if applyTo.hasObject("GenericConstraintSolver") is False:
+            applyTo.addObject('GenericConstraintSolver', tolerance=1e-6, maxIterations=1000)
+
+    return applyTo
 
 ### This function is just an example on how to use the DefaultHeader function.
-def createScene(rootNode):
+def createScene(rootnode):
     import os
     from mainheader import MainHeader
-    MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython","SoftRobots"], repositoryPaths=[os.getcwd()])
-    ContactHeader(rootNode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)
+    MainHeader(rootnode, plugins=["SofaMiscCollision","SofaPython3","SoftRobots","SofaConstraint"], repositoryPaths=[os.getcwd()])
+    ContactHeader(rootnode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)
