@@ -18,5 +18,10 @@ stlib3.solver.DefaultSolver
 
 """
 
-from defaultsolver import DefaultSolver
+from stlib3.solver.defaultsolver import DefaultSolver
+
+#from defaultsolver import DefaultSolver #(suppression de cette manière d'importer)
+#                                          que j'ai remplacé par celle qui est en dessus
+
+
 
