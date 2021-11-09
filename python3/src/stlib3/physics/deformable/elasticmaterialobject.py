@@ -69,15 +69,15 @@ class ElasticMaterialObject(Sofa.Prefab):
                                                  method='large', name='forcefield',
                                                  poissonRatio=self.poissonRatio.value,  youngModulus=self.youngModulus.value)
 
-        if self.withConstrain:
+        if self.withConstrain.value:
             plugins.append('SofaConstraint')
-            self.correction = self.addObject('LinearSolverConstraintCorrection')
+            self.correction = self.addObject('LinearSolverConstraintCorrection',name='correction')
 
         if self.collisionMesh:
             self.addCollisionModel(self.collisionMesh.value, list(self.rotation.value), list(self.translation.value), list(self.scale.value))
 
         if self.surfaceMeshFileName:
-            self.addVisualModel(self.surfaceMeshFileName.value, self.surfaceColor.value, list(self.rotation.value), list(self.translation.value), list(self.scale.value))
+            self.addVisualModel(self.surfaceMeshFileName.value, list(self.surfaceColor.value), list(self.rotation.value), list(self.translation.value), list(self.scale.value))
 
         self.addObject('RequiredPlugin', pluginName=plugins)
 
@@ -93,8 +93,7 @@ class ElasticMaterialObject(Sofa.Prefab):
         self.collisionmodel.addObject('BarycentricMapping')
 
     def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
-        visualmodel = VisualModel(visualMeshPath=filename, color=color, rotation=rotation, translation=translation, scale=scale)
-        self.addChild(visualmodel)
+        visualmodel = self.addChild(VisualModel(visualMeshPath=filename, color=color, rotation=rotation, translation=translation, scale=scale))
 
         # Add a BarycentricMapping to deform the rendering model to follow the ones of the
         # mechanical model.
