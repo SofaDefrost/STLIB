@@ -32,7 +32,8 @@ stlib.physics.rigid.Floor
 
 
 """
-from rigidobject import RigidObject
+all = ["rigidobject"]
+from stlib.physics.rigid.rigidobject import RigidObject
 
 def Cube(node, **kwargs):
     """Create a rigid cube of unit dimension"""
@@ -50,7 +51,8 @@ def Floor(node, **kwargs):
     """Create a rigid floor of unit dimension"""
     if "name" not in kwargs:
         kwargs["name"] = "Floor"
-    return RigidObject(node, surfaceMeshFileName="mesh/floor.obj", **kwargs)
+        print("ADDING A NAME", kwargs)
+    return node.addChild( RigidObject(surfaceMeshFileName="mesh/floor.obj", **kwargs) )
 
 def createScene(rootNode):
     from stlib.scene import MainHeader

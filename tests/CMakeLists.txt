@@ -9,12 +9,7 @@ find_package(SofaGTestMain REQUIRED)
 find_package(SofaFramework REQUIRED)
 
 set(TEST_FILES
-    python3/stlib/scene/contactheader_test.py
-    python3/stlib/scene/mainheader_test.py
-    python3/stlib/scene/interaction_test.py
-    python3/stlib/scene/wrapper_test.py
-    python3/stlib/scene/scene_test.py
-    )
+   )
 
 enable_testing()
 add_executable(${PROJECT_NAME} ${SOURCE_FILES} ${TEST_FILES})
@@ -23,4 +18,4 @@ target_link_libraries(${PROJECT_NAME} SofaGTestMain SofaHelper SofaPython3::Plug
 
 add_test(NAME ${PROJECT_NAME} COMMAND ${PROJECT_NAME})
 
-file(COPY python3/ DESTINATION ${CMAKE_BINARY_DIR}/bin/stlib-tests/tests)
+#file(COPY python3/ DESTINATION ${CMAKE_BINARY_DIR}/bin/stlib-tests/tests)

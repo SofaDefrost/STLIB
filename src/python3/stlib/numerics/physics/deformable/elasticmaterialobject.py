@@ -42,48 +42,46 @@ class ElasticMaterialObject(SofaObject):
                      youngModulus=18000,
                      totalMass=1.0, solver=None):
 
-        if not self.getRoot().getObject("SofaSparseSolver", warning=False):
-            if not self.getRoot().getObject("/Config/SofaSparseSolver", warning=False):
-                    Sofa.msg_info("Missing RequiredPlugin SofaSparseSolver in the scene, add it from Prefab ElasticMaterialObject.")
-                    self.getRoot().createObject("RequiredPlugin", name="SofaSparseSolver")
+        if not self.getRoot().getObject("SofaSparseSolver"):
+            if not self.getRoot().getObject("/Config/SofaSparseSolver"):
+                    Sofa.msg_info(self.getRoot(), "Missing RequiredPlugin SofaSparseSolver in the scene, add it from Prefab ElasticMaterialObject.")
+                    self.getRoot().addObject("RequiredPlugin", name="SofaSparseSolver")
 
         if self.node is None:
-            Sofa.msg_error("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
-            return None
+            raise Exception("Unable to create the elastic object because it is not attached to any node. Please fill the attachedTo parameter")
 
         if volumeMeshFileName is None:
-            Sofa.msg_error(self.node, "Unable to create an elastic object because there is no volume mesh provided.")
-            return None
+            raise Exception("Unable to create an elastic object because there is no volume mesh provided.")
 
         if volumeMeshFileName.endswith(".msh"):
-            self.loader = self.node.createObject('MeshGmshLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
+            self.loader = self.node.addObject('MeshGmshLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
         elif volumeMeshFileName.endswith(".gidmsh"):
-            self.loader = self.node.createObject('GIDMeshLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
+            self.loader = self.node.addObject('GIDMeshLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
         else:
-            self.loader = self.node.createObject('MeshVTKLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
+            self.loader = self.node.addObject('MeshVTKLoader', name='loader', filename=volumeMeshFileName, rotation=rotation, translation=translation, scale3d=scale)
 
         if solver is None:
-            self.integration = self.node.createObject('EulerImplicitSolver', name='integration')
-            self.solver = self.node.createObject('SparseLDLSolver', name="solver")
+            self.integration = self.node.addObject('EulerImplicitSolver', name='integration')
+            self.solver = self.node.addObject('SparseLDLSolver', name="solver", template="CompressedRowSparseMatrixd")
 
-        self.container = self.node.createObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
-        self.dofs = self.node.createObject('MechanicalObject', template='Vec3d', name='dofs')
+        self.container = self.node.addObject('TetrahedronSetTopologyContainer', src='@loader', name='container')
+        self.dofs = self.node.addObject('MechanicalObject', template='Vec3d', name='dofs')
 
         # To be properly simulated and to interact with gravity or inertia forces, an elasticobject
         # also needs a mass. You can add a given mass with a uniform distribution for an elasticobject
         # by adding a UniformMass component to the elasticobject node
-        self.mass = self.node.createObject('UniformMass', totalMass=totalMass, name='mass')
+        self.mass = self.node.addObject('UniformMass', totalMass=totalMass, name='mass')
 
         # The next component to add is a FEM forcefield which defines how the elasticobject reacts
         # to a loading (i.e. which deformations are created from forces applied onto it).
         # Here, because the elasticobject is made of silicone, its mechanical behavior is assumed elastic.
         # This behavior is available via the TetrahedronFEMForceField component.
-        self.forcefield = self.node.createObject('TetrahedronFEMForceField', template='Vec3d',
+        self.forcefield = self.node.addObject('TetrahedronFEMForceField', template='Vec3d',
                                                  method='large', name='forcefield',
                                                  poissonRatio=poissonRatio,  youngModulus=youngModulus)
 
         if withConstrain:
-            self.node.createObject('LinearSolverConstraintCorrection', solverName=self.solver.name)
+            self.node.addObject('LinearSolverConstraintCorrection', solverName=self.solver.name)
 
         if collisionMesh:
             self.addCollisionModel(collisionMesh, rotation, translation, scale)
@@ -92,26 +90,26 @@ class ElasticMaterialObject(SofaObject):
                 self.addVisualModel(surfaceMeshFileName, surfaceColor, rotation, translation, scale)
 
     def addCollisionModel(self, collisionMesh, rotation=[0.0, 0.0, 0.0], translation=[0.0, 0.0, 0.0], scale=[1., 1., 1.]):
-        self.collisionmodel = self.node.createChild('CollisionModel')
-        self.collisionmodel.createObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation, scale3d=scale)
-        self.collisionmodel.createObject('TriangleSetTopologyContainer', src='@loader', name='container')
-        self.collisionmodel.createObject('MechanicalObject', template='Vec3d', name='dofs')
-        self.collisionmodel.createObject('TriangleCollisionModel')
-        self.collisionmodel.createObject('LineCollisionModel')
-        self.collisionmodel.createObject('PointCollisionModel')
-        self.collisionmodel.createObject('BarycentricMapping')
+        self.collisionmodel = self.node.addChild('CollisionModel')
+        self.collisionmodel.addObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation, translation=translation, scale3d=scale)
+        self.collisionmodel.addObject('TriangleSetTopologyContainer', src='@loader', name='container')
+        self.collisionmodel.addObject('MechanicalObject', template='Vec3d', name='dofs')
+        self.collisionmodel.addObject('TriangleCollisionModel')
+        self.collisionmodel.addObject('LineCollisionModel')
+        self.collisionmodel.addObject('PointCollisionModel')
+        self.collisionmodel.addObject('BarycentricMapping')
 
     def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
         self.visualmodel = VisualModel(parent=self.node, surfaceMeshFileName=filename, color=color, rotation=rotation, translation=translation)
 
         # Add a BarycentricMapping to deform the rendering model to follow the ones of the
         # mechanical model.
-        self.visualmodel.mapping = self.visualmodel.node.createObject('BarycentricMapping', name='mapping')
+        self.visualmodel.mapping = self.visualmodel.node.addObject('BarycentricMapping', name='mapping')
 
 
 def createScene(rootNode):
     from stlib.scene import MainHeader
 
-    MainHeader(rootNode, gravity=" 0 0 0")
+    MainHeader(rootNode, gravity=[0, 0, 0], plugins=["SofaLoader", "SofaConstraint", "SofaImplicitOdeSolver", "SofaSimpleFem"])
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "NoVisual", translation=[3.0, 0.0, 0.0])
     ElasticMaterialObject(rootNode, "mesh/liver.msh", "WithVisual", translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj", surfaceColor=[1.0, 0.0, 0.0])

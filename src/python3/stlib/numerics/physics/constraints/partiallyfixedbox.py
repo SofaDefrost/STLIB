@@ -48,8 +48,8 @@ def createScene(rootNode):
     from stlib.physics.constraints import PartiallyFixedBox
 
     MainHeader(rootNode)
-    target = ElasticMaterialObject(fromVolumeMesh="mesh/liver.msh",
-                                   withTotalMass=0.5,
+    target = ElasticMaterialObject(volumeMeshFileName="mesh/liver.msh",
+                                   totalMass=0.5,
                                    attachedTo=rootNode)
 
     PartiallyFixedBox(box=[-4, 0, 0, 5, 5, 4], attachedTo=target,

@@ -55,7 +55,7 @@ static struct PythonModule_Sofa_tests : public PythonTestExtractor
     {
         const std::string executable_directory = sofa::helper::Utils::getExecutableDirectory();
         addTestDirectory(executable_directory+"/stlib-tests/tests/stlib/scene", "STLIB_");
-        addTestDirectory(sofa_tostring(STLIB_SRC_DIR/stlib), "stlib", "", true);
+        //addTestDirectory(sofa_tostring(STLIB_SRC_DIR/stlib), "stlib", "", true);
     }
 } python_tests;
 

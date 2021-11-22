@@ -1,7 +1,7 @@
-# -*- coding: utf-8 -*-
+import Sofa
 from stlib.visuals import VisualModel
 
-def RigidObject(node, name="RigidObject",
+def RigidObject(name="RigidObject",
                 surfaceMeshFileName=None,
                 translation=[0., 0., 0.],
                 rotation=[0., 0., 0.],
@@ -10,27 +10,18 @@ def RigidObject(node, name="RigidObject",
                 volume=1.,
                 inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
                 color=[1., 1., 0.],
-                isAStaticObject=False):
+                isAStaticObject=False, parent=None):
     """Creates and adds rigid body from a surface mesh.
-
     Args:
         surfaceMeshFileName (str):  The path or filename pointing to surface mesh file.
-
         totalMass (float):   The mass is distributed according to the geometry of the object.
-
         color (vec3f):  The default color used for the rendering of the object.
-
         translation (vec3f):   Apply a 3D translation to the object.
-
         rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
-
         uniformScale (vec3f):   Apply a uniform scaling to the object.
-
         isAStaticObject (bool): The object does not move in the scene (e.g. floor, wall) but react to collision.
-
     Structure:
             .. sourcecode:: qml
-
                 Node : {
                     name : "rigidobject"
                     MechanicalObject,
@@ -38,7 +29,6 @@ def RigidObject(node, name="RigidObject",
                     UncoupledConstraintCorrection,
                     *EulerImplicit,
                     *SparseLDLSolver,
-
                     Node : {
                         name : "collision",
                         Mesh,
@@ -55,53 +45,70 @@ def RigidObject(node, name="RigidObject",
                     }
                 }
     """
+
     #### mechanics
-    object = node.createChild(name)
+    object = Sofa.Core.Node(name)
+    if(parent != None):
+        parent.addChild(object)
 
-    if not isAStaticObject:
-        object.createObject('EulerImplicitSolver', name='odesolver')
-        object.createObject('CGLinearSolver', name='Solver')
-
-    object.createObject('MechanicalObject',
+    plugins = ['SofaRigid']
+    object.addObject('MechanicalObject',
                       name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
 
-    object.createObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
+    object.addObject('UniformMass', name="mass", vertexMass=[totalMass, volume, inertiaMatrix[:]])
 
     if not isAStaticObject:
-        object.createObject('UncoupledConstraintCorrection')
+        plugins.append('SofaConstraint')
+        object.addObject('UncoupledConstraintCorrection')
 
-    #### collision
-    objectCollis = object.createChild('collision')
-    objectCollis.createObject('MeshObjLoader', name="loader", filename=surfaceMeshFileName, triangulate="true",
+    def addCollisionModel(inputMesh=surfaceMeshFileName):
+        objectCollis = object.addChild('collision')
+        objectCollis.addObject('RequiredPlugin', name='SofaMeshCollision')
+        objectCollis.addObject('MeshObjLoader', name="loader",
+                            filename=inputMesh, triangulate=True,
                             scale=uniformScale)
 
-    objectCollis.createObject('MeshTopology', src="@loader")
-    objectCollis.createObject('MechanicalObject')
+        objectCollis.addObject('MeshTopology', src="@loader")
+        objectCollis.addObject('MechanicalObject')
 
-    if isAStaticObject:
-        objectCollis.createObject('TriangleCollisionModel', moving=False, simulated=False)
-        objectCollis.createObject('LineCollisionModel', moving=False, simulated=False)
-        objectCollis.createObject('PointCollisionModel', moving=False, simulated=False)
-    else:
-        objectCollis.createObject('TriangleCollisionModel')
-        objectCollis.createObject('LineCollisionModel')
-        objectCollis.createObject('PointCollisionModel')
+        if isAStaticObject:
+            objectCollis.addObject('TriangleCollisionModel', moving=False, simulated=False)
+            objectCollis.addObject('LineCollisionModel', moving=False, simulated=False)
+            objectCollis.addObject('PointCollisionModel', moving=False, simulated=False)
+        else:
+            objectCollis.addObject('TriangleCollisionModel')
+            objectCollis.addObject('LineCollisionModel')
+            objectCollis.addObject('PointCollisionModel')
 
-    objectCollis.createObject('RigidMapping')
+        objectCollis.addObject('RigidMapping')
+
+    object.addCollisionModel = addCollisionModel
 
     #### visualization
-    objectVisu = VisualModel(parent=object, surfaceMeshFileName=surfaceMeshFileName, color=color, scale=[uniformScale]*3)
-    objectVisu.createObject('RigidMapping')
+    def addVisualModel(inputMesh=surfaceMeshFileName):
+        visual = VisualModel(object, name="visual", surfaceMeshFileName=inputMesh, color=color, scale=[uniformScale]*3)
+        visual.addObject('RigidMapping')
+
+    object.addVisualModel = addVisualModel
+
+    if surfaceMeshFileName != None:
+        object.addCollisionModel()
+        object.addVisualModel()
+
+    object.addObject('RequiredPlugin', pluginName=plugins)
 
     return object
 
-def createScene(rootNode):
-    from stlib.scene import MainHeader
-    from stlib.solver import DefaultSolver
+def createScene(root):
+    from stlib.scene.scene import Scene
 
-    MainHeader(rootNode)
-    DefaultSolver(rootNode)
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Left", translation=[-20., 0., 0.])
-    RigidObject(rootNode, surfaceMeshFileName="mesh/dragon.obj", translation=[0., 0., 0.])
-    RigidObject(rootNode, surfaceMeshFileName="mesh/smCube27.obj", name="Right", translation=[ 20., 0., 0.])
+    ## Create a basic scene graph layout with settings, modelling and simulation
+    scene = Scene(root, plugins=["SofaLoader"])
+    scene.addSettings()
+    scene.addModelling()
+    scene.addSimulation()
+
+    ## Create a RigidObject with a cube mesh.
+    rigid = RigidObject(surfaceMeshFileName="mesh/smCube27.obj", parent=scene.Modelling)
+    scene.Simulation.addChild(rigid)

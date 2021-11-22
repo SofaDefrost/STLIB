@@ -58,14 +58,14 @@ def SubTopology(attachedTo=None,
     strTmp = strTmp[start:end]
     argument = strTmp[::-1]
 
-    modelSubTopo = attachedTo.createChild(name)
-    modelSubTopo.createObject(linkTypeUp+'SetTopologyContainer',
+    modelSubTopo = attachedTo.addChild(name)
+    modelSubTopo.addObject(linkTypeUp+'SetTopologyContainer',
                               name='container',
                               position=containerLink)
 
-    modelSubTopo.getObject('container').findData(argument).value = boxRoiLink
+    modelSubTopo.getObject('container').findData(argument).setParent(boxRoiLink)
 
-    modelSubTopo.createObject(linkTypeUp+'FEMForceField',
+    modelSubTopo.addObject(linkTypeUp+'FEMForceField',
                               name='FEM',
                               method='large',
                               poissonRatio=poissonRatio,
@@ -79,37 +79,38 @@ def SubTopology(attachedTo=None,
 def createScene(rootNode):
     from stlib.scene import MainHeader
     from stlib.physics.deformable import ElasticMaterialObject
-
-    MainHeader(rootNode)
-
+    from Sofa.future import __enable_feature__
+    
+    MainHeader(rootNode,plugins=["SofaConstraint","SofaEngine","SofaImplicitOdeSolver", "SofaMiscFem","SofaSimpleFem"])
+    
     # Tetrahedron and triangle subtopology
     target = ElasticMaterialObject(volumeMeshFileName="mesh/liver2.msh",
-                                   totalMass=0.5,
-                                   attachedTo=rootNode)
-
-    target.createObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
-
+                                       totalMass=0.5,
+                                       attachedTo=rootNode)
+    
+    target.addObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
+    
     SubTopology(attachedTo=target,
-                containerLink='@../container.position',
-                boxRoiLink='@../boxROI.tetrahedraInROI',
-                name='Default-tetrahedron')
-
+                    containerLink='@../container.position',
+                    boxRoiLink='@../boxROI.tetrahedraInROI',
+                    name='Default-tetrahedron')
+    
     SubTopology(attachedTo=target,
-                containerLink='@../container.position',
-                linkType='triangle',
-                boxRoiLink='@../boxROI.trianglesInROI',
-                name='Triangles')
+                    containerLink='@../container.position',
+                    linkType='triangle',
+                    boxRoiLink='@../boxROI.trianglesInROI',
+                    name='Triangles')
 
-    # Hexahedron subtopology : (eulalie) Need fix, HexahedronFEMForceField segfault...
-    # target = ElasticMaterialObject(volumeMeshFileName="mesh/SimpleBeamHexa.msh",
-    #                                totalMass=0.5,
-    #                                attachedTo=rootNode)
-    # target.removeObject(target.container)
-    # target.removeObject(target.forcefield)
-    # target.createObject("HexahedronSetTopologyContainer", name="container", position=target.loader.position, hexahedra=target.loader.hexahedra)
-    # target.createObject("HexahedronFEMForceField", name="forcefield")
-
-    # target.createObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
+        # Hexahedron subtopology : (eulalie) Need fix, HexahedronFEMForceField segfault...
+        # target = ElasticMaterialObject(volumeMeshFileName="mesh/SimpleBeamHexa.msh",
+        #                                totalMass=0.5,
+        #                                attachedTo=rootNode)
+        # target.removeObject(target.container)
+        # target.removeObject(target.forcefield)
+        # target.addObject("HexahedronSetTopologyContainer", name="container", position=target.loader.position, hexahedra=target.loader.hexahedra)
+        # target.addObject("HexahedronFEMForceField", name="forcefield")
+    
+    # target.addObject('BoxROI', name='boxROI', box=[-20, -20, -20, 20, 20, 20], drawBoxes=True)
 
     # SubTopology(attachedTo=target,
     #             containerLink='@../container.position',
