@@ -18,5 +18,5 @@ stlib3.solver.DefaultSolver
 
 """
 
-from defaultsolver import DefaultSolver
+from stlib3.solver.defaultsolver import DefaultSolver
 

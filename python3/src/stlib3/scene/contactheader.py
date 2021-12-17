@@ -18,17 +18,19 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
     Structure:
         .. sourcecode:: qml
 
-            rootNode : {
+            applyTo : {
                 DefaultPipeline,
                 BruteForceDetection,
                 RuleBasedContactManager,
                 LocalMinDistance
             }
     '''
-    if applyTo.getObject("DefaultPipeline", warning=False) is None:
+
+    if applyTo.hasObject("DefaultPipeline") is False:
             applyTo.addObject('DefaultPipeline')
 
-    applyTo.addObject('BruteForceDetection')
+    applyTo.addObject('BruteForceBroadPhase')
+    applyTo.addObject('BVHNarrowPhase')
 
     applyTo.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
                                                     name='Response', response='FrictionContact')
@@ -36,17 +38,17 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
 
-    if applyTo.getObject("FreeMotionAnimationLoop", warning=False) is None:
+    if applyTo.hasObject("FreeMotionAnimationLoop") is False:
             applyTo.addObject('FreeMotionAnimationLoop')
 
-    if applyTo.getObject("GenericConstraintSolver", warning=False) is None:
+    if applyTo.hasObject("GenericConstraintSolver") is False:
             applyTo.addObject('GenericConstraintSolver', tolerance=1e-6, maxIterations=1000)
 
     return applyTo
 
 ### This function is just an example on how to use the DefaultHeader function.
-def createScene(rootNode):
+def createScene(rootnode):
     import os
     from mainheader import MainHeader
-    MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython","SoftRobots"], repositoryPaths=[os.getcwd()])
-    ContactHeader(rootNode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)
+    MainHeader(rootnode, plugins=["SofaMiscCollision","SofaPython3","SoftRobots","SofaConstraint"], repositoryPaths=[os.getcwd()])
+    ContactHeader(rootnode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)
