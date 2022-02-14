@@ -2,7 +2,7 @@ import numpy
 import math
 from math import pi
 
-class  Quat(numpy.ndarray):
+class Quat(numpy.ndarray):
     """ The Quat class implements the following:
 
     Public methods:
@@ -132,7 +132,7 @@ class  Quat(numpy.ndarray):
         v2 = (2.0 * (q[2] * q[0] - q[1] * q[3]))*v[0] + (2.0 * (q[1] * q[2] + q[0] * q[3]))*v[1] + (1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]))*v[2]
 
         return numpy.array([v0,v1,v2])
-       
+
 
     def getNorm(self):
         """ Returns the norm of the quaternion.

@@ -33,6 +33,8 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
     node.findData('gravity').value=gravity;
     node.findData('dt').value=dt
 
+    node.addObject('DefaultVisualManagerLoop')
+
     if not isinstance(plugins, list):
         Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
         return node
@@ -49,7 +51,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
 
     i=0
     for repository in repositoryPaths:
-        confignode.addObject('AddResourceRepository', name="AddResourceRepository"+str(i), path=repository)
+        confignode.addObject('AddDataRepository', name="AddDataRepository"+str(i), path=repository)
         i+=1
 
     confignode.addObject('OglSceneFrame', style="Arrows", alignment="TopRight")
