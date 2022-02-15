@@ -208,7 +208,6 @@ class Transform(object):
     def __init__(self, translation, orientation=None, eulerRotation=None):
         self.translation = translation
         if eulerRotation != None:
-            print("=================================> ", eulerRotation)
             self.orientation = Quat.createFromEuler( to_radians( eulerRotation ) )
         elif orientation != None:
             self.orientation = orientation

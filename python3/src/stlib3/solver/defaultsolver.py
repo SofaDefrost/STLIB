@@ -12,7 +12,7 @@ def DefaultSolver(node, iterative=True):
     if iterative:
         return node.addObject('CGLinearSolver', name='LinearSolver')
 
-    return node.addObject('SparseLDLSolver', name='LinearSolver')
+    return node.addObject('SparseLDLSolver', name='LinearSolver', template='CompressedRowSparseMatrixd')
 
 ### This function is just an example on how to use the DefaultHeader function.
 def createScene(rootNode):
