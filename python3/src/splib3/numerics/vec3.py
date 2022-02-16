@@ -1,6 +1,7 @@
 import numpy
 import math
 
+
 class Vec3(numpy.ndarray):
     """ The Vec3 class implements the following:
 
@@ -53,7 +54,6 @@ class Vec3(numpy.ndarray):
         print(cls.__new__.__doc__)
         return super(Vec3,cls).__new__(cls, shape=(3,), dtype=float, buffer=numpy.array([args[0],args[0],args[0]]))
 
-
     def __eq__(self, other):
         """ Vec3 overriding of __eq__ so that (v1==v2) returns a boolean.
         """
@@ -63,30 +63,25 @@ class Vec3(numpy.ndarray):
                 return False
         return True
 
-
     def __ne__(self, other):
         """ Vec3 overriding of __ne__ so that (v1!=v2) returns a boolean.
         """
         return not (self == other)
-
 
     def getNorm(self):
         """ Returns the norm of the vector.
         """
         return math.sqrt(Vec3.dot(self,self))
 
-
     def toString(self):
         """ Returns the vector in string format.
         """
         return str(self.take(0))+" "+str(self.take(1))+" "+str(self.take(2))
 
-
     def toList(self):
         """ Returns the vector in list format.
         """
         return [self.take(0), self.take(1), self.take(2)]
-
 
     def normalize(self, *args):
         """ Normalize the vector.
@@ -129,7 +124,6 @@ class Vec3(numpy.ndarray):
     #   if len(args) == 1 and type(args[0]) == Quat:
     #       self.rotateFromQuat(args[0])
     #   elif ...
-
 
     def rotateFromQuat(self, q):
         """Function rotateFromQuat from the Vec3 class rotates the current vector by the rotation

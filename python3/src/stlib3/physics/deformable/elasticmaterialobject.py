@@ -37,7 +37,7 @@ class ElasticMaterialObject(Sofa.Prefab):
             plugins.append('SofaImplicitOdeSolver')
             self.integration = self.addObject('EulerImplicitSolver', name='integration')
             plugins.append('SofaSparseSolver')
-            self.solver = self.addObject('SparseLDLSolver', name="solver")
+            self.solver = self.addObject('SparseLDLSolver', name="solver", template='CompressedRowSparseMatrixd')
             # Eulalie: 01/21 a bit hard to debug... when uncommented, no warning or error shows up, yet all components won't just be created...
             # self.solverName = 'solver'
 
@@ -52,7 +52,7 @@ class ElasticMaterialObject(Sofa.Prefab):
         else:
             self.loader = self.addObject('MeshVTKLoader', name='loader', filename=self.volumeMeshFileName.value, rotation=list(self.rotation.value), translation=list(self.translation.value), scale3d=list(self.scale.value))
 
-        self.container = self.addObject('TetrahedronSetTopologyContainer', src=self.loader.getLinkPath(), name='container')
+        self.container = self.addObject('TetrahedronSetTopologyContainer', position=self.loader.position.getLinkPath(), tetras=self.loader.tetras.getLinkPath(), name='container')
         self.dofs = self.addObject('MechanicalObject', template='Vec3', name='dofs')
 
         # To be properly simulated and to interact with gravity or inertia forces, an elasticobject

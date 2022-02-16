@@ -1,6 +1,7 @@
 import numpy
 import math
-from math import pi
+from math import pi, sqrt
+
 
 class Quat(numpy.ndarray):
     """ The Quat class implements the following:
@@ -55,7 +56,6 @@ class Quat(numpy.ndarray):
         print(cls.__new__.__doc__)
         return super(Quat,cls).__new__(cls, shape=(4,), dtype=float, buffer=numpy.array([0.,0.,0.,1.]))
 
-
     def __eq__(self, other):
         """ Quat overriding of __eq__ so that (q1==q2) returns a boolean.
         """
@@ -65,18 +65,15 @@ class Quat(numpy.ndarray):
                 return False
         return True
 
-
     def __ne__(self, other):
         """ Quat overriding of __ne__ so that (q1!=q2) returns a boolean.
         """
         return not (self == other)
 
-
     def normalize(self, *args):
         """ Function normalize of class Quat normalize the vector. The function expects no argument.
         """
         self /= self.getNorm()
-
 
     def rotateFromQuat(self, qb):
         """Function rotateFromQuat of class Quat rotates the current Quat from the given one.
@@ -92,7 +89,6 @@ class Quat(numpy.ndarray):
 
         self.put(range(4),self.product(self,qb))
 
-
     def rotateFromEuler(self, v, axes="sxyz"):
         """Function rotateFromEuler of class Quat combine the current Quat from euler angles.
 
@@ -107,13 +103,11 @@ class Quat(numpy.ndarray):
         q = Quat.createFromEuler(v)
         self.put(range(4),self.product(self,q))
 
-
     def flip(self):
         """Function flip of class Quat flips the quaternion to the real positive hemisphere if needed.
         """
         if self.getRe() < 0:
             self.put(range(4),-1*self)
-
 
     def rotate(self,v):
         """Function rotate of class Quat rotate a vector using a quaternion.
@@ -133,12 +127,10 @@ class Quat(numpy.ndarray):
 
         return numpy.array([v0,v1,v2])
 
-
     def getNorm(self):
         """ Returns the norm of the quaternion.
         """
         return numpy.linalg.norm(self)
-
 
     def getRe(self):
         """Returns the real part of the quaternion.
@@ -151,7 +143,6 @@ class Quat(numpy.ndarray):
         """
         return float(self.take(3))
 
-
     def getIm(self):
         """Returns the imaginary part of the quaternion.
 
@@ -162,7 +153,6 @@ class Quat(numpy.ndarray):
         [0.65,0.,0.]
         """
         return numpy.array(self.take(range(3)))
-
 
     def getAxisAngle(self):
         """ Returns rotation vector corresponding to unit quaternion in the form of [axis, angle]
@@ -228,7 +218,6 @@ class Quat(numpy.ndarray):
             a[0], a[2] = a[2], a[0]
         return a
 
-
     def getMatrix(self):
         """Returns the convertion of the quaternion into rotation matrix form.
         """
@@ -261,7 +250,6 @@ class Quat(numpy.ndarray):
 
         return matrix
 
-
     def getConjugate(self):
         """Returns the conjugate of the quaternion.
 
@@ -273,20 +261,26 @@ class Quat(numpy.ndarray):
         """
         return Quat(-self.take(0),-self.take(1),-self.take(2),self.take(3))
 
-
     def getInverse(self):
         """Returns the inverse of the quaternion.
 
         If you are dealing with unit quaternions, use getConjugate() instead.
         """
-        return  self.getConjugate() / self.getNorm()**2
-
+        return self.getConjugate() / self.getNorm()**2
 
     def toString(self):
         """Returns the quaternion in string format.
         """
-        return  str(self.take(0))+" "+str(self.take(1))+" "+str(self.take(2))+" "+str(self.take(3))
+        return str(self.take(0))+" "+str(self.take(1))+" "+str(self.take(2))+" "+str(self.take(3))
 
+    @staticmethod
+    def createFromVectors(v1,v2):
+        from splib3.numerics.vec3 import Vec3
+        q = Quat()
+        q[0:3] = Vec3.cross(v2, v1)
+        q[3] = sqrt((v1.getNorm() * v1.getNorm()) * (v2.getNorm() * v2.getNorm())) + Vec3.dot(v1, v2)
+        q.normalize();
+        return q
 
     @staticmethod
     def createFromAxisAngle(axis, angle):

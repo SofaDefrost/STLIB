@@ -66,7 +66,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
             if iterative:
                 node.addObject('CGLinearSolver', name='LinearSolver')
             else:
-                node.addObject('SparseLDLSolver', name='LinearSolver')
+                node.addObject('SparseLDLSolver', name='LinearSolver', template='CompressedRowSparseMatrixd')
             return node
 
         def addContactHeader():
