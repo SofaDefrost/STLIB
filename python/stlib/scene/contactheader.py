@@ -20,7 +20,8 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
 
             rootNode : {
                 DefaultPipeline,
-                BruteForceDetection,
+                BruteForceBroadPhase,
+                BVHNarrowPhase,
                 RuleBasedContactManager,
                 LocalMinDistance
             }
@@ -28,7 +29,8 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
     if applyTo.getObject("DefaultPipeline", warning=False) is None:
             applyTo.createObject('DefaultPipeline')
 
-    applyTo.createObject('BruteForceDetection')
+    applyTo.createObject('BruteForceBroadPhase', name="N2")
+    applyTo.createObject('BVHNarrowPhase')
 
     applyTo.createObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
                                                     name='Response', response='FrictionContact')
