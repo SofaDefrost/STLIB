@@ -31,7 +31,7 @@ def find(node, path):
         return None
 
     for child in s[2:]:
-        newnode = node.getChild(child, warning=False)
+        newnode = node.getChild(child)
         if newnode == None:
             newnode = node.getObject(child)
 
@@ -58,8 +58,9 @@ def get(node, path):
         path = path[2:]
 
     s = path.split('/')
+    #print("path after split ----> ", type(s))
     for child in s:
-        newnode = node.getChild(child, warning=False)
+        newnode = node.getChild(child)
         if newnode == None:
             nn = child.split('.')
             if len(nn) == 1:

@@ -25,7 +25,6 @@ class Wrapper(object):
         self.datacache = datacache
 
     def addObject(self, type, **kwargs):
-
         objectArg = self.attachedFunction(self.node,type,self.datacache,kwargs)
         # objectArg as to contain (newType, **newKwargs)
 
@@ -38,7 +37,17 @@ class Wrapper(object):
         return Wrapper(self.node.addChild(name), self.attachedFunction ,self.datacache)
 
     def __getattr__(self, value):
+        try:
+            return self.node.__getattr__(value)
+        except:
+            pass
         return self.node.__getattribute__(value)
+
+    def createObject(self, type, **kwargs):
+        return self.addObject(type, **kwargs)
+
+    def createChild(self, type, **kwargs):
+        return self.addChild(type, **kwargs)
 
 ### This functions are just an example on how to use the Wrapper class.
 
@@ -66,3 +75,4 @@ class Wrapper(object):
 # def createScene(rootNode):
 #     ## Call the old scene creation.
 #     mainheader.createScene(Wrapper(rootNode, myAttachedFunction, myNewParam))
+
