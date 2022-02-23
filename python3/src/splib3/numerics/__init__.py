@@ -175,10 +175,8 @@ class RigidDof(object):
 
     def translate(self, v, field="position"):
         p = self.rigidobject.getData(field)
-        to = p.value[0]
-        t = Transform(to[:3], orientation=to[3:])
-        t.translate(v)
-        p.value = t.toSofaRepr()
+        with p.writeableArray() as w:
+            w[0, 0:3] += v
 
     def rotateAround(self, axis, angle, field="position"):
         p = self.rigidobject.getData(field)
