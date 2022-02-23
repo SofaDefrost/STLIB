@@ -181,7 +181,9 @@ class RigidDof(object):
     def rotateAround(self, axis, angle, field="position"):
         p = self.rigidobject.getData(field)
         pq = p.value[0]
-        p.value =  pq[:3] + list(Quaternion.prod(axisToQuat(axis, angle), pq[3:]))
+        x= Quat(pq[3:].tolist())
+        p.value = [list(pq[:3]) + list(Quat.product(Quat.createFromAxisAngle(axis, angle),x))]
+    
 
     def __getattr__(self, key):
         if key in self.__dict__:
