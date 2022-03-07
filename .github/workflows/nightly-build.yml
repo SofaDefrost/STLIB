@@ -22,6 +22,11 @@ jobs:
           sofa_version: ${{ matrix.sofa_branch }}
           sofa_scope: 'standard'
 
+      - name: Install Qt5
+        shell: bash
+        run: |
+            sudo apt-get install qt5-default
+
       - name: Checkout source code
         uses: actions/checkout@v2
         with:
