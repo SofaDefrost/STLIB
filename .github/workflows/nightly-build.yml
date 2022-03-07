@@ -6,6 +6,7 @@ on:
 
 jobs:
   test-container:
+    runs-on: ubuntu-latest     
     container : sofaframework/sofabuilder_ubuntu  
 
     steps:
