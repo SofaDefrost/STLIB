@@ -44,10 +44,6 @@ jobs:
                   -DCMAKE_PREFIX_PATH="$SOFA_ROOT/lib/cmake" \
                   -DCMAKE_BUILD_TYPE=Release \
                   -DCMAKE_INSTALL_PREFIX="$WORKSPACE_INSTALL_PATH" \
-                  -DPYTHON_ROOT=$PYTHON_ROOT \
-                  -DPython_ROOT=$PYTHON_ROOT \
-                  -DPYTHON_EXECUTABLE=$PYTHON_ROOT/python.exe \
-                  -DPython_EXECUTABLE=$PYTHON_ROOT/python.exe \
                   -DSTLIB_BUILD_TESTS=True \
                   ../src \
               && ninja install"
@@ -61,10 +57,6 @@ jobs:
               -DCMAKE_PREFIX_PATH=$SOFA_ROOT/lib/cmake \
               -DCMAKE_BUILD_TYPE=Release \
               -DCMAKE_INSTALL_PREFIX="$WORKSPACE_INSTALL_PATH" \
-              -DPYTHON_ROOT=$PYTHON_ROOT \
-              -DPython_ROOT=$PYTHON_ROOT \
-              -DPYTHON_EXECUTABLE=$PYTHON_ROOT/python.exe \
-              -DPython_EXECUTABLE=$PYTHON_ROOT/python.exe \
               -DSTLIB_BUILD_TESTS=True \
               ../src
             ninja install
