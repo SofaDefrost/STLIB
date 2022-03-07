@@ -5,6 +5,15 @@ on:
   workflow_dispatch:
 
 jobs:
+  test-container:
+    container : sofaframework/sofabuilder_ubuntu  
+
+    steps:
+        - name: "Testing a third party container" 
+          shell: bash
+          run: | 
+            echo "This is a simple test" 
+
   build-and-test:
     name: Building master-nightly on ${{ matrix.os }} using the SOFA_master_nightly
     runs-on: ${{ matrix.os }}
