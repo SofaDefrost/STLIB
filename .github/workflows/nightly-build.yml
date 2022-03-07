@@ -1,5 +1,6 @@
 name: Nightly-build
 
+
 on:
   workflow_dispatch:
 
@@ -25,7 +26,7 @@ jobs:
       - name: Install Qt5
         shell: bash
         run: |
-            sudo apt-get install qt5-default libqt5charts5-dev libqt5webengine5
+            sudo apt-get install qt5-default libqt5charts5-dev libqt5webengine5 libqt5webenginecore5 libqt5webenginewidgets5 libqt5webengine-data qtbase5-dev qtwebengine5-dev
 
       - name: Checkout source code
         uses: actions/checkout@v2
