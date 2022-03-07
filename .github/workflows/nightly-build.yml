@@ -20,7 +20,7 @@ jobs:
         with:
           sofa_root: ${{ github.workspace }}/sofa
           sofa_version: ${{ matrix.sofa_branch }}
-          sofa_scope: 'standard'
+          sofa_scope: 'minimal'
 
       - name: Checkout source code
         uses: actions/checkout@v2
