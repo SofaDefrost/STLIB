@@ -70,7 +70,7 @@ def RigidObject(name="RigidObject",
     def addCollisionModel(inputMesh=surfaceMeshFileName):
         objectCollis = object.addChild('collision')
         objectCollis.addObject('RequiredPlugin', name='SofaMeshCollision')
-        objectCollis.addObject('MeshObjLoader', name="loader",
+        objectCollis.addObject('MeshOBJLoader', name="loader",
                             filename=inputMesh, triangulate=True,
                             scale=uniformScale)
 

@@ -4,7 +4,7 @@ import Sofa
 
 def loaderFor(name):
     if name.endswith(".obj"):
-        return "MeshObjLoader"
+        return "MeshOBJLoader"
     elif name.endswith(".stl"):
         return "MeshSTLLoader"
     elif name.endswith(".vtk"):

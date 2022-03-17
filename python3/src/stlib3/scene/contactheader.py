@@ -33,7 +33,7 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
     applyTo.addObject('BVHNarrowPhase')
 
     applyTo.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
-                                                    name='Response', response='FrictionContact')
+                                                    name='Response', response='FrictionContactConstraint')
     applyTo.addObject('LocalMinDistance',
                         alarmDistance=alarmDistance, contactDistance=contactDistance,
                         angleCone=0.01)
