@@ -71,4 +71,59 @@ jobs:
         with:
           name: STLIB_${{ steps.sofa.outputs.run_branch }}_for-SOFA-${{ steps.sofa.outputs.sofa_version }}_${{ runner.os }}
           path: ${{ env.WORKSPACE_INSTALL_PATH }}
+
+  deploy:
+    name: Deploy artifacts
+    if: always() && startsWith(github.ref, 'refs/heads/') # we are on a branch (not a PR)
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - name: Get artifacts
+        uses: actions/download-artifact@v2
+        with:
+          path: artifacts
+
+      - name: Zip artifacts and set env vars
+        shell: bash
+        run: |
+          cd $GITHUB_WORKSPACE/artifacts
+          for artifact in *; do
+            zip $artifact.zip -r $artifact/*
+          done
+          PROJECT_NAME="${GITHUB_REPOSITORY#*/}"
+          echo "PROJECT_NAME=$PROJECT_NAME" | tee -a $GITHUB_ENV
+          
+          RELEASE_NAME="${{ github.ref_name }}"
+          RELEASE_TAGNAME="release-${{ github.ref_name }}"
+          if [[ "${{ github.event.inputs.is_nightly }}" == "true" ]]; then
+              RELEASE_NAME="$RELEASE_NAME-nightly"
+              RELEASE_TAGNAME="$RELEASE_TAGNAME-nightly"
+          fi
+          RELEASE_DATE="$(date +'%Y-%m-%d (at %T UTC)')"
+          echo "RELEASE_NAME=$RELEASE_NAME" | tee -a $GITHUB_ENV
+          echo "RELEASE_TAGNAME=$RELEASE_TAGNAME" | tee -a $GITHUB_ENV
+          echo "RELEASE_DATE=$RELEASE_DATE" | tee -a $GITHUB_ENV
+
+      - name: Delete old release
+        uses: dev-drprasad/delete-tag-and-release@v0.2.0
+        with:
+          tag_name: ${{ env.RELEASE_TAGNAME }}
+          delete_release: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create new release
+        if: success() || failure()
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ env.RELEASE_NAME }}
+          tag_name: ${{ env.RELEASE_TAGNAME }}
+          fail_on_unmatched_files: true
+          body: |
+            Last updated on ${{ env.RELEASE_DATE }}
+          files: |
+            artifacts/${{ env.PROJECT_NAME }}_*_Linux.zip
+            artifacts/${{ env.PROJECT_NAME }}_*_Windows.zip
+            artifacts/${{ env.PROJECT_NAME }}_*_macOS.zip
           
