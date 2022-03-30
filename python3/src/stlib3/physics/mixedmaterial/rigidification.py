@@ -118,9 +118,12 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
                                           position=[list(allPositions[i]) for i in selectedIndices])
         rigidifiedParticules.addObject("RigidMapping", name="mapping", globalToLocalCoords=True, rigidIndexPerPoint=indicesMap)
 
-        sourceObject.removeObject(sourceObject.solver)
-        sourceObject.removeObject(sourceObject.integration)
-        sourceObject.removeObject(sourceObject.correction)
+        if "solver" in sourceObject.objects:
+            sourceObject.removeObject(sourceObject.solver)
+        if "integration" in sourceObject.objects:
+            sourceObject.removeObject(sourceObject.integration)
+        if "correction" in sourceObject:
+            sourceObject.removeObject(sourceObject.correction)
 
         sourceObject.addObject("SubsetMultiMapping", name="mapping", template="Vec3,Vec3",
                               input=[freeParticules.dofs.getLinkPath(),rigidifiedParticules.dofs.getLinkPath()],
