@@ -29,6 +29,7 @@ def Settings(plugins=[], repositoryPaths=[]):
                 i+=1
 
         self.addObject('OglSceneFrame', style="Arrows", alignment="TopRight")
+        self.addObject('AttachBodyButtonSetting', name="mouseButton")
 
         return self
 
@@ -86,16 +87,15 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
                 root.addChild(Settings(plugins=plugins, repositoryPaths=repositoryPaths))
                 return root
 
-
         root.gravity.value = gravity
         root.dt.value = dt
-        root.addObject('VisualStyle')
         root.addMainHeader = addMainHeader
         root.addSettings = addSettings
         root.addSolver = addDefaultSolver
         root.addContact = addContactHeader
         root.addModelling = addModelling
         root.addSimulation = addSimulation
+
         return root
 
 
