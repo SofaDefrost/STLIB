@@ -122,7 +122,7 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
             sourceObject.removeObject(sourceObject.solver)
         if "integration" in sourceObject.objects:
             sourceObject.removeObject(sourceObject.integration)
-        if "correction" in sourceObject:
+        if "correction" in sourceObject.objects:
             sourceObject.removeObject(sourceObject.correction)
 
         sourceObject.addObject("SubsetMultiMapping", name="mapping", template="Vec3,Vec3",
