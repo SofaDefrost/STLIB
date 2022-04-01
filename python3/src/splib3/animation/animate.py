@@ -77,6 +77,9 @@ class AnimationManagerController(Sofa.Core.Controller):
         self.node = args[0]
         self.totalTime = 0
         self.animations = []
+    
+    def clearAnimations(self):
+        self.animations = []
 
     def addAnimation(self, animation):
         self.animations.append(animation)
@@ -165,7 +168,8 @@ def AnimationManager(node):
     """
     global manager
     if manager is not None:
-        Sofa.msg_info(node, "There is already one animation manager in this scene...why do you need a second one ?")
+        #Sofa.msg_info(node, "There is already one animation manager in this scene...why do you need a second one ? Resting it.")
+        manager.clearAnimations()
         return manager
     manager = AnimationManagerController(node)
     return manager
