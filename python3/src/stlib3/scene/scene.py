@@ -89,6 +89,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
 
         root.gravity.value = gravity
         root.dt.value = dt
+        root.addObject('VisualStyle')
         root.addMainHeader = addMainHeader
         root.addSettings = addSettings
         root.addSolver = addDefaultSolver
