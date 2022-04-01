@@ -21,7 +21,7 @@ class VisualModel(Sofa.Prefab):
         if path.endswith('.stl'):
             self.addObject('MeshSTLLoader', name='loader',filename=path)
         elif path.endswith('.obj'):
-            self.addObject('MeshObjLoader', name='loader',filename=path)
+            self.addObject('MeshOBJLoader', name='loader',filename=path)
         else:
             print("Extension not handled in STLIB/python3/stlib3/visuals for file: "+str(path))
 
