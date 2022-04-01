@@ -28,7 +28,7 @@ if(SofaPython_FOUND)
 endif()
 
 if(!SofaPythonAny_FOUND)
-    message("-- Missing a python implementation (SofaPython or SofaPython3). Disabling the plugin")
+    message("-- Missing a python implementation (SofaPython or SofaPython3). Disabling the plugin need that.")
     return()
 endif()
 
