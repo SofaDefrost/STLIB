@@ -175,15 +175,15 @@ class RigidDof(object):
 
     def translate(self, v, field="position"):
         p = self.rigidobject.getData(field)
-        to = p.value[0]
-        t = Transform(to[:3], orientation=to[3:])
-        t.translate(v)
-        p.value = t.toSofaRepr()
+        with p.writeableArray() as w:
+            w[0, 0:3] += v
 
     def rotateAround(self, axis, angle, field="position"):
         p = self.rigidobject.getData(field)
         pq = p.value[0]
-        p.value =  pq[:3] + list(Quaternion.prod(axisToQuat(axis, angle), pq[3:]))
+        x= Quat(pq[3:].tolist())
+        p.value = [list(pq[:3]) + list(Quat.product(Quat.createFromAxisAngle(axis, angle),x))]
+    
 
     def __getattr__(self, key):
         if key in self.__dict__:
