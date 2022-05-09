@@ -9,14 +9,14 @@ def RigidObject(name="RigidObject",
                 totalMass=1.,
                 volume=1.,
                 inertiaMatrix=[1., 0., 0., 0., 1., 0., 0., 0., 1.],
-                color=[1., 1., 0.],
+                color=[1., 1., 1., 1.],
                 collisionGroup='',
                 isAStaticObject=False, parent=None):
     """Creates and adds rigid body from a surface mesh.
     Args:
         surfaceMeshFileName (str):  The path or filename pointing to surface mesh file.
         totalMass (float):   The mass is distributed according to the geometry of the object.
-        color (vec3f):  The default color used for the rendering of the object.
+        color (vec4f):  The default color used for the rendering of the object.
         translation (vec3f):   Apply a 3D translation to the object.
         rotation (vec3f):   Apply a 3D rotation to the object in Euler angles.
         uniformScale (vec3f):   Apply a uniform scaling to the object.
