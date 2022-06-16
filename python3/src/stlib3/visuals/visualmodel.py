@@ -7,7 +7,7 @@ import Sofa.Core
 
 class VisualModel(Sofa.Prefab):
     """  """
-    prefabData = [
+    prefabParameters = [
         {'name': 'visualMeshPath', 'type': 'string', 'help': 'Path to visual mesh file', 'default': ''},
         {'name': 'translation', 'type': 'Vec3d', 'help': 'translate visual model', 'default': [0., 0., 0.]},
         {'name': 'rotation', 'type': 'Vec3d', 'help': 'rotate visual model', 'default': [0., 0., 0.]},
@@ -17,7 +17,6 @@ class VisualModel(Sofa.Prefab):
     def __init__(self, *args, **kwargs):
         Sofa.Prefab.__init__(self, *args, **kwargs)
 
-    def init(self):
         self.addObject('RequiredPlugin', pluginName=['SofaOpenglVisual', 'SofaLoader'])
         path = self.visualMeshPath.value
         if path.endswith('.stl'):

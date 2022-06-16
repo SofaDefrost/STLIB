@@ -5,7 +5,7 @@ from stlib3.visuals import VisualModel
 
 class ElasticMaterialObject(Sofa.Prefab):
     """Creates an object composed of an elastic material."""
-    prefabData = [
+    prefabParameters = [
         {'name': 'volumeMeshFileName', 'type': 'string', 'help': 'Path to volume mesh file', 'default': ''},
         {'name': 'rotation', 'type': 'Vec3d', 'help': 'Rotation', 'default': [0.0, 0.0, 0.0]},
         {'name': 'translation', 'type': 'Vec3d', 'help': 'Translation', 'default': [0.0, 0.0, 0.0]},
@@ -21,8 +21,6 @@ class ElasticMaterialObject(Sofa.Prefab):
 
     def __init__(self, *args, **kwargs):
         Sofa.Prefab.__init__(self, *args, **kwargs)
-
-    def init(self):
 
         # Eulalie: 01/21 the prefab is child of none... so there is no root?
         # root = self.getRoot()
