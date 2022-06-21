@@ -17,6 +17,7 @@ class VisualModel(Sofa.Prefab):
     def __init__(self, *args, **kwargs):
         Sofa.Prefab.__init__(self, *args, **kwargs)
 
+    def init(self):
         self.addObject('RequiredPlugin', pluginName=['SofaOpenglVisual', 'SofaLoader'])
         path = self.visualMeshPath.value
         if path.endswith('.stl'):

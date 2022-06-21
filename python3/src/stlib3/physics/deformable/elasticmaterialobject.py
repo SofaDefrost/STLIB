@@ -22,6 +22,7 @@ class ElasticMaterialObject(Sofa.Prefab):
     def __init__(self, *args, **kwargs):
         Sofa.Prefab.__init__(self, *args, **kwargs)
 
+    def init(self):
         # Eulalie: 01/21 the prefab is child of none... so there is no root?
         # root = self.getRoot()
         # if not root.getObject("SofaSparseSolver", warning=False):
