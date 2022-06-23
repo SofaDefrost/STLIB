@@ -50,7 +50,6 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
                                 If the position is not specified, the position of the rigids will be the barycenter of the region to rigidify.
             :param str name: specify the name of the Rigidified object, is none provided use the name of the SOurceObject.
         """
-
         if frames is None:
             frames = [[0., 0., 0.]]*len(groupIndices)
 
@@ -62,8 +61,8 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
         # sourceObject.reinit()
         ero = targetObject.addChild(name)
 
-        allPositions = [list(i) for i in sourceObject.container.position.value]
-        allIndices =[id for id in range(sourceObject.container.nbPoints.value)]
+        allPositions = sourceObject.container.position.value
+        allIndices =list(range(len(allPositions)))
 
         rigids = []
         indicesMap = []
@@ -79,7 +78,6 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
         selectedIndices = []
         for i in range(len(groupIndices)):
                 selectedPoints = mfilter(groupIndices[i], allIndices, allPositions)
-
                 if len(frames[i]) == 3:
                         orientation = Quat.createFromEuler(frames[i], inDegree=True)
                         poscenter = getBarycenter(selectedPoints)
@@ -108,14 +106,14 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
 
         freeParticules = ero.addChild("DeformableParts")
         freeParticules.addObject("MechanicalObject", template="Vec3", name="dofs",
-                                    position=[list(allPositions[i]) for i in otherIndices])
+                                    position=[allPositions[i] for i in otherIndices])
 
         rigidParts = ero.addChild("RigidParts")
         rigidParts.addObject("MechanicalObject", template="Rigid3", name="dofs", reserve=len(rigids), position=rigids)
 
         rigidifiedParticules = rigidParts.addChild("RigidifiedParticules")
         rigidifiedParticules.addObject("MechanicalObject", template="Vec3", name="dofs",
-                                          position=[list(allPositions[i]) for i in selectedIndices])
+                                          position=[allPositions[i] for i in selectedIndices])
         rigidifiedParticules.addObject("RigidMapping", name="mapping", globalToLocalCoords=True, rigidIndexPerPoint=indicesMap)
 
         if "solver" in sourceObject.objects:
@@ -140,7 +138,6 @@ def createScene(rootNode):
         """
         from stlib3.scene import MainHeader
         from stlib3.physics.deformable import ElasticMaterialObject
-        from stlib3.physics.mixedmaterial import Rigidify
         from splib3.objectmodel import setData
 
         MainHeader(rootNode, plugins=["SofaSparseSolver","SofaImplicitOdeSolver","SofaMiscMapping","SofaRigid","SofaBoundaryCondition"])
@@ -149,7 +146,6 @@ def createScene(rootNode):
         modelNode = rootNode.addChild("Modeling")
         elasticobject = ElasticMaterialObject(volumeMeshFileName="mesh/liver.msh", name="ElasticMaterialObject")
         modelNode.addChild(elasticobject)
-
         # Rigidification of the elasticobject for given indices with given frameOrientations.
         o = Rigidify(modelNode,
                      elasticobject,
