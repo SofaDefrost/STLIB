@@ -14,7 +14,7 @@ from Sofa.Helper import msg_deprecated
 class FixedBox(Sofa.Prefab):
     """  """
 
-    prefabParameters = [
+    prefabData = [
         {"name": "boxCoords", "type": "Vec6f",
          "help": "Coordinates expressed as follows: [minX, minY, minZ, maxX, maxY, maxZ]",
          "default": [0, 0, 0, 1, 1, 1]},
@@ -23,12 +23,14 @@ class FixedBox(Sofa.Prefab):
          "help": "Visualize box",
          "default": False},
 
-        {"name": "BoxCoords", "help": "deprecated, use boxCoords instead", "type": "Vec6f"},
-        {"name": "ShowBox", "help": "deprecated, use showBox instead", "type": "bool"}
+        {"name": "BoxCoords", "help": "deprecated, use boxCoords instead", "type": "Vec6f", 'default' : [0,0,0,1,1,1] },
+        {"name": "ShowBox", "help": "deprecated, use showBox instead", "type": "bool", 'default' : False}
     ]
 
     def __init__(self, *args, **kwargs):
-
+        if "parent" not in kwargs:
+            raise TypeError("Missing positional argument 'parent' (Sofa.Core.Node). FixingBox needs that the provided 'parent' contains a mechanical object.")
+        Sofa.Prefab.__init__(self, *args, **kwargs)
         if kwargs.get('BoxCoords') is not None:
             kwargs['boxCoords'] = kwargs.get('BoxCoords')
             msg_deprecated('BoxCoords parameter is deprecated, use boxCoords instead')
@@ -37,9 +39,7 @@ class FixedBox(Sofa.Prefab):
             kwargs['showBox'] = kwargs.get('ShowBox')
             msg_deprecated('ShowBox parameter is deprecated, use showBox instead')
 
-        Sofa.Prefab.__init__(self, *args, **kwargs)
-
-    def onParametersChanged(self):
+    def init(self):
         self.addObject('BoxROI', name='BoxROI', box=self.boxCoords, drawBoxes=self.showBox)
         self.addObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness=1e12)
 
@@ -48,6 +48,9 @@ def createScene(rootnode):
     rootnode.addObject('RequiredPlugin', pluginName=[
         "Sofa.Component.Visual",  # Needed to use components VisualStyle
         "Sofa.GL.Component.Rendering3D",  # Needed to use components OglSceneFrame
+        "Sofa.Component.StateContainer"
     ])
 
-    rootnode.addChild(FixedBox(boxCoords=[0, 0, 0, 1, 1, 1], showBox=True))
+    rootnode.addObject("MechanicalObject", name="dofs", position=[[0.0,1.0,2.0],[2.0,3.0,4.0], [0.5,0.5,0.5]],
+                        showObject=True, showObjectScale=10.0)
+    FixedBox(boxCoords=[0, 0, 0, 1, 1, 1], showBox=True)
