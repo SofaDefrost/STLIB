@@ -101,8 +101,7 @@ class ElasticMaterialObject(Sofa.Prefab):
         self.collisionmodel.addObject('BarycentricMapping')
 
     def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
-        visualmodel = self.addChild(
-            VisualModel(visualMeshPath=filename, color=color, rotation=rotation, translation=translation, scale=scale))
+        visualmodel = self.addChild(VisualModel(visualMeshPath=filename, color=color, rotation=rotation, translation=translation, scale=scale))
 
         # Add a BarycentricMapping to deform the rendering model to follow the ones of the
         # mechanical model.

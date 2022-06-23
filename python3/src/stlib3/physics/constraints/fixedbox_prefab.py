@@ -53,4 +53,4 @@ def createScene(rootnode):
 
     rootnode.addObject("MechanicalObject", name="dofs", position=[[0.0,1.0,2.0],[2.0,3.0,4.0], [0.5,0.5,0.5]],
                         showObject=True, showObjectScale=10.0)
-    FixedBox(boxCoords=[0, 0, 0, 1, 1, 1], showBox=True)
+    FixedBox(boxCoords=[0, 0, 0, 1, 1, 1], showBox=True, parent=rootnode)
