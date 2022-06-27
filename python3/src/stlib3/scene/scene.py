@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import Sofa
 import Sofa.Core
+import platform
 from splib3.animation import AnimationManager
 
 class SofaRuntime(object):
@@ -28,7 +30,10 @@ def Settings(plugins=[], repositoryPaths=[]):
                 self.addObject('AddResourceRepository', name="AddResourceRepository"+str(i), path=repository)
                 i+=1
 
-        self.addObject('OglSceneFrame', style="Arrows", alignment="TopRight")
+        if platform.system() != "Darwin":
+            self.addObject('OglSceneFrame', style="Arrows", alignment="TopRight")
+        else:
+            Sofa.msg_warning(self, "MacOs detected, removing OglSceneFrame from the Settings because of compatibility problem.")
         self.addObject('AttachBodyButtonSetting', name="mouseButton")
 
         return self
