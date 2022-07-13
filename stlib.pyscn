@@ -1,18 +1,24 @@
-from stlib.scene import MainHeader
-from stlib.solver import DefaultSolver
-from stlib.physics.rigid import Cube, Sphere, Floor
-from stlib.physics.deformable import ElasticMaterialObject
+import os
+from stlib3.scene import Scene
+from stlib3.physics.rigid import Cube, Sphere, Floor
+from stlib3.physics.deformable import ElasticMaterialObject
 
-def createScene(rootNode):
-    MainHeader(rootNode)
-    DefaultSolver(rootNode)
+def createScene(root):
+    root.addObject("APIVersion", level="22.06")
+    scene = Scene(root)
 
-    Sphere(rootNode, name="sphere", translation=[-5.0, 0.0, 0.0])
-    Cube(rootNode, name="cube", translation=[5.0,0.0,0.0])
+    scene.addSettings(repositoryPaths=[os.getcwd()])
+    scene.addModelling()
+    scene.addSimulation()
 
-    e = ElasticMaterialObject(rootNode, name="dragon",
-                          surface="mesh/dragon.obj", volume="mesh/liver.msh",
-                          translation=[0.0,0.0,0.0])
+    Cube(scene.Modelling, translation=[1.0,0.0,0.0])
+    Sphere(scene.Modelling, translation=[-1.0,0.0,0.0])
 
-    f = Floor(rootNode, name="plane", translation=[0.0, -1.0, 0.0])
+    scene.Modelling.addChild(ElasticMaterialObject(name='ElasticMaterialObject1',
+                                                surfaceMeshFileName="mesh/liver.obj",
+                                                volumeMeshFileName="mesh/liver.msh",
+                                                translation=[3.0, 0.0, 0.0], scale3d=[10,10,10]))
 
+    Floor(scene.Modelling, translation=[0.0,0.0,-3.0], isAStaticObject=True)
+    
+    scene.Simulation.addChild(scene.Modelling)
