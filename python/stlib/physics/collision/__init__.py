@@ -20,5 +20,5 @@ from collision import CollisionMesh
 
 
 def FrictionalContact(applyTo=None):
-    applyTo.createObject('DefaultContactManager', response="FrictionContact", responseParams="mu=0")
+    applyTo.createObject('DefaultContactManager', response="FrictionContactConstraint", responseParams="mu=0")
     applyTo.createObject('LocalMinDistance', name="Proximity", alarmDistance="3", contactDistance="1")
