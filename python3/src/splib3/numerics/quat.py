@@ -46,20 +46,22 @@ class Quat(numpy.ndarray):
         >>> print(q)
         [0.,0.,0.,1.]
         """
-        if len(args)==0:
-            return super(Quat,cls).__new__(cls, shape=(4,), dtype=float, buffer=numpy.array([0.,0.,0.,1.]))
-        elif hasattr(args[0],"__len__") and len(args[0])==4:
-            return super(Quat,cls).__new__(cls, shape=(4,), dtype=type(args[0][0]), buffer=numpy.array([args[0][0],args[0][1],args[0][2],args[0][3]]))
-        elif len(args)==4:
-            return super(Quat,cls).__new__(cls, shape=(4,), dtype=type(args[0]), buffer=numpy.array([args[0],args[1],args[2],args[3]]))
+        if len(args) == 0:
+            return super(Quat, cls).__new__(cls, shape=(4,), dtype=float, buffer=numpy.array([0., 0., 0., 1.]))
+        elif hasattr(args[0], "__len__") and len(args[0]) == 4:
+            return super(Quat, cls).__new__(cls, shape=(4,), dtype=type(args[0][0]),
+                                            buffer=numpy.array([args[0][0], args[0][1], args[0][2], args[0][3]]))
+        elif len(args) == 4:
+            return super(Quat, cls).__new__(cls, shape=(4,), dtype=type(args[0]),
+                                            buffer=numpy.array([args[0], args[1], args[2], args[3]]))
 
         print(cls.__new__.__doc__)
-        return super(Quat,cls).__new__(cls, shape=(4,), dtype=float, buffer=numpy.array([0.,0.,0.,1.]))
+        return super(Quat, cls).__new__(cls, shape=(4,), dtype=float, buffer=numpy.array([0., 0., 0., 1.]))
 
     def __eq__(self, other):
         """ Quat overriding of __eq__ so that (q1==q2) returns a boolean.
         """
-        results = (super(Quat,self).__eq__(other))
+        results = (super(Quat, self).__eq__(other))
         for result in results:
             if result == False:
                 return False
@@ -75,6 +77,8 @@ class Quat(numpy.ndarray):
         """
         self /= self.getNorm()
 
+        return self
+
     def rotateFromQuat(self, qb):
         """Function rotateFromQuat of class Quat rotates the current Quat from the given one.
 
@@ -87,7 +91,9 @@ class Quat(numpy.ndarray):
         [ 0.5 -0.5 -0.5  0.5]
         """
 
-        self.put(range(4),self.product(self,qb))
+        self.put(range(4), self.product(self, qb))
+
+        return self
 
     def rotateFromEuler(self, v, axes="sxyz"):
         """Function rotateFromEuler of class Quat combine the current Quat from euler angles.
@@ -101,15 +107,19 @@ class Quat(numpy.ndarray):
         """
 
         q = Quat.createFromEuler(v)
-        self.put(range(4),self.product(self,q))
+        self.put(range(4), self.product(self, q))
+
+        return self
 
     def flip(self):
         """Function flip of class Quat flips the quaternion to the real positive hemisphere if needed.
         """
         if self.getRe() < 0:
-            self.put(range(4),-1*self)
+            self.put(range(4), -1 * self)
 
-    def rotate(self,v):
+        return self
+
+    def rotate(self, v):
         """Function rotate of class Quat rotate a vector using a quaternion.
             Examples:
 
@@ -121,11 +131,14 @@ class Quat(numpy.ndarray):
         q = Quat(self)
         q.normalize()
 
-        v0 = (1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2]))*v[0] + (2.0 * (q[0] * q[1] - q[2] * q[3])) * v[1] + (2.0 * (q[2] * q[0] + q[1] * q[3])) * v[2]
-        v1 = (2.0 * (q[0] * q[1] + q[2] * q[3]))*v[0] + (1.0 - 2.0 * (q[2] * q[2] + q[0] * q[0]))*v[1] + (2.0 * (q[1] * q[2] - q[0] * q[3]))*v[2]
-        v2 = (2.0 * (q[2] * q[0] - q[1] * q[3]))*v[0] + (2.0 * (q[1] * q[2] + q[0] * q[3]))*v[1] + (1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0]))*v[2]
+        v0 = (1.0 - 2.0 * (q[1] * q[1] + q[2] * q[2])) * v[0] + (2.0 * (q[0] * q[1] - q[2] * q[3])) * v[1] + (
+                    2.0 * (q[2] * q[0] + q[1] * q[3])) * v[2]
+        v1 = (2.0 * (q[0] * q[1] + q[2] * q[3])) * v[0] + (1.0 - 2.0 * (q[2] * q[2] + q[0] * q[0])) * v[1] + (
+                    2.0 * (q[1] * q[2] - q[0] * q[3])) * v[2]
+        v2 = (2.0 * (q[2] * q[0] - q[1] * q[3])) * v[0] + (2.0 * (q[1] * q[2] + q[0] * q[3])) * v[1] + (
+                    1.0 - 2.0 * (q[1] * q[1] + q[0] * q[0])) * v[2]
 
-        return numpy.array([v0,v1,v2])
+        return numpy.array([v0, v1, v2])
 
     def getNorm(self):
         """ Returns the norm of the quaternion.
@@ -161,17 +174,17 @@ class Quat(numpy.ndarray):
         q = Quat(self)
         q.flip()  # flip q first to ensure that angle is in the [-0, pi] range
 
-        angle = 2.0* math.acos(q.getRe())
+        angle = 2.0 * math.acos(q.getRe())
 
         if angle > sys.float_info.epsilon:
-            return [ q.getIm() / math.sin(angle/2.), angle ]
+            return [q.getIm() / math.sin(angle / 2.), angle]
 
         norm = numpy.linalg.norm(q.getIm())
         if norm > sys.float_info.epsilon:
             sign = 1.0 if angle > 0 else -1.0
-            return [ q.getIm() * (sign / norm), angle ]
+            return [q.getIm() * (sign / norm), angle]
 
-        return [ numpy.zeros(3), angle ]
+        return [numpy.zeros(3), angle]
 
     def getEulerAngles(self, axes='sxyz'):
         """Returns the Euler angles in radian for specified axis sequence.
@@ -186,30 +199,30 @@ class Quat(numpy.ndarray):
             firstaxis, parity, repetition, frame = axes
 
         i = firstaxis
-        j = NEXT_AXIS[i+parity]
-        k = NEXT_AXIS[i-parity+1]
+        j = NEXT_AXIS[i + parity]
+        k = NEXT_AXIS[i - parity + 1]
 
-        a = numpy.empty((3, ))
+        a = numpy.empty((3,))
 
         if repetition:
-            sy = math.sqrt(M[i, j]*M[i, j] + M[i, k]*M[i, k])
+            sy = math.sqrt(M[i, j] * M[i, j] + M[i, k] * M[i, k])
             if sy > EPS:
-                a[0] = math.atan2( M[i, j],  M[i, k])
-                a[1] = math.atan2( sy,       M[i, i])
-                a[2] = math.atan2( M[j, i], -M[k, i])
+                a[0] = math.atan2(M[i, j], M[i, k])
+                a[1] = math.atan2(sy, M[i, i])
+                a[2] = math.atan2(M[j, i], -M[k, i])
             else:
-                a[0] = math.atan2(-M[j, k],  M[j, j])
-                a[1] = math.atan2( sy,       M[i, i])
+                a[0] = math.atan2(-M[j, k], M[j, j])
+                a[1] = math.atan2(sy, M[i, i])
                 a[2] = 0.0
         else:
-            cy = math.sqrt(M[i, i]*M[i, i] + M[j, i]*M[j, i])
+            cy = math.sqrt(M[i, i] * M[i, i] + M[j, i] * M[j, i])
             if cy > EPS:
-                a[0] = math.atan2( M[k, j],  M[k, k])
-                a[1] = math.atan2(-M[k, i],  cy)
-                a[2] = math.atan2( M[j, i],  M[i, i])
+                a[0] = math.atan2(M[k, j], M[k, k])
+                a[1] = math.atan2(-M[k, i], cy)
+                a[2] = math.atan2(M[j, i], M[i, i])
             else:
-                a[0] = math.atan2(-M[j, k],  M[j, j])
-                a[1] = math.atan2(-M[k, i],  cy)
+                a[0] = math.atan2(-M[j, k], M[j, j])
+                a[1] = math.atan2(-M[k, i], cy)
                 a[2] = 0.0
 
         if parity:
@@ -224,7 +237,7 @@ class Quat(numpy.ndarray):
         q = Quat(self)
 
         # Repetitive calculations
-        q44 = q[3]**2
+        q44 = q[3] ** 2
         q12 = q[0] * q[1]
         q13 = q[0] * q[2]
         q14 = q[0] * q[3]
@@ -232,12 +245,12 @@ class Quat(numpy.ndarray):
         q24 = q[1] * q[3]
         q34 = q[2] * q[3]
 
-        matrix = numpy.empty((3,3))
+        matrix = numpy.empty((3, 3))
 
         # The diagonal
-        matrix[0, 0] = 2.0 * (q[0]**2 + q44) - 1.0
-        matrix[1, 1] = 2.0 * (q[1]**2 + q44) - 1.0
-        matrix[2, 2] = 2.0 * (q[2]**2 + q44) - 1.0
+        matrix[0, 0] = 2.0 * (q[0] ** 2 + q44) - 1.0
+        matrix[1, 1] = 2.0 * (q[1] ** 2 + q44) - 1.0
+        matrix[2, 2] = 2.0 * (q[2] ** 2 + q44) - 1.0
 
         # Off-diagonal
         matrix[0, 1] = 2.0 * (q12 - q34)
@@ -259,22 +272,22 @@ class Quat(numpy.ndarray):
         >>> q.getConjugate()
         [-0.707,0.,0.,0.707]
         """
-        return Quat(-self.take(0),-self.take(1),-self.take(2),self.take(3))
+        return Quat(-self.take(0), -self.take(1), -self.take(2), self.take(3))
 
     def getInverse(self):
         """Returns the inverse of the quaternion.
 
         If you are dealing with unit quaternions, use getConjugate() instead.
         """
-        return self.getConjugate() / self.getNorm()**2
+        return self.getConjugate() / self.getNorm() ** 2
 
     def toString(self):
         """Returns the quaternion in string format.
         """
-        return str(self.take(0))+" "+str(self.take(1))+" "+str(self.take(2))+" "+str(self.take(3))
+        return str(self.take(0)) + " " + str(self.take(1)) + " " + str(self.take(2)) + " " + str(self.take(3))
 
     @staticmethod
-    def createFromVectors(v1,v2):
+    def createFromVectors(v1, v2):
         from splib3.numerics.vec3 import Vec3
         q = Quat()
         q[0:3] = Vec3.cross(v2, v1)
@@ -295,14 +308,13 @@ class Quat(numpy.ndarray):
         Note that the angle should be in radian.
         """
         q = Quat()
-        q[0]=axis[0]*math.sin(angle/2.)
-        q[1]=axis[1]*math.sin(angle/2.)
-        q[2]=axis[2]*math.sin(angle/2.)
-        q[3]=math.cos(angle/2.)
+        q[0] = axis[0] * math.sin(angle / 2.)
+        q[1] = axis[1] * math.sin(angle / 2.)
+        q[2] = axis[2] * math.sin(angle / 2.)
+        q[3] = math.cos(angle / 2.)
 
         q.normalize()
         return q
-
 
     @staticmethod
     def createFromEuler(a, axes='sxyz', inDegree=False):
@@ -326,7 +338,7 @@ class Quat(numpy.ndarray):
         """
 
         if inDegree:
-            a = [a[0]*pi/180, a[1]*pi/180, a[2]*pi/180]
+            a = [a[0] * pi / 180, a[1] * pi / 180, a[2] * pi / 180]
 
         try:
             firstaxis, parity, repetition, frame = AXES_TO_TUPLE[axes.lower()]
@@ -335,8 +347,8 @@ class Quat(numpy.ndarray):
             firstaxis, parity, repetition, frame = axes
 
         i = firstaxis
-        j = NEXT_AXIS[i+parity]
-        k = NEXT_AXIS[i-parity+1]
+        j = NEXT_AXIS[i + parity]
+        k = NEXT_AXIS[i - parity + 1]
 
         if frame:
             a[0], a[2] = a[2], a[0]
@@ -352,27 +364,26 @@ class Quat(numpy.ndarray):
         sj = math.sin(a[1])
         ck = math.cos(a[2])
         sk = math.sin(a[2])
-        cc = ci*ck
-        cs = ci*sk
-        sc = si*ck
-        ss = si*sk
+        cc = ci * ck
+        cs = ci * sk
+        sc = si * ck
+        ss = si * sk
 
         q = Quat()
         if repetition:
-            q[3] = cj*(cc - ss)
-            q[i] = cj*(cs + sc)
-            q[j] = sj*(cc + ss)
-            q[k] = sj*(cs - sc)
+            q[3] = cj * (cc - ss)
+            q[i] = cj * (cs + sc)
+            q[j] = sj * (cc + ss)
+            q[k] = sj * (cs - sc)
         else:
-            q[3] = cj*cc + sj*ss
-            q[i] = cj*sc - sj*cs
-            q[j] = cj*ss + sj*cc
-            q[k] = cj*cs - sj*sc
+            q[3] = cj * cc + sj * ss
+            q[i] = cj * sc - sj * cs
+            q[j] = cj * ss + sj * cc
+            q[k] = cj * cs - sj * sc
         if parity:
             q[j] *= -1.0
 
         return q
-
 
     @staticmethod
     def product(qa, qb):
@@ -391,7 +402,9 @@ class Quat(numpy.ndarray):
         # qa[3]*qb[1] + qb[3]*qa[1] + qa[2]*qb[0] - qa[0]*qb[2],
         # qa[3]*qb[2] + qb[3]*qa[2] + qa[0]*qb[1] - qa[1]*qb[0],
         # qa[3]*qb[3] - qb[0]*qa[0] - qa[1]*qb[1] - qa[2]*qb[2] ])
-        return Quat(numpy.hstack( (qa.getRe()*qb.getIm() + qb.getRe()*qa.getIm() + numpy.cross( qa.getIm(), qb.getIm() ), [qa.getRe() * qb.getRe() - numpy.dot( qa.getIm(), qb.getIm())] )))
+        return Quat(numpy.hstack((qa.getRe() * qb.getIm() + qb.getRe() * qa.getIm() + numpy.cross(qa.getIm(),
+                                                                                                  qb.getIm()),
+                                  [qa.getRe() * qb.getRe() - numpy.dot(qa.getIm(), qb.getIm())])))
 
 
 ##### adapted from http://www.lfd.uci.edu/~gohlke/code/transformations.py.html

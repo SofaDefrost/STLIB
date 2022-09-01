@@ -140,7 +140,7 @@ def createScene(rootNode):
         from stlib3.physics.deformable import ElasticMaterialObject
         from splib3.objectmodel import setData
 
-        MainHeader(rootNode, plugins=["SofaSparseSolver","SofaImplicitOdeSolver","SofaMiscMapping","SofaRigid","SofaBoundaryCondition"])
+        MainHeader(rootNode)
         rootNode.VisualStyle.displayFlags = "showBehavior"
 
         modelNode = rootNode.addChild("Modeling")
@@ -162,6 +162,6 @@ def createScene(rootNode):
 
         simulationNode = rootNode.addChild("Simulation")
         simulationNode.addObject("EulerImplicitSolver")
-        simulationNode.addObject("CGLinearSolver")
+        simulationNode.addObject("CGLinearSolver", iterations=25, tolerance=1e-5, threshold=1e-5)
         simulationNode.addChild(o)
         return rootNode
