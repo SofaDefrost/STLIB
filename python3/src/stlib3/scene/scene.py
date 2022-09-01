@@ -3,6 +3,7 @@ import Sofa
 import Sofa.Core
 import platform
 from splib3.animation import AnimationManager
+from stlib3.scene import ContactHeader
 
 class SofaRuntime(object):
         class PluginManager(object):
@@ -68,8 +69,8 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
                 node.addObject('SparseLDLSolver', name='LinearSolver', template='CompressedRowSparseMatrixd')
             return node
 
-        def addContactHeader():
-                ContactHeader(root, alarmDistance=1.0, contactDistance=0.1, frictionCoef=1.0)
+        def addContactHeader(alarmDistance=1.0 ,  contactDistance = 0.1, frictionCoef= 1.0):
+                ContactHeader(root, alarmDistance=alarmDistance , contactDistance=contactDistance , frictionCoef= frictionCoef)
                 return root
 
         def addModelling():
