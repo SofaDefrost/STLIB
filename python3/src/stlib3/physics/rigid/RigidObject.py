@@ -53,7 +53,6 @@ def RigidObject(name="RigidObject",
     if(parent != None):
         parent.addChild(object)
 
-    plugins = ['SofaRigid']
     object.addObject('MechanicalObject',
                       name="mstate", template="Rigid3",
                       translation2=translation, rotation2=rotation, showObjectScale=uniformScale)
@@ -62,14 +61,11 @@ def RigidObject(name="RigidObject",
 
 
     if not isAStaticObject:
-        plugins.append('SofaConstraint')
-        plugins.append('SofaImplicitOdeSolver')
         object.addObject('EulerImplicitSolver')
-        object.addObject('CGLinearSolver')
+        object.addObject('CGLinearSolver', iterations=25, tolerance=1e-5, threshold=1e-5)
 
     def addCollisionModel(inputMesh=surfaceMeshFileName):
         objectCollis = object.addChild('collision')
-        objectCollis.addObject('RequiredPlugin', name='SofaMeshCollision')
         objectCollis.addObject('MeshOBJLoader', name="loader",
                             filename=inputMesh, triangulate=True,
                             scale=uniformScale)
@@ -100,8 +96,6 @@ def RigidObject(name="RigidObject",
     if surfaceMeshFileName != None:
         object.addCollisionModel()
         object.addVisualModel()
-
-    object.addObject('RequiredPlugin', pluginName=plugins)
 
     return object
 

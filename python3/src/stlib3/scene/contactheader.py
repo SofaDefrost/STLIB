@@ -46,9 +46,10 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
 
     return applyTo
 
-### This function is just an example on how to use the DefaultHeader function.
+
+# This function is just an example on how to use the DefaultHeader function.
 def createScene(rootnode):
     import os
     from mainheader import MainHeader
-    MainHeader(rootnode, plugins=["SofaMiscCollision","SofaPython3","SoftRobots","SofaConstraint"], repositoryPaths=[os.getcwd()])
+    MainHeader(rootnode, plugins=["SofaPython3"], repositoryPaths=[os.getcwd()])
     ContactHeader(rootnode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)

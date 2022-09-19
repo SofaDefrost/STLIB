@@ -31,17 +31,14 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
 
     '''
     node.addObject('VisualStyle')
-    node.findData('gravity').value=gravity;
-    node.findData('dt').value=dt
+    node.findData('gravity').value = gravity
+    node.findData('dt').value = dt
 
     node.addObject('DefaultVisualManagerLoop')
 
     if not isinstance(plugins, list):
         Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
         return node
-
-    if "SofaMiscCollision" not in plugins:
-        plugins.append("SofaMiscCollision")
 
     if "SofaPython3" not in plugins:
         plugins.append("SofaPython3")
@@ -71,4 +68,4 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
 ### This function is just an example on how to use the DefaultHeader function.
 def createScene(rootNode):
     import os
-    MainHeader(rootNode, plugins=["SofaMiscCollision","SofaPython3"], repositoryPaths=[os.getcwd()])
+    MainHeader(rootNode, plugins=["SofaPython3"], repositoryPaths=[os.getcwd()])

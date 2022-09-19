@@ -16,9 +16,6 @@ def Settings(plugins=[], repositoryPaths=[]):
                 Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
                 return node
 
-        if "SofaMiscCollision" not in plugins:
-                plugins.append("SofaMiscCollision")
-
         if "SofaPython3" not in plugins:
                 plugins.append("SofaPython3")
 
@@ -48,15 +45,11 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
                 Sofa.msg_error("MainHeader", "'plugins' expected to be a list, got "+str(type(plugins)))
                 return
 
-            if "SofaMiscCollision" not in plugins:
-                plugins.append("SofaMiscCollision")
-
             if "SofaPython3" not in plugins:
                 plugins.append("SofaPython3")
 
-            if  "SofaImplicitOdeSolver":
-                plugins.append("SofaImplicitOdeSolver")
-
+            if "Sofa.Component.ODESolver.Backward":
+                plugins.append("Sofa.Component.ODESolver.Backward")
 
             if doDebug:
                 from splib3.debug import DebugManager
@@ -71,7 +64,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
         def addDefaultSolver(node):
             node.addObject('EulerImplicitSolver', name='TimeIntegrationSchema')
             if iterative:
-                node.addObject('CGLinearSolver', name='LinearSolver')
+                node.addObject('CGLinearSolver', name='LinearSolver', iterations=25, tolerance=1e-5, threshold=1e-5)
             else:
                 node.addObject('SparseLDLSolver', name='LinearSolver', template='CompressedRowSparseMatrixd')
             return node
