@@ -342,16 +342,16 @@ def close_cavity_2(ind_top,ind_bottom): # dirty => you may do better my boy
     
     return new_triangles
 
-def ordering_circles(circle,ind_tab,x=1,y=2): #
+def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     """
     Pour remettre les points d'un cercle dans le sens horaire ou anti-horaire.
     Récupère le point central, puis s'en sert pour coupe le cercle en deux selon x
     Ensuite une moitié trié avec les y croissant, puis l'autre avec les y décroissants
 
     INPUT :
-    circle = tableau qui contient tous les indices d'un cercle
+    circle = tableau qui contient tous les points d'un cercle
     ind_tab = tableau des indices
-    x and y =  positions des coordonnées x et y (du plan du cercle) dans le tableau de point circle
+    x_ref and y_ref =  positions des coordonnées x et y (du plan du cercle) dans le tableau de point circle
 
     OUTPUT :
     new_circle_pt = Nouveau cercle réordonné
@@ -363,27 +363,28 @@ def ordering_circles(circle,ind_tab,x=1,y=2): #
     z_tab = []
     circle_with_ind = []
     for i in range(l):
-        x_tab.append(circle[i][0])
-        y_tab.append(circle[i][1])
-        z_tab.append(circle[i][2])
+        x_tab.append(circle[i][x_ref])
+        y_tab.append(circle[i][y_ref])
+#        z_tab.append(circle[i][2])
         circle_with_ind.append([ circle[i],ind_tab[i] ])
     
 #    print(x_tab)
-    center = [np.mean(x_tab),np.mean(y_tab),np.mean(z_tab)]
+#    center = [np.mean(x_tab),np.mean(y_tab),np.mean(z_tab)]
+    center = [np.mean(x_tab),np.mean(y_tab)]
         
     tab_sup = []
     tab_inf = []
     for i in range(l):
-        if circle[i][x] > center[x]:
+        if circle[i][x_ref] > center[0]:
             tab_sup.append(circle_with_ind[i])
         else :
             tab_inf.append(circle_with_ind[i])
             
-    tab_sup_ordre = sorted (tab_sup, key=lambda item: (item [0][y]))
-    tab_inf_ordre = sorted (tab_inf, key=lambda item: (item [0][y]), reverse=True)
+    tab_sup_ordre = sorted (tab_sup, key=lambda item: (item [0][y_ref]))
+    tab_inf_ordre = sorted (tab_inf, key=lambda item: (item [0][y_ref]), reverse=True)
 
-    # print("RRRRR")
-    # print([tab_sup_ordre, tab_inf_ordre])
+    print("RRRRR")
+    print([tab_sup_ordre, tab_inf_ordre])
     
     new_circle_pt = []
     new_ind_tab = []

@@ -13,6 +13,7 @@ Created on Fri Oct 21 16:57:00 2022
 import Remeshing_functions as mf
 import unittest
 import pytest
+import math
 
 # print(points)
 
@@ -237,6 +238,33 @@ class Remeshing_test(unittest.TestCase):
             print("- Erreur - Tri des cercles - Indices #016")
         self.assertEqual(ind_tab_i, ind_tab_sorted_circles_i)
 
+    def test_ordering_circle(self):
+    # ordering_circles(circle,ind_tab,x=1,y=2): #
+        cercle01 = [[7.21644966e-16, 3.25, 0.0], [7.4395623e-16, 3.350481, -0.375], [7.4395623e-16, 3.350481, 0.375], [8.04911693e-16, 3.625, -0.649519], [8.04911693e-16, 3.625, 0.649519], [8.8817842e-16, 4.0, -0.75], [8.8817842e-16, 4.0, 0.75], [9.71445147e-16, 4.375, -0.649519], [9.71445147e-16, 4.375, 0.649519], [1.03240061e-15, 4.649519, -0.375], [1.03240061e-15, 4.649519, 0.375], [1.05471187e-15, 4.75, 0.0]]
+        indices01 = [k for k in range(12)]
+        [new_circle_pt,new_ind_tab] = mf.ordering_circle(cercle01,indices01)
+        circle_pt = [[9.71445147e-16, 4.375, -0.649519], [1.03240061e-15, 4.649519, -0.375], [1.05471187e-15, 4.75, 0.0], [1.03240061e-15, 4.649519, 0.375], [9.71445147e-16, 4.375, 0.649519], [8.8817842e-16, 4.0, 0.75], [8.04911693e-16, 3.625, 0.649519], [7.4395623e-16, 3.350481, 0.375], [7.21644966e-16, 3.25, 0.0], [7.4395623e-16, 3.350481, -0.375], [8.04911693e-16, 3.625, -0.649519], [8.8817842e-16, 4.0, -0.75]]
+        ind_tab = [7, 9, 11, 10, 8, 6, 4, 2, 0, 1, 3, 5]
+        if new_circle_pt != circle_pt :
+            print("- Erreur - Ordonnement des points d'un cercle #017")
+        self.assertEqual(new_circle_pt, circle_pt)
+        if new_ind_tab != ind_tab :
+            print("- Erreur - Ordonnement des points d'un cercle - Indices #018")
+        self.assertEqual(new_ind_tab, ind_tab)
+
+        cercle02 =  [(math.cos(angle), math.sin(angle)) for angle in [math.pi / 4, 5* math.pi/4, 7*math.pi/4,  2*math.pi/4 , 3*math.pi / 4 , math.pi , 0, 3*math.pi/2  ]]
+        indices02 = [k for k in range(8)]
+        [new_circle_pt2,new_ind_tab2] = mf.ordering_circle(cercle02,indices02,x_ref=0,y_ref=1)
+        circle_pt2 = [(0.7071067811865474, -0.7071067811865477), (1.0, 0.0), (0.7071067811865476, 0.7071067811865475), (6.123233995736766e-17, 1.0), (-0.7071067811865475, 0.7071067811865476), (-1.0, 1.2246467991473532e-16), (-0.7071067811865477, -0.7071067811865475), (-1.8369701987210297e-16, -1.0)]
+        ind_tab2 = [2, 6, 0, 3, 4, 5, 1, 7]
+        if new_circle_pt2 != circle_pt2 :
+            print("- Erreur - Ordonnement des points d'un cercle #019")
+        self.assertEqual(new_circle_pt2, circle_pt2)
+        if new_ind_tab2 != ind_tab2 :
+            print("- Erreur - Ordonnement des points d'un cercle - Indices #020")
+        self.assertEqual(new_ind_tab2, ind_tab2)
+
+
 # def close_cavity(circles,ind_tab): # dirty => you may do better my boy
 #     """
 #     Fonction qui en fonction des cercles, va créer les triangles pour fermer le maillage du cylindre aux extrémités
@@ -357,59 +385,7 @@ class Remeshing_test(unittest.TestCase):
     
 #     return new_triangles
 
-# def ordering_circles(circle,ind_tab,x=1,y=2): #
-#     """
-#     Pour remettre les points d'un cercle dans le sens horaire ou anti-horaire.
-#     Récupère le point central, puis s'en sert pour coupe le cercle en deux selon x
-#     Ensuite une moitié trié avec les y croissant, puis l'autre avec les y décroissants
 
-#     INPUT :
-#     circle = tableau qui contient tous les indices d'un cercle
-#     ind_tab = tableau des indices
-#     x and y =  positions des coordonnées x et y (du plan du cercle) dans le tableau de point circle
-
-#     OUTPUT :
-#     new_circle_pt = Nouveau cercle réordonné
-#     new_ind_tab =  nouveau tableau d'indices associés
-#     """
-#     l = len(circle)
-#     x_tab = []
-#     y_tab = []
-#     z_tab = []
-#     circle_with_ind = []
-#     for i in range(l):
-#         x_tab.append(circle[i][0])
-#         y_tab.append(circle[i][1])
-#         z_tab.append(circle[i][2])
-#         circle_with_ind.append([ circle[i],ind_tab[i] ])
-    
-# #    print(x_tab)
-#     center = [np.mean(x_tab),np.mean(y_tab),np.mean(z_tab)]
-        
-#     tab_sup = []
-#     tab_inf = []
-#     for i in range(l):
-#         if circle[i][x] > center[x]:
-#             tab_sup.append(circle_with_ind[i])
-#         else :
-#             tab_inf.append(circle_with_ind[i])
-            
-#     tab_sup_ordre = sorted (tab_sup, key=lambda item: (item [0][y]))
-#     tab_inf_ordre = sorted (tab_inf, key=lambda item: (item [0][y]), reverse=True)
-
-#     # print("RRRRR")
-#     # print([tab_sup_ordre, tab_inf_ordre])
-    
-#     new_circle_pt = []
-#     new_ind_tab = []
-#     for i in range(len(tab_sup_ordre)):
-#         new_circle_pt.append(tab_sup_ordre[i][0])
-#         new_ind_tab.append(tab_sup_ordre[i][1])
-#     for i in range(len(tab_inf_ordre)):
-#         new_circle_pt.append(tab_inf_ordre[i][0])
-#         new_ind_tab.append(tab_inf_ordre[i][1])
-    
-#     return [new_circle_pt,new_ind_tab]
 
 # def ordering_cylinder(circle_tab,ind_tab):
 #     """ 
