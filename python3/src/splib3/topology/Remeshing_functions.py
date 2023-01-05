@@ -83,7 +83,7 @@ def reindex_mesh(conv_tab,mesh):
     #      ind += 1
           
     # print(sort_index)
-    sort_index = np.array(conv_tab)
+    sort_index = np.array(conv_tab,dtype = object)
     
     new_mesh = []
     for i in mesh :
@@ -239,8 +239,8 @@ def close_cavity(circles,ind_tab): # dirty => you may do better my boy
     l = len(circles)
     circle_top = circles[l-1]
     ind_top = ind_tab[l-1]
-    print(ind_top)
-    print(len(ind_top))
+    # print(ind_top)
+    # print(len(ind_top))
     
     new_triangles = []
     nb_pt_per_slices = len(ind_top)
@@ -383,8 +383,8 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     tab_sup_ordre = sorted (tab_sup, key=lambda item: (item [0][y_ref]))
     tab_inf_ordre = sorted (tab_inf, key=lambda item: (item [0][y_ref]), reverse=True)
 
-    print("RRRRR")
-    print([tab_sup_ordre, tab_inf_ordre])
+    # print("RRRRR")
+    # print([tab_sup_ordre, tab_inf_ordre])
     
     new_circle_pt = []
     new_ind_tab = []
@@ -399,7 +399,7 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
 
 def ordering_cylinder(circle_tab,ind_tab):
     """ 
-    Pour remettre tous les cercles successif d'un cylindre dans le sens horaire
+    Pour remettre tous les points des cercles successifs d'un cylindre dans le sens horaire
     Va découper les cercles et les réordonner un par un avec la fonction ordering_circles() 
 
     INPUT :
@@ -413,7 +413,7 @@ def ordering_cylinder(circle_tab,ind_tab):
     new_circle_tab = []
     new_ind_tab_full = []
     for i in range(len(circle_tab)) : 
-        [new_circle_pt,new_ind_tab] = ordering_circles(circle = circle_tab[i],ind_tab = ind_tab[i])
+        [new_circle_pt,new_ind_tab] = ordering_circle(circle = circle_tab[i],ind_tab = ind_tab[i])
         new_circle_tab.append(new_circle_pt)
         new_ind_tab_full.append(new_ind_tab)
     return [new_circle_tab,new_ind_tab_full]     
