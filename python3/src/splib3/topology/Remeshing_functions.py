@@ -201,7 +201,7 @@ def circle_detection_axis(points, axis,tolerance=0,indices="null"):
 def remesh_from_axis(points,mesh,axis,old_indices = "null"):
     """
     Fonction pour remesher un maillage : 
-    1 - Remettre la liste des points dansn un nouvel ordre ( fonction new_index() )
+    1 - Remettre la liste des points dansn un nouvel ordre ( fonction index_from_axis() )
     2 - Changer les indices du maillage pour qu'il correspondent à cette nouvelle liste de points ( fonction reindex_mesh() )
     3 - crée un nouveau tableau pour avoir les équivalences entre les anciens et les nouveaux index des points
 
@@ -221,126 +221,6 @@ def remesh_from_axis(points,mesh,axis,old_indices = "null"):
     [new_points, conv_tab] = index_from_axis(points = points, axis = axis,old_indices = old_indices)
     new_mesh = reindex_mesh(conv_tab=conv_tab,mesh=mesh)
     return [new_points, conv_tab ,new_mesh]
-
-def close_cavity(circles,ind_tab): # dirty => you may do better my boy
-    """
-    Fonction qui en fonction des cercles, va créer les triangles pour fermer le maillage du cylindre aux extrémités
-
-    INPUT : 
-    circles = tableau qui contient les cercles du cylindre (tableau de tous les indices des points, un ligne du tableau représentant un cercle
-    ind_tab = tableau des indices 
-
-    OUTOUT :
-    new_triangles = tableau des triangles à ajouter pour fermer les cylindres
-    """
-    circle_bottom = circles[0]
-    ind_bottom = ind_tab [0]
-    # print(ind_bottom)
-    l = len(circles)
-    circle_top = circles[l-1]
-    ind_top = ind_tab[l-1]
-    # print(ind_top)
-    # print(len(ind_top))
-    
-    new_triangles = []
-    nb_pt_per_slices = len(ind_top)
-    print(nb_pt_per_slices)
-    for i in range(6):
-        i = i*2
-        print(i)
-        ind_a = i
-        ind_b = i + 2
-        ind_c = i + 1
-        # print([ind_a,ind_b,ind_c])
-        if ind_b == np.ceil(nb_pt_per_slices):
-            # print("Y ALLONS NOUS ? je vais savoir bientpot")
-            ind_b = 0
-        print([ind_a,ind_b,ind_c])
-        
-        new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-        new_triangles.append( [ ind_bottom[ind_a] ,ind_bottom[ind_b] ,ind_bottom[ind_c] ] )
-        
-        ind_a = 0
-        ind_b = 10
-        ind_c = 2
-        new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-        new_triangles.append( [ ind_bottom[ind_a] ,ind_bottom[ind_b] ,ind_bottom[ind_c] ] )
-        
-        ind_a = 4
-        ind_b = 8
-        ind_c = 6
-        new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-        new_triangles.append( [ ind_bottom[ind_a] ,ind_bottom[ind_b] ,ind_bottom[ind_c] ] )
-        
-        ind_a = 4
-        ind_b = 2
-        ind_c = 10
-        new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-        new_triangles.append( [ ind_bottom[ind_a] ,ind_bottom[ind_b] ,ind_bottom[ind_c] ] )
-        
-        ind_a = 10
-        ind_b = 4
-        ind_c = 8
-        new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-        new_triangles.append( [ ind_bottom[ind_a] ,ind_bottom[ind_b] ,ind_bottom[ind_c] ] )
-    
-    return new_triangles
-
-def close_cavity_2(ind_top,ind_bottom): # dirty => you may do better my boy
-    """
-    Fonction qui en fonction des cercles, va créer les triangles pour fermer le maillage du cylindre aux extrémités
-
-    INPUT : 
-    ind_top = indices du cercle à l'extrémité supérieure du cylindre
-    ind_bottom = indices du cercle à l'extrémité inférieure du cylindre
-
-    OUTOUT :
-    new_triangles = tableau des triangles à ajouter pour fermer les cylindres
-    """
-    
-    new_triangles = []
-    nb_pt_per_slices = len(ind_top)
-    # print(nb_pt_per_slices)
-    for i in range(6):
-        i = i*2
-        # print(i)
-        ind_a = i
-        ind_b = i + 2
-        ind_c = i + 1
-        # print([ind_a,ind_b,ind_c])
-        if ind_b == np.ceil(nb_pt_per_slices):
-            # print("Y ALLONS NOUS ? je vais savoir bientpot")
-            ind_b = 0
-        # print([ind_a,ind_b,ind_c])
-        
-        new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-        new_triangles.append( [ ind_bottom[ind_c] ,ind_bottom[ind_b] ,ind_bottom[ind_a] ] )
-        
-    ind_a = 0
-    ind_b = 10
-    ind_c = 2
-    new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-    new_triangles.append( [ ind_bottom[ind_c] ,ind_bottom[ind_b] ,ind_bottom[ind_a] ] )
-    
-    ind_a = 4
-    ind_b = 8
-    ind_c = 6
-    new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-    new_triangles.append( [ ind_bottom[ind_c] ,ind_bottom[ind_b] ,ind_bottom[ind_a] ] )
-    
-    ind_a = 2
-    ind_b = 10
-    ind_c = 4
-    new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-    new_triangles.append( [ ind_bottom[ind_c] ,ind_bottom[ind_b] ,ind_bottom[ind_a] ] )
-    
-    ind_a = 4
-    ind_b = 10
-    ind_c = 8
-    new_triangles.append( [ ind_top[ind_a] ,ind_top[ind_b] ,ind_top[ind_c] ] )
-    new_triangles.append( [ ind_bottom[ind_c] ,ind_bottom[ind_b] ,ind_bottom[ind_a] ] )
-    
-    return new_triangles
 
 def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     """
@@ -433,6 +313,16 @@ def invers_normal(mesh):
     return new_mesh
 
 def new_idx_from_conv_tab(mesh,tab):
+    """
+    Function to convert the mesh indices from a convertion tab
+
+    INPUT :
+    mesh = mesh you want to convert
+    tab = conversion tab
+
+    OUTPUT :
+    new_mesh
+    """
     lonely_tab = []
     for j in range(len(tab)):
         lonely_tab.append(tab[j][0])
@@ -450,7 +340,11 @@ def new_idx_from_conv_tab(mesh,tab):
             # print(value_inx)
             value_idx = value_inx[0]
             # print(value_idx)
-            value_i = value_idx[0]
+            try :
+                value_i = value_idx[0]
+            except:
+                print("\n\n Valeur non trouvée, conversion aux nouveaux indices impossible \n\n ")
+                value_i = value_idx[0]
             element.append(tab[value_i][1])
         new_mesh.append(element)
     return new_mesh  
