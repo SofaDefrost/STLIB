@@ -27,6 +27,15 @@ import math
 #         print("Reindexation du robot mauvaise")
 #     assert new_mesh == new_mesh_sol 
 
+# def createCircle(nb_points):
+#     """
+#     Crée un tableau de points représentant un cercle, avec le nb de points spécifiés
+#     """
+#     ratio = 1 / nb_points
+#     cercle =  [(math.cos(angle), math.sin(angle)) for angle in np.arange(0,2*math.pi,2*math.pi*ratio)]
+#     print(cercle)
+#     return cercle
+
 class Remeshing_test(unittest.TestCase):
 
     # def __init__(self) : # ne fonctionne pas je ne comprend pas pourquoi
@@ -316,6 +325,34 @@ class Remeshing_test(unittest.TestCase):
             print("- Erreur - Décalage des éléments du tableau faux - #027")
         self.assertEqual(new_tab, tab_sol)
 
+
+    def test_closeSurface(self):
+        nb_points = 12
+        cercle_ind = [k for k in range(nb_points)]
+        triangles = mf.closeSurface(cercle_ind)
+        triangles_sol = [[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9, 10], [10, 11, 0], [0, 2, 4], [4, 6, 8], [8, 10, 0], [0, 4, 8]]
+
+        if triangles != triangles_sol :
+            print("- Erreur - Décalage des éléments du tableau faux - #027")
+        self.assertEqual(triangles, triangles_sol)
+
+        nb_points = 15
+        cercle_ind = [k for k in range(nb_points)]
+        triangles = mf.closeSurface(cercle_ind)
+        triangles_sol = [[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9, 10], [10, 11, 12], [12, 13, 14], [0, 2, 4], [4, 6, 8], [8, 10, 12], [12, 14, 0], [0, 4, 8], [8, 12, 0]]
+
+        if triangles != triangles_sol :
+            print("- Erreur - Décalage des éléments du tableau faux - #027")
+        self.assertEqual(triangles, triangles_sol)
+
+        nb_points = 30
+        cercle_ind = [k for k in range(nb_points)]
+        triangles = mf.closeSurface(cercle_ind)
+        triangles_sol = [[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9, 10], [10, 11, 12], [12, 13, 14], [14, 15, 16], [16, 17, 18], [18, 19, 20], [20, 21, 22], [22, 23, 24], [24, 25, 26], [26, 27, 28], [28, 29, 0], [0, 2, 4], [4, 6, 8], [8, 10, 12], [12, 14, 16], [16, 18, 20], [20, 22, 24], [24, 26, 28], [0, 4, 8], [8, 12, 16], [16, 20, 24], [24, 28, 0], [0, 8, 16], [16, 24, 0]]
+
+        if triangles != triangles_sol :
+            print("- Erreur - Décalage des éléments du tableau faux - #027")
+        self.assertEqual(triangles, triangles_sol)
 
 # def close_cavity(circles,ind_tab): # dirty => you may do better my boy
 #     """

@@ -9,6 +9,7 @@ Created on Fri Oct 21 16:57:00 2022
 # importing csv module
 import csv
 import numpy as np
+from collections import OrderedDict
 
 def default_indices(length):
     """
@@ -356,3 +357,30 @@ def shift_tab(tab): # pour décaler tous les éléments d'un tableau de 1, pour 
         new_tab.append(tab[t+1])
     new_tab.append(tab[0])
     return new_tab
+
+def closeSurface(ind_tab, reccur_bool = 0):
+    """
+    crée un ensemble de triangles pour refermer une surface, dont les indices des points triés dans le sens horaire sont passés en argument
+    """
+#    if reccur_bool == 0 :
+    triangles = []
+    new_ind = []
+    for k in range(0,len(ind_tab)-1,2) :
+        # print(k)
+        ind_a = k
+        ind_b = k + 1
+        ind_c = k + 2
+        if ind_c > len(ind_tab)-1 :
+            ind_c = 0
+
+        triangles.append( [ ind_tab[ind_a] ,ind_tab[ind_b] ,ind_tab[ind_c] ] )
+        new_ind.append(ind_tab[ind_a] )
+        new_ind.append(ind_tab[ind_c] )
+    
+    new_ind = list(OrderedDict.fromkeys(new_ind))
+    if len(new_ind) >= 3:
+        new_triangles = closeSurface(ind_tab = new_ind, reccur_bool = 1)
+        for tri in new_triangles :
+            triangles.append(tri)
+
+    return triangles
