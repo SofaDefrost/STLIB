@@ -27,11 +27,7 @@
 * Contact information: https://project.inria.fr/softrobot/contact/            *
 *                                                                             *
 ******************************************************************************/
-#ifndef INITSTLIB_H
-#define INITSTLIB_H
-
-
-#include <sofa/helper/config.h>
+#pragma once
 
 #ifdef SOFA_BUILD_STLIB
 #define SOFA_TARGET STLIB
@@ -44,5 +40,3 @@
 /** \mainpage
   This is the plugin for the control of soft robots
   */
-
-#endif // INITSTLIB_H
