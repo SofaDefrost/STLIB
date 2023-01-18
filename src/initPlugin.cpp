@@ -28,27 +28,10 @@
 *                                                                             *
 ******************************************************************************/
 #include "initPlugin.h"
-#include <sofa/core/ObjectFactory.h>
 
-#include <sofa/helper/system/PluginManager.h>
-using sofa::helper::system::PluginManager;
-using sofa::helper::system::Plugin;
+#include <sofa/config/sharedlibrary_defines.h>
 
-#include <sofa/helper/system/DynamicLibrary.h>
-using sofa::helper::system::DynamicLibrary;
-
-#include <sofa/helper/system/FileSystem.h>
-using sofa::helper::system::FileSystem;
-
-#include <sofa/helper/Utils.h>
-using sofa::helper::Utils;
-
-#include <fstream>
-
-namespace sofa
-{
-
-namespace component
+namespace sofa::component
 {
 
 extern "C" {
@@ -87,14 +70,12 @@ const char* getModuleLicense()
 
 const char* getModuleDescription()
 {
-    return "";
+    return "Sofa Template Library";
 }
 
 const char* getModuleComponentList()
 {
     return "";
-}
-
 }
 
 }
