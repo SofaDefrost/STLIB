@@ -46,12 +46,12 @@ class SofaPrefab(object):
     def __call__(self, *args, **kwargs):
             o = self.cls(*args, **kwargs)
             frameinfo = getframeinfo(currentframe().f_back)
-            o.node.addNewData("Prefab type", "Infos", "","string", str(o.__class__.__name__))
-            o.node.addNewData("modulepath", "Infos", "","string",
-                              str(os.path.dirname(os.path.abspath(sys.modules[o.__module__].__file__))))
-            o.node.addNewData("Defined in", "Infos", "","string", str(self.definedloc))
-            o.node.addNewData("Instantiated in", "Infos", "","string", str((frameinfo.filename, frameinfo.lineno)))
-            o.node.addNewData("Help", "Infos", "", "string", str(getdoc(o)))
+            o.node.addData(name="Prefab type", group="Infos", help="", type="string", value=str(o.__class__.__name__))
+            o.node.addData(name="modulepath", group="Infos", help="", type="string",
+                              value=str(os.path.dirname(os.path.abspath(sys.modules[o.__module__].__file__))))
+            o.node.addData(name="Defined in", group="Infos", help="", type="string", value=str(self.definedloc))
+            o.node.addData(name="Instantiated in", group="Infos", help="", type="string", value=str((frameinfo.filename, frameinfo.lineno)))
+            o.node.addData(name="Help", group="Infos", help="", type="string", value=str(getdoc(o)))
 
             ## This is the kind of hack that make me love python
             def sofaprefab_getattr(self, name):
