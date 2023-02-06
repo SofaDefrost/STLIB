@@ -64,7 +64,7 @@ def createScene(rootNode):
                 Beam.addObject('ShewchukPCGLinearSolver', iterations=1, name="linearsolver", tolerance=1e-5, preconditioners="preconditioner", use_precond=True)
                 Beam.addObject('RegularGridTopology', name="SoftBeam", nx=5, ny=2, nz=2, min=[-0.050, -0.010, -0.002], max=[0.050, 0.010, 0.0025])
                 Beam.addObject('MechanicalObject', name="meca", template="Vec3")
-                Beam.addObject('UniformMass', totalmass=0.01)
+                Beam.addObject('UniformMass', totalMass=0.01)
                 Beam.addObject('SparseLDLSolver', name="preconditioner")
                 Beam.addObject('LinearSolverConstraintCorrection', solverName="preconditioner")
                 Beam.addObject('HexahedronFEMForceField', youngModulus=3000, poissonRatio=0.2)
