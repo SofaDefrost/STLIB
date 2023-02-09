@@ -349,9 +349,9 @@ def shift_tab(tab):
     """
     To shift all the points of a tab oe time. The last value will become the 1st one
     """
-    return  tab[1:]+ [tab[0]]
+    return  tab[1:] + [tab[0]]
 
-def closeSurface(ind_tab, reccur_bool = 0):
+def close_surface(ind_tab) : 
     """
     Create triangles to close a surface, by giving all the indices of the points at the edge
 
@@ -376,10 +376,9 @@ def closeSurface(ind_tab, reccur_bool = 0):
         new_ind.append(ind_tab[ind_a] )
         new_ind.append(ind_tab[ind_c] )
     
-    new_ind = list(OrderedDict.fromkeys(new_ind))
+    new_ind = list(OrderedDict.fromkeys(new_ind)) # pour supprimer les doublons dans le tableau
     if len(new_ind) >= 3:
-        new_triangles = closeSurface(ind_tab = new_ind, reccur_bool = 1)
-        for tri in new_triangles :
-            triangles.append(tri)
+        new_triangles = close_surface(ind_tab = new_ind)
+        triangles = triangles + new_triangles
 
     return triangles

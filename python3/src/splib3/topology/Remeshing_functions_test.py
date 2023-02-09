@@ -323,7 +323,7 @@ class Remeshing_test(unittest.TestCase):
     def test_closeSurface(self):
         nb_points = 12
         cercle_ind = [k for k in range(nb_points)]
-        triangles = mf.closeSurface(cercle_ind)
+        triangles = mf.close_surface(cercle_ind)
         triangles_sol = [[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9, 10], [10, 11, 0], [0, 2, 4], [4, 6, 8], [8, 10, 0], [0, 4, 8]]
 
         if triangles != triangles_sol :
@@ -332,7 +332,7 @@ class Remeshing_test(unittest.TestCase):
 
         nb_points = 15
         cercle_ind = [k for k in range(nb_points)]
-        triangles = mf.closeSurface(cercle_ind)
+        triangles = mf.close_surface(cercle_ind)
         triangles_sol = [[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9, 10], [10, 11, 12], [12, 13, 14], [0, 2, 4], [4, 6, 8], [8, 10, 12], [12, 14, 0], [0, 4, 8], [8, 12, 0]]
 
         if triangles != triangles_sol :
@@ -341,7 +341,7 @@ class Remeshing_test(unittest.TestCase):
 
         nb_points = 30
         cercle_ind = [k for k in range(nb_points)]
-        triangles = mf.closeSurface(cercle_ind)
+        triangles = mf.close_surface(cercle_ind)
         triangles_sol = [[0, 1, 2], [2, 3, 4], [4, 5, 6], [6, 7, 8], [8, 9, 10], [10, 11, 12], [12, 13, 14], [14, 15, 16], [16, 17, 18], [18, 19, 20], [20, 21, 22], [22, 23, 24], [24, 25, 26], [26, 27, 28], [28, 29, 0], [0, 2, 4], [4, 6, 8], [8, 10, 12], [12, 14, 16], [16, 18, 20], [20, 22, 24], [24, 26, 28], [0, 4, 8], [8, 12, 16], [16, 20, 24], [24, 28, 0], [0, 8, 16], [16, 24, 0]]
 
         if triangles != triangles_sol :
