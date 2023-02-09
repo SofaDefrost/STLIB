@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 def default_indices(length):
     """
-    Crée un tableau d'indice par défaut
+    Create a default indices tab
 
     INPUT:
     length : length of the default indices tab
@@ -27,64 +27,50 @@ def default_indices(length):
 
 def index_from_axis(points,axis,old_indices = "null"): # 
     """
-    Fonction pour réindexer (réordonner) des points celon un axe. Les points seront triés dans l'ordre croissant selon cet axe.
+    Function to order points along an axis. The points would be sorted in the crescent way aong this axis
 
     INPUT :
-    - Points : tableau de points à réordonner
-    - axis (axe selon lequel on veut trier les points celon l'ordre croissant) = 0 => x //  axis = 1 => y  // axis = 2 => z 
-    - old indices : tableau des indices des points passés en argument
+    - Points : Tab that contains the points you want to order (format [x,y,z])
+    - axis (axis along which you want to order your points) [ 0 => x //  axis = 1 => y  // axis = 2 => z  ]
+    - old indices : tab that contains the indices of the points before the new ordering
 
     OUTPUT :
     - new_points : tableau des points dans le nouvel ordre
-    - conv_tab_final : tableau qui contient : [old_indices] at new indices position. Liste des anciens indices des points, triés dans le nouvel ordre
-    (Remplacer par )
-    """
-    ###### Pour trier les points et enregistrer les indices   ##### #001    
+    - ind_tab : tab that contains [old_indices] at new indices position. Liste des anciens indices des points, triés dans le nouvel ordre
+        """
 
     if old_indices == "null" :
         old_indices = default_indices(len(points))
     
     if len(points) != len(old_indices):
-        print("Attention, le  nombre de points et le nombre d'indices est différent => les données ne sont pas valides")
+        print("Be carefull, the number of points and indices are not coherent in index_from_axis(), so it will create false results ! ")
     
     conv_tab=[]
     for i in range(len(points)):
           conv_tab.append([points[i],old_indices[i]])
           
     new_points = sorted (points, key=lambda item: (item [axis]))
-    # new_points_final = np.array(new_points) # Conversion de liste à tableau => vraiment utile ?
 
     conv_tab_sorted = sorted(conv_tab,key=lambda item: (item [0][axis]))
 
-    conv_tab_final = []
+    ind_tab = []
     for i in range(len(conv_tab_sorted)):
-        conv_tab_final.append(conv_tab_sorted[i][1])
+        ind_tab.append(conv_tab_sorted[i][1])
 
-    # print(conv_tab_final)
+    return (new_points, ind_tab) # contain the points in the new order and the old associated index
 
-    return [new_points, conv_tab_final] # contain the points in the new order and the old associated index
-
-def reindex_mesh(conv_tab,mesh):
+def reindex_mesh(ind_tab,mesh):  # fusion des fonctions reindex_mesh() et new_idx_from_conv_tab() ?
     """
-    Pour changer les indices d'un mesh, en remplacant par les indices du nouveau tableau trié
+    To change mesh indices, by changing the number from ind_tab. If the element 212 is at 3rd position in the ind_tab, the indices 212 will be replace by indices 3 in the mesh file, to keep indices and new mesh coherent.
 
     INPUT :
-    - conv_tab : tableau des points avec les positions et les indices (format [old_indices] de la fonction précédente)
-    - mesh : maillage dont on veut changer les indices
+    - ind_tab : tab that contains [old_indices] at new indices position (format [old_indices] from index_from_axis() fcn )
+    - mesh : mesh that you want to change indices
 
     OUTPUT :
     new_mesh : the same mesh but with indices that make reference to the new point tab
     """
-    
-    # sort_index = []
-    # ind = 0
-    # for x in conv_tab:
-    #      sort_index.append(x[1]) # sort index good :) :) :) 
-    #      # sort_index2.append((x[1],ind)) # ind pas utile finalement
-    #      ind += 1
-          
-    # print(sort_index)
-    sort_index = np.array(conv_tab,dtype = object)
+    sort_index = np.array(ind_tab,dtype = object)
     
     new_mesh = []
     for i in mesh :
@@ -92,26 +78,61 @@ def reindex_mesh(conv_tab,mesh):
          new_element = []
          for j in element :
              pt = j
-             # print(pt)
              value_inx = np.where( sort_index == pt )
-             # print(value_inx)
              value_idx = value_inx[0]
-             # print(value_idx)
              try:
-                # print("what")
                 value_i = value_idx[0]
              except:
-                print("\n \n Element / point du maillage non trouvé dans le tableau de conversion #008 \n \n")
+                print("\n \n Element / point of the mesh not founded in conversion tab (ind_tab) in reindex_mesh() fcn #008 \n \n")
                 value_i = value_idx[0]
              new_element.append(value_i)
          new_mesh.append(new_element)
 
     return new_mesh
 
+def conv_tab_from_ind_tab(ind_tab): 
+    conv_tab = []
+    for i in range(len(ind_tab)):
+        # conv_tab.append([ind_tab[i],i])
+        conv_tab.append([i,ind_tab[i]])
+    return conv_tab
+
+def new_idx_from_conv_tab(mesh,conv_tab): # fusion des fonctions reindex_mesh() et new_idx_from_conv_tab() ?
+    """
+    Function to convert the mesh indices from a convertion tab
+
+    INPUT :
+    mesh = mesh you want to convert
+    tab = conversion tab (format [new_indices , old_indices])
+
+    OUTPUT :
+    new_mesh
+    """
+    lonely_tab = []
+    for j in range(len(conv_tab)):
+        lonely_tab.append(conv_tab[j][0])
+    lonely_tab = np.array(lonely_tab)
+    l = len(mesh)
+    new_mesh = []
+    for i in range(l):
+        element = []
+        nb_pt = len(mesh[i])
+        for k in range(nb_pt):
+            value_inx = np.where(lonely_tab  == (mesh[i][k]) )
+            value_idx = value_inx[0]
+            try :
+                value_i = value_idx[0]
+            except:
+                print("\n\n Valeur non trouvée, conversion aux nouveaux indices impossible \n\n ")
+                value_i = value_idx[0]
+            element.append(conv_tab[value_i][1])
+        new_mesh.append(element)
+    return new_mesh  
+
 
 def quad_2_triangles(quads) :
     """
-    To convert quads to triangles with keeping the same normals
+    To convert quads mesh to triangles mesh with keeping the same normals
     """
     triangles = []
     for q in quads :
@@ -123,17 +144,17 @@ def quad_2_triangles(quads) :
 
 def circle_detection_regular(points, pt_per_slice,indices="null"):
     """
-    Code pour relier chaque disque ensemble (pour à termes y mettre des ressorts dans SOFA)
+    Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
 
-    Ne fonctionne que pour les cylindres réguliers, déjà trié selon le bon axe, avec un nombre constant et connu de points par étages
+    Only work for regular cylinder, with their points already sorted along the good axis
 
     INPUT :
-    - points = liste des points
-    - pt_per_slice = numbre of points per slices
+    - points = points list
+    - pt_per_slice = number of points per slices
 
     OUTPUT :
-    - points_tab = tableau des points, triés par cercles
-    - ind_tab = tableau des indices, triés par cercles
+    - points_tab = tab of points, sorted by circles
+    - ind_tab = indices tab, sorted by circles
     """
     if indices == "null" :
         indices = default_indices(len(points))
@@ -141,9 +162,9 @@ def circle_detection_regular(points, pt_per_slice,indices="null"):
     nb_slice = len(points)/pt_per_slice
     
     if nb_slice!=np.ceil(nb_slice):
-        print("\n \n \n Warning : the total number of points and the number per stage are not coherent in 'circle_detection' function (SPLIB in STLIB) \n \n \n")
+        print("\n \n \n Warning : the total number of points and the number per stage are not coherent in circle_detection() function (SPLIB in STLIB) \n \n \n")
     
-    ind_tab = [] # tableau des indices
+    ind_tab = [] 
     points_tab = []
     dec = 0
     for i in range(int(nb_slice)):
@@ -157,23 +178,21 @@ def circle_detection_regular(points, pt_per_slice,indices="null"):
 
 def circle_detection_axis(points, axis,tolerance=0,indices="null"):
     """
-    Code pour relier chaque disque ensemble (pour à termes y mettre des ressorts dans SOFA)
+    Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
 
-    Doit fonctionner pour toutes les cavités, même irrégulières
+    Should work every cavity, even not regular. Anyway you will have to order first yours points along an axis
 
     INPUT :
-    - points = liste des points
-    - axis = 0=x / 1=y / 2=z
-    - tolerance = valeur de laquelle il faut différer pour être considéré comme l'étage suivant
+    - points = points list
+    - axis (axis along which the points are already sorted) [ 0 => x //  axis = 1 => y  // axis = 2 => z  ]
+    - tolerance = minimum value between two different step of a cylinder
 
     OUTPUT :
-    - points_tab = tableau des points, triés par cercles
-    - ind_tab = tableau des indices, triés par cercles
+    - points_tab = tab of points, sorted by circles
+    - ind_tab = indices tab, sorted by circles
     """
-    # if indices == "null" :
-    #     indices = default_indices(len(points))
-    
-    [new_points, conv_tab] = index_from_axis(points = points, axis = axis, old_indices = indices)
+
+    [new_points, conv_tab] = index_from_axis(points = points, axis = axis, old_indices = indices) # tri intégré à la fonction ?
 
     points_tab = []
     circle_points = []
@@ -199,12 +218,12 @@ def circle_detection_axis(points, axis,tolerance=0,indices="null"):
 
     return [points_tab, ind_tab]
 
-def remesh_from_axis(points,mesh,axis,old_indices = "null"):
+def remesh_from_axis(points,mesh,axis,old_indices = None):
     """
-    Fonction pour remesher un maillage : 
-    1 - Remettre la liste des points dansn un nouvel ordre ( fonction index_from_axis() )
-    2 - Changer les indices du maillage pour qu'il correspondent à cette nouvelle liste de points ( fonction reindex_mesh() )
-    3 - crée un nouveau tableau pour avoir les équivalences entre les anciens et les nouveaux index des points
+    Function to remesh a model : 
+    1 - Will order the points list alon an axis  ( function index_from_axis() )
+    2 - Adapt the mesh indices to this new order ( function reindex_mesh() )
+    3 - Create a new conv_tab to know the link between the old and the indices of the points
 
     INPUT : 
     points = liste de points à réordonner
@@ -217,26 +236,28 @@ def remesh_from_axis(points,mesh,axis,old_indices = "null"):
     conv_tab = tableau d'équivalence entre les nouveaux et les anciens points
     new_mesh = nouveau maillage avec les nouveaux indices réorodnnés
     """
-    if old_indices == "null" :
+    if old_indices is None :
         old_indices = default_indices(len(points))
-    [new_points, conv_tab] = index_from_axis(points = points, axis = axis,old_indices = old_indices)
-    new_mesh = reindex_mesh(conv_tab=conv_tab,mesh=mesh)
-    return [new_points, conv_tab ,new_mesh]
+    new_points, ind_tab = index_from_axis(points = points, axis = axis,old_indices = old_indices)
+    new_mesh = reindex_mesh(ind_tab=ind_tab,mesh=mesh)
+    return [new_points, ind_tab ,new_mesh]
 
 def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     """
-    Pour remettre les points d'un cercle dans le sens horaire ou anti-horaire.
-    Récupère le point central, puis s'en sert pour coupe le cercle en deux selon x
-    Ensuite une moitié trié avec les y croissant, puis l'autre avec les y décroissants
+    To order all the points of a circles in clockwise
+
+    Method :
+    Calculate 1st the central points, the use this center to split in 2 the circle along x axis
+    Then half of the circle will be sorted along crescent x axis, and the other hald in descending along x.
 
     INPUT :
-    circle = tableau qui contient tous les points d'un cercle
-    ind_tab = tableau des indices
-    x_ref and y_ref =  positions des coordonnées x et y (du plan du cercle) dans le tableau de point circle
+    circle = tab that contains all the points of the circle
+    ind_tab = indices tab
+    x_ref and y_ref =  position of x and y axis to get the plane of the circles 
 
     OUTPUT :
-    new_circle_pt = Nouveau cercle réordonné
-    new_ind_tab =  nouveau tableau d'indices associés
+    new_circle_pt = points of the circles, sorted in clockwise
+    new_ind_tab =  new indices tab from the new ordering
     """
     l = len(circle)
     x_tab = []
@@ -249,8 +270,6 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
 #        z_tab.append(circle[i][2])
         circle_with_ind.append([ circle[i],ind_tab[i] ])
     
-#    print(x_tab)
-#    center = [np.mean(x_tab),np.mean(y_tab),np.mean(z_tab)]
     center = [np.mean(x_tab),np.mean(y_tab)]
         
     tab_sup = []
@@ -263,9 +282,6 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
             
     tab_sup_ordre = sorted (tab_sup, key=lambda item: (item [0][y_ref]))
     tab_inf_ordre = sorted (tab_inf, key=lambda item: (item [0][y_ref]), reverse=True)
-
-    # print("RRRRR")
-    # print([tab_sup_ordre, tab_inf_ordre])
     
     new_circle_pt = []
     new_ind_tab = []
@@ -278,30 +294,37 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     
     return [new_circle_pt,new_ind_tab]
 
-def ordering_cylinder(circle_tab,ind_tab):
+def ordering_cylinder(circle_tab,ind_tab,axis = 0):
     """ 
-    Pour remettre tous les points des cercles successifs d'un cylindre dans le sens horaire
-    Va découper les cercles et les réordonner un par un avec la fonction ordering_circles() 
+    To put all the points of all circles of a cylinder in the clockwise order
 
     INPUT :
-    circle_tab = tableau qui contient les cercles du cylindre (tableau de tous les indices des points, un ligne du tableau représentant un cercle
-    ind_tab = tableau des indices associés
-    
+    circle_tab = tab that contains all the points of all circles, on line of the list represent on circle.
+    ind_tab = indices tab
     OUTPUT :
-    new_circle_tab = tableau qui contient les cercles du cylindre (dans le sens horaire)
-    new_ind_tab_full = nouveau tableau des indices
+    new_circle_tab = tab that contains all the circles of a cylinder, in the clockwise order
+    new_ind_tab_full = new _ind tab
     """
+    if axis == 0 :
+        x_ref = 1
+        y_ref = 2
+    elif axis == 1 :
+        x_ref = 0
+        y_ref = 2
+    elif axis == 2 :
+        x_ref = 0
+        y_ref = 1
     new_circle_tab = []
     new_ind_tab_full = []
     for i in range(len(circle_tab)) : 
-        [new_circle_pt,new_ind_tab] = ordering_circle(circle = circle_tab[i],ind_tab = ind_tab[i])
+        [new_circle_pt,new_ind_tab] = ordering_circle(circle = circle_tab[i],ind_tab = ind_tab[i],x_ref = x_ref,y_ref = y_ref)
         new_circle_tab.append(new_circle_pt)
         new_ind_tab_full.append(new_ind_tab)
     return [new_circle_tab,new_ind_tab_full]     
 
 def invers_normal(mesh):
     """
-    Inverse les normales d'un maillage
+    Invers the normal of all surfaces of a mesh
     """
     l = len(mesh)
     new_mesh = []
@@ -313,54 +336,21 @@ def invers_normal(mesh):
         new_mesh.append(element)
     return new_mesh
 
-def new_idx_from_conv_tab(mesh,tab):
+def shift_tab(tab): 
     """
-    Function to convert the mesh indices from a convertion tab
-
-    INPUT :
-    mesh = mesh you want to convert
-    tab = conversion tab
-
-    OUTPUT :
-    new_mesh
+    To shift all the points of a tab oe time. The last value will become the 1st one
     """
-    lonely_tab = []
-    for j in range(len(tab)):
-        lonely_tab.append(tab[j][0])
-    lonely_tab = np.array(lonely_tab)
-    l = len(mesh)
-    new_mesh = []
-    # print(lonely_tab)
-    for i in range(l):
-        element = []
-        nb_pt = len(mesh[i])
-        for k in range(nb_pt):
-            # print("Looking for : ") ## pour savoir quel point n'est pas trouvé
-            # print(mesh[i][k])
-            value_inx = np.where(lonely_tab  == (mesh[i][k]) )
-            # print(value_inx)
-            value_idx = value_inx[0]
-            # print(value_idx)
-            try :
-                value_i = value_idx[0]
-            except:
-                print("\n\n Valeur non trouvée, conversion aux nouveaux indices impossible \n\n ")
-                value_i = value_idx[0]
-            element.append(tab[value_i][1])
-        new_mesh.append(element)
-    return new_mesh  
-
-def shift_tab(tab): # pour décaler tous les éléments d'un tableau de 1, pour pouvoir placer les ressorts
-    l = len(tab)
-    new_tab = []
-    for t in range(l-1) :
-        new_tab.append(tab[t+1])
-    new_tab.append(tab[0])
-    return new_tab
+    return  tab[1:]+ [tab[0]]
 
 def closeSurface(ind_tab, reccur_bool = 0):
     """
-    crée un ensemble de triangles pour refermer une surface, dont les indices des points triés dans le sens horaire sont passés en argument
+    Create triangles to close a surface, by giving all the indices of the points at the edge
+
+    INPUT :
+    - ind_tab : indices of the points at the edge of the surface we want to close
+
+    OUTPUT : 
+    - triangles : triangles mesh to close the cavity
     """
 #    if reccur_bool == 0 :
     triangles = []
