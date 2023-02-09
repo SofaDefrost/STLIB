@@ -13,7 +13,7 @@ from collections import OrderedDict
 
 def default_indices(length):
     """
-    Create a default indices tab
+    Create a default indices tab # TODO : Choisir une convention et s'y tenir pour les docstings
 
     INPUT:
     length : length of the default indices tab
@@ -22,10 +22,10 @@ def default_indices(length):
     indices : tab that contain default indices [0 to len-1]
 
     """
-    indices = [k for k in range(length)]
-    return indices
+    return [k for k in range(length)]
+     
 
-def index_from_axis(points,axis,old_indices = "null"): # 
+def index_from_axis(points,axis,old_indices = None): # 
     """
     Function to order points along an axis. The points would be sorted in the crescent way aong this axis
 
@@ -38,12 +38,22 @@ def index_from_axis(points,axis,old_indices = "null"): #
     - new_points : tableau des points dans le nouvel ordre
     - ind_tab : tab that contains [old_indices] at new indices position. Liste des anciens indices des points, triés dans le nouvel ordre
         """
+    if old_indices == 'null':
+        raise DeprecationWarning("Attention, old_indices est à 'null', the new norm is old_indices = None")
+        # old_indices == None
 
-    if old_indices == "null" :
+    if old_indices is None :
         old_indices = default_indices(len(points))
+
+
     
+    # print(len(points))
+    # print(len(old_indices))
+
     if len(points) != len(old_indices):
-        print("Be carefull, the number of points and indices are not coherent in index_from_axis(), so it will create false results ! ")
+        # print(len(points))
+        # print(len(old_indices))
+        raise RuntimeError("Be carefull, the number of points and indices are not coherent in index_from_axis(), so it will create false results ! ")
     
     conv_tab=[]
     for i in range(len(points)):
@@ -78,13 +88,13 @@ def reindex_mesh(ind_tab,mesh):  # fusion des fonctions reindex_mesh() et new_id
          new_element = []
          for j in element :
              pt = j
-             value_inx = np.where( sort_index == pt )
+             value_inx = np.where( sort_index == pt ) # where function find where the sort_index tab is equal to the pt variable, and record the position in the sort_index in the bariable value_inx
              value_idx = value_inx[0]
              try:
                 value_i = value_idx[0]
-             except:
-                print("\n \n Element / point of the mesh not founded in conversion tab (ind_tab) in reindex_mesh() fcn #008 \n \n")
-                value_i = value_idx[0]
+             except IndexError as e:
+                e.add_note("Element / point of the mesh not founded in conversion tab (ind_tab) in reindex_mesh() fcn #008") # add a commentary to the exception
+                raise
              new_element.append(value_i)
          new_mesh.append(new_element)
 
@@ -142,7 +152,7 @@ def quad_2_triangles(quads) :
         triangles.append(t2)
     return triangles
 
-def circle_detection_regular(points, pt_per_slice,indices="null"):
+def circle_detection_regular(points, pt_per_slice,indices=None):
     """
     Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
 
@@ -156,7 +166,7 @@ def circle_detection_regular(points, pt_per_slice,indices="null"):
     - points_tab = tab of points, sorted by circles
     - ind_tab = indices tab, sorted by circles
     """
-    if indices == "null" :
+    if indices is None :
         indices = default_indices(len(points))
     
     nb_slice = len(points)/pt_per_slice
@@ -176,7 +186,7 @@ def circle_detection_regular(points, pt_per_slice,indices="null"):
         
     return [points_tab, ind_tab]
 
-def circle_detection_axis(points, axis,tolerance=0,indices="null"):
+def circle_detection_axis(points, axis,tolerance=0,indices=None):
     """
     Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
 
@@ -243,8 +253,7 @@ def remesh_from_axis(points,mesh,axis,old_indices = None):
     return [new_points, ind_tab ,new_mesh]
 
 def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
-    """
-    To order all the points of a circles in clockwise
+    """To order all the points of a circles in clockwise
 
     Method :
     Calculate 1st the central points, the use this center to split in 2 the circle along x axis
@@ -292,7 +301,7 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
         new_circle_pt.append(tab_inf_ordre[i][0])
         new_ind_tab.append(tab_inf_ordre[i][1])
     
-    return [new_circle_pt,new_ind_tab]
+    return [new_circle_pt,new_ind_tab] # TODO : retirer tous les corchets aux return (+ les enlever lors des appels de la fonction)
 
 def ordering_cylinder(circle_tab,ind_tab,axis = 0):
     """ 
