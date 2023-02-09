@@ -12,31 +12,34 @@ import numpy as np
 from collections import OrderedDict
 
 def default_indices(length):
-    """
-    Create a default indices tab # TODO : Choisir une convention et s'y tenir pour les docstings
+    """Create a default indices tab # TODO : Choisir une convention et s'y tenir pour les docstings
 
-    INPUT:
-    length : length of the default indices tab
+    Parameters
+    ----------
+        :param int length: length of the default indices tab
 
-    OUTPUT :
-    indices : tab that contain default indices [0 to len-1]
+    
+    Returns
+    -------
+        :return: tab that contain default indices [0 to len-1]
 
     """
     return [k for k in range(length)]
      
 
 def index_from_axis(points,axis,old_indices = None): # 
-    """
-    Function to order points along an axis. The points would be sorted in the crescent way aong this axis
+    """Function to order points along an axis. The points would be sorted in the crescent way along this axis
 
-    INPUT :
-    - Points : Tab that contains the points you want to order (format [x,y,z])
-    - axis (axis along which you want to order your points) [ 0 => x //  axis = 1 => y  // axis = 2 => z  ]
-    - old indices : tab that contains the indices of the points before the new ordering
+    Parameters
+    ----------
+        :param tab points: Tab that contains the points you want to order (format [x,y,z])
+        :param int axis: (axis along which you want to order your points) [ 0 => x //  axis = 1 => y  // axis = 2 => z  ]
+        :param tab old_indices: tab that contains the indices of the points before the new ordering
 
-    OUTPUT :
-    - new_points : tableau des points dans le nouvel ordre
-    - ind_tab : tab that contains [old_indices] at new indices position. Liste des anciens indices des points, triés dans le nouvel ordre
+    Returns
+    -------
+        :returns: new_points : tab of the points in the new order
+        :returns: ind_tab : tab that contains [old_indices] at new indices position. Liste des anciens indices des points, triés dans le nouvel ordre
         """
     if old_indices == 'null':
         raise DeprecationWarning("Attention, old_indices est à 'null', the new norm is old_indices = None")
@@ -70,15 +73,16 @@ def index_from_axis(points,axis,old_indices = None): #
     return (new_points, ind_tab) # contain the points in the new order and the old associated index
 
 def reindex_mesh(ind_tab,mesh):  # fusion des fonctions reindex_mesh() et new_idx_from_conv_tab() ?
-    """
-    To change mesh indices, by changing the number from ind_tab. If the element 212 is at 3rd position in the ind_tab, the indices 212 will be replace by indices 3 in the mesh file, to keep indices and new mesh coherent.
+    """To change mesh indices, by changing the number from ind_tab. If the element 212 is at 3rd position in the ind_tab, the indices 212 will be replace by indices 3 in the mesh file, to keep indices and new mesh coherent.
 
-    INPUT :
-    - ind_tab : tab that contains [old_indices] at new indices position (format [old_indices] from index_from_axis() fcn )
-    - mesh : mesh that you want to change indices
+    Parameters
+    ----------
+        :param tab ind_tab: tab that contains [old_indices] at new indices position (format [old_indices] from index_from_axis() fcn )
+        :param tab mesh: mesh that you want to change indices
 
-    OUTPUT :
-    new_mesh : the same mesh but with indices that make reference to the new point tab
+    Returns
+    -------
+        :returns: new_mesh : the same mesh but with indices that make reference to the new point tab
     """
     sort_index = np.array(ind_tab,dtype = object)
     
@@ -108,15 +112,16 @@ def conv_tab_from_ind_tab(ind_tab):
     return conv_tab
 
 def new_idx_from_conv_tab(mesh,conv_tab): # fusion des fonctions reindex_mesh() et new_idx_from_conv_tab() ?
-    """
-    Function to convert the mesh indices from a convertion tab
+    """Function to convert the mesh indices from a convertion tab
 
-    INPUT :
-    mesh = mesh you want to convert
-    tab = conversion tab (format [new_indices , old_indices])
+    Parameters
+    ----------
+        :param tab mesh: mesh you want to convert
+        :param tab conv_tab = conversion tab (format [new_indices , old_indices])
 
-    OUTPUT :
-    new_mesh
+    Returns
+    -------
+        :returns: new_mesh tab => mesh with new indices from conv_tab
     """
     lonely_tab = []
     for j in range(len(conv_tab)):
@@ -141,8 +146,7 @@ def new_idx_from_conv_tab(mesh,conv_tab): # fusion des fonctions reindex_mesh() 
 
 
 def quad_2_triangles(quads) :
-    """
-    To convert quads mesh to triangles mesh with keeping the same normals
+    """To convert quads mesh to triangles mesh with keeping the same normals
     """
     triangles = []
     for q in quads :
@@ -153,18 +157,19 @@ def quad_2_triangles(quads) :
     return triangles
 
 def circle_detection_regular(points, pt_per_slice,indices=None):
-    """
-    Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
+    """Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
 
     Only work for regular cylinder, with their points already sorted along the good axis
 
-    INPUT :
-    - points = points list
-    - pt_per_slice = number of points per slices
+    Parameters
+    ----------
+        :param tab points: points list
+        :param int pt_per_slice: number of points per slices
 
-    OUTPUT :
-    - points_tab = tab of points, sorted by circles
-    - ind_tab = indices tab, sorted by circles
+    Returns
+    -------
+        :returns: points_tab = tab of points, sorted by circles
+        :returns: ind_tab = indices tab, sorted by circles
     """
     if indices is None :
         indices = default_indices(len(points))
@@ -187,19 +192,20 @@ def circle_detection_regular(points, pt_per_slice,indices=None):
     return [points_tab, ind_tab]
 
 def circle_detection_axis(points, axis,tolerance=0,indices=None):
-    """
-    Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
+    """Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
 
     Should work every cavity, even not regular. Anyway you will have to order first yours points along an axis
 
-    INPUT :
-    - points = points list
-    - axis (axis along which the points are already sorted) [ 0 => x //  axis = 1 => y  // axis = 2 => z  ]
-    - tolerance = minimum value between two different step of a cylinder
+    Parameters
+    ----------
+        :param tab points: points list
+        :param int axis: (axis along which the points are already sorted) [ 0 => x //  axis = 1 => y  // axis = 2 => z  ]
+        :param int tolerance: minimum value between two different step of a cylinder
 
-    OUTPUT :
-    - points_tab = tab of points, sorted by circles
-    - ind_tab = indices tab, sorted by circles
+    Returns
+    -------
+        :returns: points_tab = tab of points, sorted by circles
+        :returns: ind_tab = indices tab, sorted by circles
     """
 
     [new_points, conv_tab] = index_from_axis(points = points, axis = axis, old_indices = indices) # tri intégré à la fonction ?
@@ -229,22 +235,23 @@ def circle_detection_axis(points, axis,tolerance=0,indices=None):
     return [points_tab, ind_tab]
 
 def remesh_from_axis(points,mesh,axis,old_indices = None):
-    """
-    Function to remesh a model : 
+    """Function to remesh a model : 
     1 - Will order the points list alon an axis  ( function index_from_axis() )
     2 - Adapt the mesh indices to this new order ( function reindex_mesh() )
     3 - Create a new conv_tab to know the link between the old and the indices of the points
 
-    INPUT : 
-    points = liste de points à réordonner
-    mesh = maillage a remesher
-    axis = axe selon lequel on veut réordonner les points [ 0 -> x / 1 -> y / 2 -> z ]
-    old_indices = donne les anciens indices aux cas ou ils auraient déjà été modifiés
+    Parameters
+    ----------
+        :param tab points: points list you will reorder
+        :param tab mesh: mesh you want to change indices to be coherent with the new_points tab
+        :param int axis: axis along which you want to order points [ 0 -> x / 1 -> y / 2 -> z ]
+        :param tab old_indices: indices of the points, if they already have indices
 
-    OUTPUT : 
-    new_points = liste de points dans le nouvel ordre (celui de l'axe axis)
-    conv_tab = tableau d'équivalence entre les nouveaux et les anciens points
-    new_mesh = nouveau maillage avec les nouveaux indices réorodnnés
+    Returns
+    ------- 
+        :returns: new_points = points tab in the new order
+        :returns: conv_tab = tab taht give the correspondance between old and new indices
+        :returns: new_mesh = new mesh with the new indices
     """
     if old_indices is None :
         old_indices = default_indices(len(points))
@@ -259,15 +266,22 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     Calculate 1st the central points, the use this center to split in 2 the circle along x axis
     Then half of the circle will be sorted along crescent x axis, and the other hald in descending along x.
 
-    INPUT :
-    circle = tab that contains all the points of the circle
-    ind_tab = indices tab
-    x_ref and y_ref =  position of x and y axis to get the plane of the circles 
+    Parameters
+    ----------
+        :param tab circle: tab that contains all the points of the circle
+        :param tab ind_tab: indices tab
+        :param int x_ref and y_ref:  position of x and y axis to get the plane of the circles 
 
-    OUTPUT :
-    new_circle_pt = points of the circles, sorted in clockwise
-    new_ind_tab =  new indices tab from the new ordering
+    Returns
+    -------
+        :returns: new_circle_pt = points of the circles, sorted in clockwise
+        :returns: new_ind_tab =  new indices tab from the new ordering
     """
+    assert(isinstance(x_ref,int))
+    assert( 0 <= x_ref <= 2)
+    assert(isinstance(y_ref,int))
+    assert( 0 <= y_ref <= 2)
+
     l = len(circle)
     x_tab = []
     y_tab = []
@@ -304,15 +318,17 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     return [new_circle_pt,new_ind_tab] # TODO : retirer tous les corchets aux return (+ les enlever lors des appels de la fonction)
 
 def ordering_cylinder(circle_tab,ind_tab,axis = 0):
-    """ 
-    To put all the points of all circles of a cylinder in the clockwise order
+    """ To put all the points of all circles of a cylinder in the clockwise order
 
-    INPUT :
-    circle_tab = tab that contains all the points of all circles, on line of the list represent on circle.
-    ind_tab = indices tab
-    OUTPUT :
-    new_circle_tab = tab that contains all the circles of a cylinder, in the clockwise order
-    new_ind_tab_full = new _ind tab
+    Parameters
+    ----------
+        :param tab circle_tab: tab that contains all the points of all circles, on line of the list represent on circle.
+        :param tab ind_tab: indices tab
+
+    Returns
+    -------
+        :returns: new_circle_tab = tab that contains all the circles of a cylinder, in the clockwise order
+        :returns: new_ind_tab_full = new indices of the cylinder points
     """
     if axis == 0 :
         x_ref = 1
@@ -332,8 +348,7 @@ def ordering_cylinder(circle_tab,ind_tab,axis = 0):
     return [new_circle_tab,new_ind_tab_full]     
 
 def invers_normal(mesh):
-    """
-    Invers the normal of all surfaces of a mesh
+    """Invers the normal of all surfaces of a mesh
     """
     l = len(mesh)
     new_mesh = []
@@ -346,20 +361,20 @@ def invers_normal(mesh):
     return new_mesh
 
 def shift_tab(tab): 
-    """
-    To shift all the points of a tab oe time. The last value will become the 1st one
+    """To shift all the points of a tab oe time. The last value will become the 1st one
     """
     return  tab[1:] + [tab[0]]
 
 def close_surface(ind_tab) : 
-    """
-    Create triangles to close a surface, by giving all the indices of the points at the edge
+    """Create triangles to close a surface, by giving all the indices of the points at the edge
 
-    INPUT :
-    - ind_tab : indices of the points at the edge of the surface we want to close
+    Parameters
+    ----------
+        :param tab ind_tab: indices of the points at the edge of the surface we want to close
 
-    OUTPUT : 
-    - triangles : triangles mesh to close the cavity
+    Returns
+    ------- 
+        :returns: triangles : triangles mesh to close the cavity
     """
 #    if reccur_bool == 0 :
     triangles = []
