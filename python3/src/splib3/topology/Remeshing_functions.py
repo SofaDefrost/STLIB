@@ -70,7 +70,7 @@ def index_from_axis(points,axis,old_indices = None): #
     for i in range(len(conv_tab_sorted)):
         ind_tab.append(conv_tab_sorted[i][1])
 
-    return (new_points, ind_tab) # contain the points in the new order and the old associated index
+    return new_points, ind_tab # contain the points in the new order and the old associated index
 
 def reindex_mesh(ind_tab,mesh):  # fusion des fonctions reindex_mesh() et new_idx_from_conv_tab() ?
     """To change mesh indices, by changing the number from ind_tab. If the element 212 is at 3rd position in the ind_tab, the indices 212 will be replace by indices 3 in the mesh file, to keep indices and new mesh coherent.
@@ -189,7 +189,7 @@ def circle_detection_regular(points, pt_per_slice,indices=None):
         points_tab.append(circle)
         ind_tab.append(indi)
         
-    return [points_tab, ind_tab]
+    return points_tab, ind_tab
 
 def circle_detection_axis(points, axis,tolerance=0,indices=None):
     """Code to separate each step of a cylinder (so it's circles) (the goal is then to put spring in SOFA, to constrain a cavity)
@@ -208,7 +208,7 @@ def circle_detection_axis(points, axis,tolerance=0,indices=None):
         :returns: ind_tab = indices tab, sorted by circles
     """
 
-    [new_points, conv_tab] = index_from_axis(points = points, axis = axis, old_indices = indices) # tri intégré à la fonction ?
+    new_points, conv_tab = index_from_axis(points = points, axis = axis, old_indices = indices) # tri intégré à la fonction ?
 
     points_tab = []
     circle_points = []
@@ -232,7 +232,7 @@ def circle_detection_axis(points, axis,tolerance=0,indices=None):
     points_tab.append(circle_points)
     ind_tab.append(circles_ind)
 
-    return [points_tab, ind_tab]
+    return points_tab, ind_tab
 
 def remesh_from_axis(points,mesh,axis,old_indices = None):
     """Function to remesh a model : 
@@ -257,7 +257,7 @@ def remesh_from_axis(points,mesh,axis,old_indices = None):
         old_indices = default_indices(len(points))
     new_points, ind_tab = index_from_axis(points = points, axis = axis,old_indices = old_indices)
     new_mesh = reindex_mesh(ind_tab=ind_tab,mesh=mesh)
-    return [new_points, ind_tab ,new_mesh]
+    return new_points, ind_tab ,new_mesh
 
 def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
     """To order all the points of a circles in clockwise
@@ -315,7 +315,7 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
         new_circle_pt.append(tab_inf_ordre[i][0])
         new_ind_tab.append(tab_inf_ordre[i][1])
     
-    return [new_circle_pt,new_ind_tab] # TODO : retirer tous les corchets aux return (+ les enlever lors des appels de la fonction)
+    return new_circle_pt,new_ind_tab # TODO : retirer tous les corchets aux return (+ les enlever lors des appels de la fonction)
 
 def ordering_cylinder(circle_tab,ind_tab,axis = 0):
     """ To put all the points of all circles of a cylinder in the clockwise order
@@ -342,10 +342,10 @@ def ordering_cylinder(circle_tab,ind_tab,axis = 0):
     new_circle_tab = []
     new_ind_tab_full = []
     for i in range(len(circle_tab)) : 
-        [new_circle_pt,new_ind_tab] = ordering_circle(circle = circle_tab[i],ind_tab = ind_tab[i],x_ref = x_ref,y_ref = y_ref)
+        new_circle_pt,new_ind_tab = ordering_circle(circle = circle_tab[i],ind_tab = ind_tab[i],x_ref = x_ref,y_ref = y_ref)
         new_circle_tab.append(new_circle_pt)
         new_ind_tab_full.append(new_ind_tab)
-    return [new_circle_tab,new_ind_tab_full]     
+    return new_circle_tab,new_ind_tab_full    
 
 def invers_normal(mesh):
     """Invers the normal of all surfaces of a mesh
