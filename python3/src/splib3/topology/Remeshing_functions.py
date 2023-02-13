@@ -315,7 +315,7 @@ def ordering_circle(circle,ind_tab,x_ref=1,y_ref=2): #
         new_circle_pt.append(tab_inf_ordre[i][0])
         new_ind_tab.append(tab_inf_ordre[i][1])
     
-    return new_circle_pt,new_ind_tab # TODO : retirer tous les corchets aux return (+ les enlever lors des appels de la fonction)
+    return new_circle_pt,new_ind_tab 
 
 def ordering_cylinder(circle_tab,ind_tab,axis = 0):
     """ To put all the points of all circles of a cylinder in the clockwise order
@@ -361,7 +361,7 @@ def invers_normal(mesh):
     return new_mesh
 
 def shift_tab(tab): 
-    """To shift all the points of a tab oe time. The last value will become the 1st one
+    """To shift all the points of a tab. The first value will become the last one
     """
     return  tab[1:] + [tab[0]]
 
@@ -391,7 +391,7 @@ def close_surface(ind_tab) :
         new_ind.append(ind_tab[ind_a] )
         new_ind.append(ind_tab[ind_c] )
     
-    new_ind = list(OrderedDict.fromkeys(new_ind)) # pour supprimer les doublons dans le tableau
+    new_ind = list(OrderedDict.fromkeys(new_ind)) # to delete double value in the tab // pour supprimer les doublons dans le tableau
     if len(new_ind) >= 3:
         new_triangles = close_surface(ind_tab = new_ind)
         triangles = triangles + new_triangles
