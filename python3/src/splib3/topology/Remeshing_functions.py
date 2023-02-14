@@ -209,8 +209,6 @@ def circle_detection_axis(points, axis,tolerance=0,indices=None):
     circle_points.append(new_points[0])
     circles_ind.append(conv_tab[0])
     for i in range(len(new_points)-1) :
-        # print(i)
-        # print( [new_points[i+1][axis], new_points[i][axis] - tolerance])
         if new_points[i+1][axis] >= new_points[i][axis] - tolerance  and new_points[i+1][axis] <= new_points[i][axis] + tolerance :
             circle_points.append(new_points[i+1])
             circles_ind.append(conv_tab[i+1])
