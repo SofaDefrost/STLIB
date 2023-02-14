@@ -43,19 +43,12 @@ def index_from_axis(points,axis,old_indices = None): #
         """
     if old_indices == 'null':
         raise DeprecationWarning("Attention, old_indices est à 'null', the new norm is old_indices = None")
-        # old_indices == None
+        # old_indices = None
 
     if old_indices is None :
         old_indices = default_indices(len(points))
 
-
-    
-    # print(len(points))
-    # print(len(old_indices))
-
     if len(points) != len(old_indices):
-        # print(len(points))
-        # print(len(old_indices))
         raise RuntimeError("Be carefull, the number of points and indices are not coherent in index_from_axis(), so it will create false results ! ")
     
     conv_tab=[]
@@ -107,7 +100,6 @@ def reindex_mesh(ind_tab,mesh):  # fusion des fonctions reindex_mesh() et new_id
 def conv_tab_from_ind_tab(ind_tab): 
     conv_tab = []
     for i in range(len(ind_tab)):
-        # conv_tab.append([ind_tab[i],i])
         conv_tab.append([i,ind_tab[i]])
     return conv_tab
 
