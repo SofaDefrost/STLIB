@@ -77,6 +77,11 @@ def Rigidify(targetObject, sourceObject, groupIndices, frames=None, name=None):
         # get all the points from the source.
         selectedIndices = []
         for i in range(len(groupIndices)):
+                # print("hh")
+                # print(type(groupIndices[1]))
+                # print(type(allIndices[1]))
+                # print(type(allPositions[1]))
+                print(groupIndices)
                 selectedPoints = mfilter(groupIndices[i], allIndices, allPositions)
                 if len(frames[i]) == 3:
                         orientation = Quat.createFromEuler(frames[i], inDegree=True)
