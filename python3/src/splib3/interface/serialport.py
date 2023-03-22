@@ -27,7 +27,6 @@ def getDevicePort(entry, method="manufacturer"):
         Sofa.msg_warning("stlib3.interface.serialport",
                          "Multiple port found with " + method + " = " + entry + ". Using the first.")
 
-    print("---------------------------------------")
     Sofa.msg_info("stlib3.interface.serialport",
                   "Found port with " + method + " = " + entry + ": \n" +
                   "device : " + ports[0].device + "\n" +
@@ -35,7 +34,6 @@ def getDevicePort(entry, method="manufacturer"):
                   "description : " + ports[0].description + "\n" +
                   "serial number : " + ports[0].serial_number
                   )
-    print("---------------------------------------")
     return ports[0].device
 
 
