@@ -47,8 +47,9 @@ class SofaPrefab(object):
             o = self.cls(*args, **kwargs)
             frameinfo = getframeinfo(currentframe().f_back)
             o.node.addData(name="Prefab type", group="Infos", help="", type="string", value=str(o.__class__.__name__))
-            o.node.addData(name="modulepath", group="Infos", help="", type="string",
-                              value=str(os.path.dirname(os.path.abspath(sys.modules[o.__module__].__file__))))
+            if o.__module__ in sys.modules:
+                o.node.addData(name="modulepath", group="Infos", help="", type="string",
+                               value=str(os.path.dirname(os.path.abspath(sys.modules[o.__module__].__file__))))
             o.node.addData(name="Defined in", group="Infos", help="", type="string", value=str(self.definedloc))
             o.node.addData(name="Instantiated in", group="Infos", help="", type="string", value=str((frameinfo.filename, frameinfo.lineno)))
             o.node.addData(name="Help", group="Infos", help="", type="string", value=str(getdoc(o)))
