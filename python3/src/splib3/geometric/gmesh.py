@@ -85,7 +85,7 @@ def tetmeshFromBrepAndSaveToFile(filepath, outputdir='autogen', **kwargs):
         return outfilepath
 
 def createScene(root):
-        from stlib.scene import Scene
+        from stlib3.scene import Scene
 
         Scene(root)
         root.VisualStyle.displayFlags="showForceFields"
