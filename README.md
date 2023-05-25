@@ -4,10 +4,10 @@
 
 Sofa Template Library
 
-This library should contains sofa scene template.
-It should contains common scene template used regularly to make the writing of scene with Sofa easy. 
+This library should contain sofa scene template.
+It should contain common scene template used regularly to make the writing of scene with Sofa easy. 
 The templates should be compatible with .pyscn and PSL scenes. The library also contains cool
-utilitary function we should always consider to use.
+utility functions we should always consider to use.
 
 ```python
 from stlib.scene import MainHeader
