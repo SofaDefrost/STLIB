@@ -19,15 +19,15 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
         .. sourcecode:: qml
 
             applyTo : {
-                DefaultPipeline,
+                CollisionPipeline,
                 BruteForceDetection,
                 RuleBasedContactManager,
                 LocalMinDistance
             }
     '''
 
-    if applyTo.hasObject("DefaultPipeline") is False:
-            applyTo.addObject('DefaultPipeline')
+    if applyTo.hasObject("CollisionPipeline") is False:
+            applyTo.addObject('CollisionPipeline')
 
     applyTo.addObject('BruteForceBroadPhase')
     applyTo.addObject('BVHNarrowPhase')
