@@ -13,7 +13,7 @@ jobs:
       fail-fast: false
       matrix:
         os: [ubuntu-20.04, macos-11, windows-2019]
-        sofa_branch: [master, v22.12]
+        sofa_branch: [v23.06]
 
     steps:
       - name: Setup SOFA and environment
@@ -119,7 +119,7 @@ jobs:
         with:
           name: ${{ env.RELEASE_NAME }}
           tag_name: ${{ env.RELEASE_TAGNAME }}
-          fail_on_unmatched_files: true
+          fail_on_unmatched_files: false
           body: |
             Last updated on ${{ env.RELEASE_DATE }}
           files: |
