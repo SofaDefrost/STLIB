@@ -28,9 +28,6 @@ sofa_create_package_with_targets(
 install(DIRECTORY docs DESTINATION share/sofa/${PROJECT_NAME})
 install(FILES "README.md" "LICENSE" DESTINATION .)
 
-# Install python2 scripts (macro defined in SOFA)
-sofa_install_pythonscripts(PLUGIN_NAME ${PROJECT_NAME} PYTHONSCRIPTS_SOURCE_DIR "python" PYTHONSCRIPTS_INSTALL_DIR "python")
-
 # Install python3 scripts (macro defined in SofaPython3)
 find_file(SofaPython3Tools NAMES "SofaPython3/lib/cmake/SofaPython3/SofaPython3Tools.cmake")
 if(SofaPython3Tools)
