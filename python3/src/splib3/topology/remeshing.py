@@ -41,9 +41,9 @@ def index_from_axis(points,axis,old_indices = None): #
         :returns: new_points : tab of the points in the new order
         :returns: ind_tab : tab that contains [old_indices] at new indices position. Liste des anciens indices des points, triés dans le nouvel ordre
         """
-    if old_indices == 'null':
-        raise DeprecationWarning("Attention, old_indices est à 'null', the new norm is old_indices = None")
-        # old_indices = None
+    # if old_indices == 'null':
+    #     raise DeprecationWarning("Attention, old_indices est à 'null', the new norm is old_indices = None")
+    #     # old_indices = None
 
     if old_indices is None :
         old_indices = default_indices(len(points))
