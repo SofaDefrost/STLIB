@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import Sofa.Core
 from stlib3.visuals import VisualModel
+from stlib3.physics.collision import CollisionMesh
 
 
 class ElasticMaterialObject(Sofa.Prefab):
@@ -73,27 +74,20 @@ class ElasticMaterialObject(Sofa.Prefab):
             self.correction = self.addObject('LinearSolverConstraintCorrection', name='correction')
 
         if self.collisionMesh:
-            self.addCollisionModel(self.collisionMesh.value, list(self.rotation.value), list(self.translation.value),
-                                   list(self.scale.value))
+            CollisionMesh(surfaceMeshFileName=self.collisionMesh.value, attachedTo=self,
+                          name="CollisionModel",
+                          rotation=list(self.rotation.value),
+                          translation=list(self.translation.value),
+                          scale=list(self.scale.value)
+                          )
 
         if self.surfaceMeshFileName:
             self.addVisualModel(self.surfaceMeshFileName.value, list(self.surfaceColor.value),
                                 list(self.rotation.value), list(self.translation.value), list(self.scale.value))
 
-    def addCollisionModel(self, collisionMesh, rotation=[0.0, 0.0, 0.0], translation=[0.0, 0.0, 0.0],
-                          scale=[1., 1., 1.]):
-        self.collisionmodel = self.addChild('CollisionModel')
-        self.collisionmodel.addObject('MeshSTLLoader', name='loader', filename=collisionMesh, rotation=rotation,
-                                      translation=translation, scale3d=scale)
-        self.collisionmodel.addObject('TriangleSetTopologyContainer', src='@loader', name='container')
-        self.collisionmodel.addObject('MechanicalObject', template='Vec3', name='dofs')
-        self.collisionmodel.addObject('TriangleCollisionModel')
-        self.collisionmodel.addObject('LineCollisionModel')
-        self.collisionmodel.addObject('PointCollisionModel')
-        self.collisionmodel.addObject('BarycentricMapping')
-
     def addVisualModel(self, filename, color, rotation, translation, scale=[1., 1., 1.]):
-        visualmodel = self.addChild(VisualModel(visualMeshPath=filename, color=color, rotation=rotation, translation=translation, scale=scale))
+        visualmodel = self.addChild(VisualModel(visualMeshPath=filename, color=color,
+                                                rotation=rotation, translation=translation, scale=scale))
 
         # Add a BarycentricMapping to deform the rendering model to follow the ones of the
         # mechanical model.
@@ -107,5 +101,7 @@ def createScene(rootNode):
     rootNode.addChild(ElasticMaterialObject(name='ElasticMaterialObject1', volumeMeshFileName="mesh/liver.msh",
                                             translation=[3.0, 0.0, 0.0]))
     rootNode.addChild(ElasticMaterialObject(name='ElasticMaterialObject2', volumeMeshFileName="mesh/liver.msh",
-                                            translation=[-3, 0, 0], surfaceMeshFileName="mesh/liver.obj",
+                                            translation=[-3, 0, 0], scale=[2, 1, 3],
+                                            surfaceMeshFileName="mesh/liver.obj",
+                                            collisionMesh="mesh/liver.obj",
                                             surfaceColor=[1.0, 0.0, 0.0]))

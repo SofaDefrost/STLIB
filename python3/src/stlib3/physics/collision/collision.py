@@ -16,6 +16,7 @@ def CollisionMesh(attachedTo=None,
                   name="collision",
                   rotation=[0.0, 0.0, 0.0],
                   translation=[0.0, 0.0, 0.0],
+                  scale=[1., 1., 1.],
                   collisionGroup=None,
                   mappingType='BarycentricMapping'):
     '''
@@ -33,7 +34,7 @@ def CollisionMesh(attachedTo=None,
         return None
 
     collisionmodel.addObject(loaderFor(surfaceMeshFileName), name="loader", filename=surfaceMeshFileName,
-                                rotation=rotation, translation=translation)
+                                rotation=rotation, translation=translation, scale3d=scale)
     collisionmodel.addObject('MeshTopology', src="@loader")
     collisionmodel.addObject('MechanicalObject')
     if collisionGroup:
