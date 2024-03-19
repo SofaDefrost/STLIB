@@ -58,31 +58,35 @@ def to_radians(v):
         return p
     return v * pi * 2.0 / 360.0
 
+
 def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
     t = numpy.identity(4)
     s = numpy.identity(4)
-    if eulerRotation != None:
-        q = Quat.createFromEuler(eulerRotation,inDegree=True)
-    else:
+
+    if eulerRotation is not None:
+        q = Quat.createFromEuler(eulerRotation, inDegree=True)
+    elif rotation is not None:
         q = Quat(rotation)
+    else:
+        q = Quat()  # default [0, 0, 0, 1] quaternion
 
-    if scale == None:
-        scale = [1.0,1.0,1.0]
-
+    if scale is None:
+        scale = [1.0, 1.0, 1.0]
 
     r = q.getMatrix()
     rr = numpy.identity(4)
     rr[0:3, 0:3] = r
 
-    t[0,3]=translation[0]
-    t[1,3]=translation[1]
-    t[2,3]=translation[2]
+    t[0, 3] = translation[0]
+    t[1, 3] = translation[1]
+    t[2, 3] = translation[2]
 
-    s[0,0]=scale[0]
-    s[1,1]=scale[1]
-    s[2,2]=scale[2]
+    s[0, 0] = scale[0]
+    s[1, 1] = scale[1]
+    s[2, 2] = scale[2]
 
-    return numpy.matmul( numpy.matmul(t,rr), s )
+    return numpy.matmul(numpy.matmul(t, rr), s)
+
 
 def transformPositions(position, translation=[0.0,0.0,0.0], rotation=[0.0,0.0,0.0,1.0], eulerRotation=None, scale=[1.0,1.0,1.0]):
 
