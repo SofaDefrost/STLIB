@@ -29,6 +29,7 @@ class Quat(numpy.ndarray):
     q = Quat.product(q1,q2)
     q = Quat.createFromEuler([x,y,z])
     q = Quat.createFromAxisAngle([axis],angle)
+    q = Quat.createFromVectors(v1, v2)
     """
 
     def __new__(cls, *args):
@@ -317,13 +318,13 @@ class Quat(numpy.ndarray):
         return q
 
     @staticmethod
-    def createFromEuler(a, axes='sxyz', inDegree=False):
+    def createFromEuler(v, axes='sxyz', inDegree=False):
         """Returns a quaternion from Euler angles (in radian) and axis sequence.
         The quaternion is of type Quat.
 
         Args:
 
-        a is a list of three Euler angles [x,y,z]
+        v is a list of three Euler angles [x,y,z]
         axes : One of 24 axis sequences as string or encoded tuple
 
         Example:
@@ -337,6 +338,7 @@ class Quat(numpy.ndarray):
         [ 0.5 -0.5  0.5  0.5]
         """
 
+        a = numpy.copy(v)
         if inDegree:
             a = [a[0] * pi / 180, a[1] * pi / 180, a[2] * pi / 180]
 
