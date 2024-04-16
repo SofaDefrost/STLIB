@@ -37,11 +37,11 @@ class Animation(object):
             self.startTime = None
         self.startTimeInit = None
 
-        if 'endTime' in params:
-            self.endTime = params['endTime']
+        if 'terminationDelay' in params:
+            self.terminationDelay = params['terminationDelay']
         else:
-            self.endTime = None
-        self.endTimeInit = self.endTime
+            self.terminationDelay = None
+        self.terminationDelayInit = self.terminationDelay
 
         self.duration = duration
         self.onUpdate = onUpdate
@@ -53,7 +53,7 @@ class Animation(object):
 
     def reset(self):
         self.startTime = self.startTimeInit
-        self.endTime = self.endTimeInit
+        self.terminationDelay = self.terminationDelayInit
 
     def doOnDone(self, currentTime):
         self.onDone(factor=self.factor, **self.params)
@@ -118,11 +118,11 @@ class AnimationManagerController(Sofa.Core.Controller):
                 nextanimations.append(animation)
             elif animation.mode == "pingpong":
                 animation.direction = -animation.direction
-                animation.startTime = animation.endTime + animation.startTime if animation.endTime is not None else None
+                animation.startTime = animation.duration + animation.terminationDelay + animation.startTime if animation.terminationDelay is not None else None
                 nextanimations.append(animation)
             elif animation.mode == "loop":
                 animation.direction = animation.direction
-                animation.startTime = animation.endTime + animation.startTime if animation.endTime is not None else None
+                animation.startTime = animation.duration + animation.terminationDelay + animation.startTime if animation.terminationDelay is not None else None
                 nextanimations.append(animation)
             elif animation.onDone is not None:
                 animation.doOnDone(self.totalTime)
@@ -197,15 +197,16 @@ def AnimationManager(node):
 
 # This function is just an example on how to use the animate function.
 def createScene(rootNode):
-    def myAnimate1(target, factor):
-        print("I should do something on: " + target.name + " factor is: " + str(factor))
+    def myAnimate1(target, factor, terminationDelay=0):
+        print("I should do something on: " + target.getName() + " factor is: " + str(factor))
 
     def myAnimate2(target, factor):
-        print("Function 2: " + target.name + " factor is: " + str(factor))
+        print("Function 2: " + target.getName() + " factor is: " + str(factor))
 
     def myOnDone(target, factor):
-        print("onDone: " + target.name + " factor is: " + str(factor))
+        print("onDone: " + target.getName() + " factor is: " + str(factor))
 
     rootNode.addObject(AnimationManager(rootNode))
     animate(myAnimate1, {"target": rootNode}, 10)
     animate(myAnimate2, {"target": rootNode}, 12, onDone=myOnDone)
+    animate(myAnimate1, {"target": rootNode, "terminationDelay": 2}, 2, mode="loop")
