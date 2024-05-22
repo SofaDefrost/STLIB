@@ -47,7 +47,7 @@ from splib3.numerics.matrix import *
 RigidDofZero = [0.0,0.0,0.0,0.0,0.0,0.0,1.0]
 
 def to_radians(v):
-    """Converts degree to radians
+    """Converts degrees to radians
 
        :param v: the angle to convert
     """
@@ -58,6 +58,17 @@ def to_radians(v):
         return p
     return v * pi * 2.0 / 360.0
 
+def to_degrees(v):
+    """Converts radians to degrees
+
+       :param v: the angle to convert
+    """
+    if isinstance(v, list):
+        p = []
+        for tp in v:
+            p.append( tp / pi / 2.0 * 360.0 )
+        return p
+    return v / pi / 2.0 * 360.0
 
 def TRS_to_matrix(translation, rotation=None, scale=None, eulerRotation=None):
     t = numpy.identity(4)
