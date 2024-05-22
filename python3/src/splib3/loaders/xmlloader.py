@@ -44,9 +44,12 @@ def loadXML(filename, sofaNode, context={}):
           from splib3.loaders.xmlloader import loadXML
 
           def createScene(root):
-              loadXML("MyScene.xml", root)
+              loadXML("Caduceus.xml", root)
     """
     tree = ET.parse(filename)
     xmlNode = tree.getroot()
     _processNode(xmlNode, sofaNode, context)
     return sofaNode
+
+def createScene(root):
+    loadXML(SofaRuntime.DataRepository.getFile("Demos/caduceus.scn"), root)
