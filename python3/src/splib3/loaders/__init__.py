@@ -13,9 +13,8 @@ splib.loaders.loadPointListFromFile
 .. autofunction:: getLoadingLocation
 
 """
-__all__=[]
+__all__=["xmlloader"]
 
-import os
 def getLoadingLocation(filename , source=None):
     """Compute a loading path for the provided filename relative to a given 
        source location
@@ -28,6 +27,8 @@ def getLoadingLocation(filename , source=None):
         The latter is really usefull to make get the path for a file relative
         to the 'current' python source.                    
     """
+    import os
+
     if source == None:
         return filename
     
