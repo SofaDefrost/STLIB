@@ -30,17 +30,14 @@ class Animation(object):
     """
 
     @deprecated_alias(cb='onUpdate')
-    def __init__(self, duration, mode, onUpdate, params, onDone=None):
+    def __init__(self, duration, mode, onUpdate, params, onDone=None, terminationDelay=None):
         if 'startTime' in params:
             self.startTime = params['startTime']
         else:
             self.startTime = None
         self.startTimeInit = None
 
-        if 'terminationDelay' in params:
-            self.terminationDelay = params['terminationDelay']
-        else:
-            self.terminationDelay = None
+        self.terminationDelay = terminationDelay
         self.terminationDelayInit = self.terminationDelay
 
         self.duration = duration
@@ -133,7 +130,7 @@ class AnimationManagerController(Sofa.Core.Controller):
 manager = None
 
 
-def animate(onUpdate, params, duration, mode="once", onDone=None):
+def animate(onUpdate, params, duration, mode="once", onDone=None, terminationDelay=None):
     """Construct and starts an animation
 
     Build a new animation from a callback function that computes the animation value,
@@ -158,7 +155,8 @@ def animate(onUpdate, params, duration, mode="once", onDone=None):
     if manager is None:
         raise Exception("Missing manager in this scene")
 
-    manager.addAnimation(Animation(duration=duration, mode=mode, onUpdate=onUpdate, params=params, onDone=onDone))
+    manager.addAnimation(Animation(duration=duration, mode=mode, onUpdate=onUpdate, params=params,
+                                   onDone=onDone, terminationDelay=terminationDelay))
 
 
 def removeAnimation(animation):
@@ -209,4 +207,4 @@ def createScene(rootNode):
     rootNode.addObject(AnimationManager(rootNode))
     animate(myAnimate1, {"target": rootNode}, 10)
     animate(myAnimate2, {"target": rootNode}, 12, onDone=myOnDone)
-    animate(myAnimate1, {"target": rootNode, "terminationDelay": 2}, 2, mode="loop")
+    animate(myAnimate1, {"target": rootNode}, 2, mode="loop", terminationDelay=2)
