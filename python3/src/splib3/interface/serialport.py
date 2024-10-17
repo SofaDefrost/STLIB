@@ -13,17 +13,17 @@ def getDevicePort(entry, method="manufacturer"):
     ports = []
     comports = serial.tools.list_ports.comports()
 
-    if comports is None:
+    if comports is None or len(comports) == 0:
         Sofa.msg_error("stlib3.interface.serialport",
                        "Serial ports check failed, list of ports is empty.")
         return
 
     if method == "manufacturer":
-        ports = [p for p in comports if entry in p.manufacturer]
+        ports = [p for p in comports if p.manufacturer is not None and entry in p.manufacturer]
     if method == "description":
-        ports = [p for p in comports if entry in p.description]
+        ports = [p for p in comports if p.description is not None and entry in p.description]
     if method == "serial_number":
-        ports = [p for p in comports if entry in p.serial_number]
+        ports = [p for p in comports if p.serial_number is not None and entry in p.serial_number]
 
     if not ports:
         Sofa.msg_error("stlib3.interface.serialport",
