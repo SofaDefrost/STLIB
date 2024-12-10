@@ -41,7 +41,7 @@ class FixedBox(Sofa.Prefab):
 
     def init(self):
         self.addObject('BoxROI', name='BoxROI', box=self.boxCoords, drawBoxes=self.showBox)
-        self.addObject('RestShapeSpringsForceField', points='@BoxROI.indices', stiffness=1e12)
+        self.addObject('RestShapeSpringsForceField', indices='@BoxROI.indices', stiffness=1e12)
 
 
 def createScene(rootnode):
