@@ -35,7 +35,7 @@ def FixedBox(applyTo=None, atPositions=[-1.0, -1.0, -1.0, 1.0, 1.0, 1.0],
     else:
         c.addObject('BoxROI', position=position, name='BoxROI', box=atPositions, drawBoxes=doVisualization, doUpdate=doRecomputeDuringSimulation)
 
-    c.addObject('RestShapeSpringsForceField', indices='@BoxROI.indices', stiffness=1e12)
+    c.addObject('FixedWeakConstraint', indices='@BoxROI.indices', stiffness=1e12)
     return c
 
 def createScene(rootNode):
