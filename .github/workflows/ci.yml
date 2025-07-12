@@ -31,6 +31,7 @@ jobs:
       
       - name: Build and install
         shell: bash
+        id: build-and-install
         run: |
           if [[ "$RUNNER_OS" == "Windows" ]]; then
             cmd //c "${{ steps.sofa.outputs.vs_vsdevcmd }} \
@@ -79,10 +80,38 @@ jobs:
           echo "artifact_name=$artifact_name" >> $env:GITHUB_OUTPUT
 
       - name: Create artifact
+        id: create-artifact
         uses: actions/upload-artifact@v4.4.0
         with:
           name: ${{ steps.sanitize.outputs.artifact_name }}
           path: ${{ env.WORKSPACE_INSTALL_PATH }}
+
+      - name: Notify dashboard
+        if: always() && startsWith(github.repository, 'sofa-framework') && startsWith(github.ref, 'refs/heads/master') # we are not on a fork and on master
+        env:
+          DASH_AUTH: ${{ secrets.PLUGIN_DASH }}
+        shell: bash
+        run: |
+          os=$(echo "${{ matrix.os }}" | awk -F- '{ print $1 }')
+
+
+          build_status=$([ '${{ steps.build-and-install.outcome }}' == 'success' ] && \
+                         echo 'true' || echo 'false')
+
+          binary_status=$([ '${{ steps.create-artifact.outcome }}' == 'success' ] && \
+                         [ '${{ steps.sanitize.outcome }}' == 'success' ] && \
+                         echo 'true' || echo 'false')
+
+
+          curl -X POST -H "X-API-KEY: $DASH_AUTH" -H "Content-Type: application/json" -d \
+          "{\"id\":\"$(echo "${{ github.repository }}" | awk -F/ '{ print $2 }')\",\
+           \"github_ref\":\"${{ github.sha }}\",\
+           \"url\":\"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\",\
+           \"os\":\"$os\",\
+           \"build\":$build_status,\
+           \"binary\":$binary_status}"\
+           https://sofa-framework.org:5000/api/v1/plugins
+
 
   deploy:
     name: Deploy artifacts
