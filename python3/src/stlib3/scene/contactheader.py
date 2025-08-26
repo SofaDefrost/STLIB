@@ -41,8 +41,8 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
     if applyTo.hasObject("FreeMotionAnimationLoop") is False:
             applyTo.addObject('FreeMotionAnimationLoop')
 
-    if applyTo.hasObject("GenericConstraintSolver") is False:
-            applyTo.addObject('GenericConstraintSolver', tolerance=1e-6, maxIterations=1000)
+    if applyTo.hasObject("ProjectedGaussSeidelConstraintSolver") is False:
+            applyTo.addObject('ProjectedGaussSeidelConstraintSolver', tolerance=1e-6, maxIterations=1000)
 
     return applyTo
 
