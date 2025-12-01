@@ -56,7 +56,7 @@ def createScene(rootNode):
                 rootNode.addObject('RequiredPlugin', name='SofaPython3')
 
                 rootNode.addObject('FreeMotionMasterSolver')
-                rootNode.addObject('ProjectedGaussSeidelConstraintSolver',maxIterations=1000 ,tolerance=0.001)
+                rootNode.addObject('BlockGaussSeidelConstraintSolver',maxIterations=1000 ,tolerance=0.001)
                 rootNode.addObject(UDP)
 
                 Beam = rootNode.addChild('Beam')

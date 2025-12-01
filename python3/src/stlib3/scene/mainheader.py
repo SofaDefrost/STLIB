@@ -25,7 +25,7 @@ def MainHeader(node, gravity=[0.0, -9.8, 0.0], dt=0.01, plugins=[], repositoryPa
                 RequiredPlugin,
                 OglSceneFrame,
                 FreeMotionAnimationLoop,
-                ProjectedGaussSeidelConstraintSolver,
+                BlockGaussSeidelConstraintSolver,
                 DiscreteIntersection
             }
 
