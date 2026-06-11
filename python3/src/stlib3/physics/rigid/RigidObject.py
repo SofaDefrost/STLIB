@@ -63,6 +63,7 @@ def RigidObject(name="RigidObject",
     if not isAStaticObject:
         object.addObject('EulerImplicitSolver')
         object.addObject('CGLinearSolver', iterations=25, tolerance=1e-5, threshold=1e-5)
+        object.addObject('UncoupledConstraintCorrection')
 
     def addCollisionModel(inputMesh=surfaceMeshFileName):
         objectCollis = object.addChild('collision')
