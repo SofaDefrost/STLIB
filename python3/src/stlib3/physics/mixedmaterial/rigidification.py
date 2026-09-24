@@ -161,7 +161,7 @@ def createScene(rootNode):
         o.RigidParts.addObject("FixedConstraint", indices=0)
 
         simulationNode = rootNode.addChild("Simulation")
-        simulationNode.addObject("EulerImplicitSolver")
+        simulationNode.addObject("EulerImplicitIntegrationScheme")
         simulationNode.addObject("CGLinearSolver", iterations=25, tolerance=1e-5, threshold=1e-5)
         simulationNode.addChild(o)
         return rootNode

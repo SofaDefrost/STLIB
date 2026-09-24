@@ -48,8 +48,8 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
             if "SofaPython3" not in plugins:
                 plugins.append("SofaPython3")
 
-            if "Sofa.Component.ODESolver.Backward":
-                plugins.append("Sofa.Component.ODESolver.Backward")
+            if "Sofa.Component.IntegrationScheme.Backward":
+                plugins.append("Sofa.Component.IntegrationScheme.Backward")
 
             if doDebug:
                 from splib3.debug import DebugManager
@@ -62,7 +62,7 @@ def Scene(root, gravity=[0.0,-9.81,0.0],
             addSimulation()
 
         def addDefaultSolver(node):
-            node.addObject('EulerImplicitSolver', name='TimeIntegrationSchema')
+            node.addObject('EulerImplicitIntegrationScheme', name='TimeIntegrationSchema')
             if iterative:
                 node.addObject('CGLinearSolver', name='LinearSolver', iterations=25, tolerance=1e-5, threshold=1e-5)
             else:

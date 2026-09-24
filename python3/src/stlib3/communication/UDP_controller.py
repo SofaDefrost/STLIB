@@ -60,7 +60,7 @@ def createScene(rootNode):
                 rootNode.addObject(UDP)
 
                 Beam = rootNode.addChild('Beam')
-                Beam.addObject('EulerImplicitSolver', name="odesolver", rayleighStiffness=0.1, rayleighMass=0.1)
+                Beam.addObject('EulerImplicitIntegrationScheme', name="odesolver", rayleighStiffness=0.1, rayleighMass=0.1)
                 Beam.addObject('ShewchukPCGLinearSolver', iterations=1, name="linearsolver", tolerance=1e-5, preconditioners="preconditioner", use_precond=True)
                 Beam.addObject('RegularGridTopology', name="SoftBeam", nx=5, ny=2, nz=2, min=[-0.050, -0.010, -0.002], max=[0.050, 0.010, 0.0025])
                 Beam.addObject('MechanicalObject', name="meca", template="Vec3")

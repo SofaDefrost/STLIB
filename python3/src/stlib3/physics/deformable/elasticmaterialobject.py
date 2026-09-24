@@ -31,7 +31,7 @@ class ElasticMaterialObject(Sofa.Prefab):
         #         Sofa.msg_info("Missing RequiredPlugin SofaSparseSolver in the scene, add it from Prefab ElasticMaterialObject.")
 
         if self.solverName.value == '':
-            self.integration = self.addObject('EulerImplicitSolver', name='integration')
+            self.integration = self.addObject('EulerImplicitIntegrationScheme', name='integration')
             self.solver = self.addObject('SparseLDLSolver', name="solver", template='CompressedRowSparseMatrixd')
             # Eulalie: 01/21 a bit hard to debug... when uncommented, no warning or error shows up, yet all components won't just be created...
             # self.solverName = 'solver'

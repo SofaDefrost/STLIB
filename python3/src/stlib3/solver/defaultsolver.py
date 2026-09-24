@@ -5,10 +5,10 @@ def DefaultSolver(node, iterative=True):
     Adds EulerImplicit, CGLinearSolver
 
     Components added:
-        EulerImplicitSolver
+        EulerImplicitIntegrationScheme
         CGLinearSolver
     '''
-    node.addObject('EulerImplicitSolver', name='TimeIntegrationSchema')
+    node.addObject('EulerImplicitIntegrationScheme', name='TimeIntegrationSchema')
     if iterative:
         return node.addObject('CGLinearSolver', name='LinearSolver', iterations=25, tolerance=1e-5, threshold=1e-5)
 

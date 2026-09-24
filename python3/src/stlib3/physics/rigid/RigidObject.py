@@ -61,7 +61,7 @@ def RigidObject(name="RigidObject",
 
 
     if not isAStaticObject:
-        object.addObject('EulerImplicitSolver')
+        object.addObject('EulerImplicitIntegrationScheme')
         object.addObject('CGLinearSolver', iterations=25, tolerance=1e-5, threshold=1e-5)
 
     def addCollisionModel(inputMesh=surfaceMeshFileName):
