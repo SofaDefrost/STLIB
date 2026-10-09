@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 
+
 def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
-    '''
+    """
     Args:
         applyTo (Sofa.Node): the node to attach the object to
 
@@ -24,25 +25,27 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
                 RuleBasedContactManager,
                 LocalMinDistance
             }
-    '''
+    """
 
     if applyTo.hasObject("CollisionPipeline") is False:
-            applyTo.addObject('CollisionPipeline')
+        applyTo.addObject("CollisionPipeline")
 
-    applyTo.addObject('BruteForceBroadPhase')
-    applyTo.addObject('BVHNarrowPhase')
+    applyTo.addObject("BruteForceBroadPhase")
+    applyTo.addObject("BVHNarrowPhase")
 
-    applyTo.addObject('RuleBasedContactManager', responseParams="mu="+str(frictionCoef),
-                                                    name='Response', response='FrictionContactConstraint')
-    applyTo.addObject('LocalMinDistance',
-                        alarmDistance=alarmDistance, contactDistance=contactDistance,
-                        angleCone=0.01)
+    applyTo.addObject(
+        "RuleBasedContactManager",
+        responseParams="mu=" + str(frictionCoef),
+        name="Response",
+        response="FrictionContactConstraint",
+    )
+    applyTo.addObject("LocalMinDistance", alarmDistance=alarmDistance, contactDistance=contactDistance, angleCone=0.01)
 
     if applyTo.hasObject("FreeMotionAnimationLoop") is False:
-            applyTo.addObject('FreeMotionAnimationLoop')
+        applyTo.addObject("FreeMotionAnimationLoop")
 
     if applyTo.hasObject("BlockGaussSeidelConstraintSolver") is False:
-            applyTo.addObject('BlockGaussSeidelConstraintSolver', tolerance=1e-6, maxIterations=1000)
+        applyTo.addObject("BlockGaussSeidelConstraintSolver", tolerance=1e-6, maxIterations=1000)
 
     return applyTo
 
@@ -51,5 +54,6 @@ def ContactHeader(applyTo, alarmDistance, contactDistance, frictionCoef=0.0):
 def createScene(rootnode):
     import os
     from mainheader import MainHeader
-    MainHeader(rootnode, plugins=["SofaPython3"], repositoryPaths=[os.getcwd()])
+
+    MainHeader(rootnode, plugins=[], repositoryPaths=[os.getcwd()])
     ContactHeader(rootnode, alarmDistance=1, contactDistance=0.1, frictionCoef=1.0)
