@@ -53,7 +53,6 @@ def createScene(rootNode):
                 rootNode.findData('gravity').value=[0., 0., -9810]
                 rootNode.findData('dt').value=0.01
                 rootNode.addObject('RequiredPlugin', name='SoftRobots')
-                rootNode.addObject('RequiredPlugin', name='SofaPython3')
 
                 rootNode.addObject('FreeMotionMasterSolver')
                 rootNode.addObject('BlockGaussSeidelConstraintSolver',maxIterations=1000 ,tolerance=0.001)
